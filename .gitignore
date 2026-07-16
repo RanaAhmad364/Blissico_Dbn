@@ -1,0 +1,26 @@
+# Python
+blissico_backend/venv/
+blissico_backend/__pycache__/
+blissico_backend/.env
+blissico_backend/uploads/
+blissico_backend/logs/
+blissico_backend/.pytest_cache/
+
+# React
+blissico_app/node_modules/
+blissico_app/dist/
+blissico_app/.env
+
+# VS Code
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Python cache
+*.pyc
+*.pyo
+
+# Logs
+*.log

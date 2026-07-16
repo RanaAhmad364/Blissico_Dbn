@@ -1,0 +1,266 @@
+/* --- Product Detail Page --- */
+.product-detail-page {
+  background-color: #fff;
+  min-height: 100vh;
+}
+
+/* Breadcrumbs */
+.detail-breadcrumbs {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 30px 20px 0;
+  font-size: 0.9rem;
+  color: #333;
+}
+.detail-breadcrumbs a {
+  text-decoration: none;
+  color: #666;
+}
+.detail-breadcrumbs a:hover {
+  color: #e27c9f;
+}
+
+/* Main Layout */
+.detail-main-area {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 30px 20px 60px;
+  display: flex;
+  gap: 60px;
+}
+
+/* Left Image */
+.detail-image-placeholder {
+  flex: 1;
+  max-width: 500px;
+  aspect-ratio: 3 / 4;
+  background: #666;
+  border-radius: 4px;
+}
+
+/* Right Info */
+.detail-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.detail-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.5rem;
+  font-weight: 400;
+  margin-bottom: 10px;
+}
+
+.detail-price {
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+  color: #1a1a1a;
+}
+
+.detail-divider {
+  border: 0;
+  height: 1px;
+  background: #ddd;
+  margin: 10px 0 20px;
+}
+
+.detail-size {
+  font-size: 1rem;
+  margin-bottom: 25px;
+}
+
+/* Customize Button */
+.detail-customize-btn {
+  background: #e27c9f;
+  color: white;
+  text-decoration: none;
+  text-align: center;
+  padding: 12px 0;
+  width: 100%;
+  max-width: 350px;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: background 0.3s;
+  margin-bottom: 25px;
+}
+.detail-customize-btn:hover {
+  background: #c86a89;
+}
+
+.detail-share-text {
+  font-weight: 500;
+  margin-bottom: 15px;
+  font-size: 0.95rem;
+}
+
+/* Download Links */
+.detail-downloads {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.download-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: #1a1a1a;
+  font-size: 0.95rem;
+  transition: color 0.3s;
+}
+.download-link:hover {
+  color: #e27c9f;
+}
+
+/* Description */
+.detail-description {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px 60px;
+  border-top: 1px solid #f0f0f0; /* Optional: adds a subtle line above description */
+  padding-top: 40px;
+}
+
+.detail-description h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.detail-description p {
+  font-size: 1rem;
+  color: #555;
+  line-height: 1.7;
+  max-width: 900px;
+}
+
+/* --- You May Also Like (Carousel) --- */
+.detail-related-section {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px 100px;
+  position: relative;
+}
+
+.related-title {
+  font-family: 'Playfair Display', serif;
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: 400;
+  margin-bottom: 40px;
+  color: #1a1a1a;
+}
+
+.related-carousel-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.related-carousel {
+  display: flex;
+  gap: 40px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding: 10px 0;
+  /* Hide scrollbar */
+  -ms-overflow-style: none; 
+  scrollbar-width: none; 
+}
+.related-carousel::-webkit-scrollbar {
+  display: none;
+}
+
+.related-card-link {
+  text-decoration: none;
+  color: inherit;
+  flex: 0 0 calc(25% - 30px); /* Shows 4 items at a time */
+  min-width: 200px;
+}
+
+.related-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.related-image {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  background: #666;
+  margin-bottom: 12px;
+}
+
+.related-name {
+  font-size: 0.9rem;
+  color: #1a1a1a;
+}
+
+.related-price {
+  font-size: 0.85rem;
+  color: #555;
+}
+
+/* Carousel Arrows */
+.carousel-arrow {
+  position: absolute;
+  top: 45%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: white;
+  border: none;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.3s;
+}
+.carousel-arrow:hover {
+  background: #f9f9f9;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.left-arrow { left: -20px; }
+.right-arrow { right: -20px; }
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .related-card-link { flex: 0 0 calc(33.33% - 26px); }
+}
+@media (max-width: 768px) {
+  .detail-main-area { flex-direction: column; align-items: center; }
+  .detail-image-placeholder { width: 100%; max-width: 100%; }
+  .detail-info { width: 100%; }
+  .detail-customize-btn { max-width: 100%; }
+  .related-card-link { flex: 0 0 calc(50% - 20px); }
+  .left-arrow { left: 0; }
+  .right-arrow { right: 0; }
+}
+@media (max-width: 480px) {
+  .related-card-link { flex: 0 0 100%; }
+}
+
+
+
+
+.detail-image-wrapper {
+  flex: 1;
+  max-width: 500px;
+  aspect-ratio: 3 / 4;
+  border-radius: 4px;
+  overflow: hidden;
+  background: #f0f0f0;
+}
+.detail-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}

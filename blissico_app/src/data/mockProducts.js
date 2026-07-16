@@ -1,0 +1,125 @@
+export const mockProducts = [
+  // --- For Mom (36 Items to ensure 3 pages) ---
+  { id: 1, name: 'Mom Card 1', price: 14.99, category: 'card', recipient: 'mom', style: 'floral', occasion: 'birthday' },
+  { id: 2, name: 'Mom Card 2', price: 12.50, category: 'card', recipient: 'mom', style: 'minimal', occasion: 'anniversary' },
+  { id: 3, name: 'Mom Card 3', price: 16.00, category: 'card', recipient: 'mom', style: 'elegant', occasion: 'mothers-day' },
+  { id: 4, name: 'Mom Card 4', price: 14.99, category: 'card', recipient: 'mom', style: 'floral', occasion: 'birthday' },
+  { id: 5, name: 'Mom Card 5', price: 12.50, category: 'card', recipient: 'mom', style: 'fun', occasion: 'thinking-of-you' },
+  { id: 6, name: 'Mom Card 6', price: 16.00, category: 'card', recipient: 'mom', style: 'elegant', occasion: 'birthday' },
+  { id: 7, name: 'Mom Card 7', price: 14.99, category: 'card', recipient: 'mom', style: 'floral', occasion: 'anniversary' },
+  { id: 8, name: 'Mom Card 8', price: 12.50, category: 'card', recipient: 'mom', style: 'minimal', occasion: 'mothers-day' },
+  { id: 9, name: 'Mom Card 9', price: 16.00, category: 'card', recipient: 'mom', style: 'elegant', occasion: 'birthday' },
+  { id: 10, name: 'Mom Card 10', price: 14.99, category: 'card', recipient: 'mom', style: 'luxury', occasion: 'anniversary' },
+  { id: 11, name: 'Mom Card 11', price: 12.50, category: 'card', recipient: 'mom', style: 'minimal', occasion: 'birthday' },
+  { id: 12, name: 'Mom Card 12', price: 16.00, category: 'card', recipient: 'mom', style: 'floral', occasion: 'mothers-day' },
+  { id: 13, name: 'Mom Card 13', price: 14.99, category: 'card', recipient: 'mom', style: 'floral', occasion: 'birthday' },
+  { id: 14, name: 'Mom Card 14', price: 12.50, category: 'card', recipient: 'mom', style: 'minimal', occasion: 'anniversary' },
+  { id: 15, name: 'Mom Card 15', price: 16.00, category: 'card', recipient: 'mom', style: 'elegant', occasion: 'mothers-day' },
+  { id: 16, name: 'Mom Card 16', price: 14.99, category: 'card', recipient: 'mom', style: 'floral', occasion: 'birthday' },
+  { id: 17, name: 'Mom Card 17', price: 12.50, category: 'card', recipient: 'mom', style: 'fun', occasion: 'thinking-of-you' },
+  { id: 18, name: 'Mom Card 18', price: 16.00, category: 'card', recipient: 'mom', style: 'elegant', occasion: 'birthday' },
+  { id: 19, name: 'Mom Card 19', price: 14.99, category: 'card', recipient: 'mom', style: 'floral', occasion: 'anniversary' },
+  { id: 20, name: 'Mom Card 20', price: 12.50, category: 'card', recipient: 'mom', style: 'minimal', occasion: 'mothers-day' },
+  { id: 21, name: 'Mom Card 21', price: 16.00, category: 'card', recipient: 'mom', style: 'elegant', occasion: 'birthday' },
+  { id: 22, name: 'Mom Card 22', price: 14.99, category: 'card', recipient: 'mom', style: 'luxury', occasion: 'anniversary' },
+  { id: 23, name: 'Mom Card 23', price: 12.50, category: 'card', recipient: 'mom', style: 'minimal', occasion: 'birthday' },
+  { id: 24, name: 'Mom Card 24', price: 16.00, category: 'card', recipient: 'mom', style: 'floral', occasion: 'mothers-day' },
+  { id: 25, name: 'Mom Card 25', price: 14.99, category: 'card', recipient: 'mom', style: 'floral', occasion: 'birthday' },
+  { id: 26, name: 'Mom Card 26', price: 12.50, category: 'card', recipient: 'mom', style: 'minimal', occasion: 'anniversary' },
+  { id: 27, name: 'Mom Card 27', price: 16.00, category: 'card', recipient: 'mom', style: 'elegant', occasion: 'mothers-day' },
+  { id: 28, name: 'Mom Card 28', price: 14.99, category: 'card', recipient: 'mom', style: 'floral', occasion: 'birthday' },
+  { id: 29, name: 'Mom Card 29', price: 12.50, category: 'card', recipient: 'mom', style: 'fun', occasion: 'thinking-of-you' },
+  { id: 30, name: 'Mom Card 30', price: 16.00, category: 'card', recipient: 'mom', style: 'elegant', occasion: 'birthday' },
+  { id: 31, name: 'Mom Card 31', price: 14.99, category: 'card', recipient: 'mom', style: 'floral', occasion: 'anniversary' },
+  { id: 32, name: 'Mom Card 32', price: 12.50, category: 'card', recipient: 'mom', style: 'minimal', occasion: 'mothers-day' },
+  { id: 33, name: 'Mom Card 33', price: 16.00, category: 'card', recipient: 'mom', style: 'elegant', occasion: 'birthday' },
+  { id: 34, name: 'Mom Card 34', price: 14.99, category: 'card', recipient: 'mom', style: 'luxury', occasion: 'anniversary' },
+  { id: 35, name: 'Mom Card 35', price: 12.50, category: 'card', recipient: 'mom', style: 'minimal', occasion: 'birthday' },
+  { id: 36, name: 'Mom Card 36', price: 16.00, category: 'card', recipient: 'mom', style: 'floral', occasion: 'mothers-day' },
+
+  // Dad
+  { id: 37, name: 'Dad Card 1', price: 14.99, category: 'card', recipient: 'dad', style: 'minimal', occasion: 'fathers-day' },
+  { id: 38, name: 'Dad Card 2', price: 12.50, category: 'card', recipient: 'dad', style: 'elegant', occasion: 'birthday' },
+  { id: 39, name: 'Dad Card 3', price: 16.00, category: 'card', recipient: 'dad', style: 'floral', occasion: 'fathers-day' },
+
+  // Occasions
+  { id: 40, name: 'Birthday Card 1', price: 14.99, category: 'occasion', occasion: 'birthday', style: 'floral' },
+  { id: 41, name: 'Birthday Card 2', price: 12.50, category: 'occasion', occasion: 'birthday', style: 'fun' },
+  { id: 42, name: 'Birthday Card 3', price: 16.00, category: 'occasion', occasion: 'birthday', style: 'minimal' },
+  { id: 43, name: 'Birthday Card 4', price: 14.99, category: 'occasion', occasion: 'birthday', style: 'floral' },
+  { id: 44, name: 'Wedding Card 1', price: 20.00, category: 'occasion', occasion: 'wedding', style: 'elegant' },
+  { id: 45, name: 'Wedding Card 2', price: 22.50, category: 'occasion', occasion: 'wedding', style: 'luxury' },
+  { id: 46, name: 'Wedding Card 3', price: 20.00, category: 'occasion', occasion: 'wedding', style: 'floral' },
+  { id: 47, name: 'Wedding Card 4', price: 22.50, category: 'occasion', occasion: 'wedding', style: 'minimal' },
+  { id: 48, name: 'Anniversary Card 1', price: 14.99, category: 'occasion', occasion: 'anniversary', style: 'floral' },
+
+  // Collections
+  { id: 49, name: 'Signature Card 1', price: 15.00, category: 'collection', collection: 'signature', style: 'elegant' },
+  { id: 50, name: 'Signature Card 2', price: 15.00, category: 'collection', collection: 'signature', style: 'minimal' },
+  { id: 51, name: 'Bloom Card 1', price: 14.00, category: 'collection', collection: 'bloom', style: 'floral' },
+  { id: 52, name: 'Bloom Card 2', price: 14.00, category: 'collection', collection: 'bloom', style: 'fun' },
+  { id: 53, name: 'Cherished Card 1', price: 16.00, category: 'collection', collection: 'cherished', style: 'luxury' },
+  { id: 54, name: 'Cherished Card 2', price: 16.00, category: 'collection', collection: 'cherished', style: 'elegant' },
+
+  {
+    id: 54,
+    name: 'Mom Card 54',
+    price: 14.99,
+    style: 'floral',
+    recipient: 'mom',
+    occasion: 'thank-you',
+    collection: 'bloom',
+    image: 'https://images.unsplash.com/photo-1513201099705-a9746e1e201f?q=80&w=600&auto=format&fit=crop'
+  },
+  {
+    id: 2,
+    name: 'Minimalist Love',
+    price: 12.99,
+    style: 'minimal',
+    recipient: 'mom',
+    occasion: 'birthday',
+    collection: 'signature',
+    image: 'https://images.unsplash.com/photo-1585338107529-13afc5f02586?q=80&w=600&auto=format&fit=crop'
+  },
+  {
+    id: 3,
+    name: 'Elegant Wedding',
+    price: 18.99,
+    style: 'elegant',
+    recipient: 'bride',
+    occasion: 'wedding',
+    collection: 'signature',
+    image: 'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=600&auto=format&fit=crop'
+  },
+  {
+    id: 4,
+    name: 'Luxury Birthday',
+    price: 24.99,
+    style: 'luxury',
+    recipient: 'mom',
+    occasion: 'birthday',
+    collection: 'cherished',
+    image: 'https://images.unsplash.com/photo-1544816155-12df9643f363?q=80&w=600&auto=format&fit=crop'
+  },
+  {
+    id: 5,
+    name: 'Fun Congrats',
+    price: 14.99,
+    style: 'fun',
+    recipient: 'friend',
+    occasion: 'congratulations',
+    collection: 'bloom',
+    image: 'https://images.unsplash.com/photo-1513151233558-d860c5398176?q=80&w=600&auto=format&fit=crop'
+  },
+  {
+    id: 6,
+    name: 'Mom Love Card',
+    price: 15.99,
+    style: 'floral',
+    recipient: 'mom',
+    occasion: 'mothers-day',
+    collection: 'signature',
+    image: 'https://images.unsplash.com/photo-1519373910464-6d307b667e9c?q=80&w=600&auto=format&fit=crop'
+  }
+
+];

@@ -1,0 +1,183 @@
+ .about-hero {
+  background-color: #e27c9f;
+  padding: 100px 20px;
+  text-align: center;
+  color: white;
+}
+
+.about-hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 4.5rem;
+  margin-bottom: 15px;
+}
+
+.about-hero h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.5rem;
+  font-weight: 400;
+  margin-bottom: 10px;
+}
+
+.about-hero p {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.1rem;
+  opacity: 0.9;
+}
+
+.about-story {
+  padding: 80px 0 0 0;
+  background: white;
+  text-align: center;
+}
+
+.about-story h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.8rem;
+  margin-bottom: 40px;
+  color: #1a1a1a;
+}
+
+.about-story p {
+  font-size: 1rem;
+  line-height: 1.9;
+  color: #555;
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.about-note {
+  padding: 10px 16%;
+  background: #fcfcfc;
+  /* text-align: center; */
+}
+
+.note-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 4rem;
+  font-weight: 400;
+  margin-bottom: 30px;
+  color: #1a1a1a;
+}
+
+.note-title .highlight {
+  color: #e27c9f;
+}
+
+.about-note blockquote {
+      font-size: 1rem;
+    line-height: 1.8;
+    color: #333;
+}
+
+.nimrah-details {
+display: inline-block;
+    
+    padding: 25px 0px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.nimrah-details h4 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem;
+  margin: 0;
+}
+
+.nimrah-details p {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.95rem;
+  margin: 5px 0 0;
+  font-weight: 300;
+}
+
+.about-cta {
+  background-color: #f6f6f6;
+  padding: 100px 10%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 60px;
+}
+
+.about-cta-content {
+  flex: 1;
+}
+
+.about-cta-content h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.8rem;
+  margin-bottom: 20px;
+  color: #1a1a1a;
+}
+
+.about-cta-content .highlight {
+  color: #e27c9f;
+}
+blockquote .highlight{
+  color: #e27c9f;
+  font-size: large;
+}
+.about-cta-content p {
+  font-size: 1rem;
+  margin-bottom: 30px;
+  color: #555;
+}
+
+.cta-btn {
+  background: #e27c9f;
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.cta-btn:hover {
+  opacity: 0.9;
+  transform: translateY(-3px);
+}
+
+.about-cta-image {
+  flex: 1;
+  height: 400px;
+  background: #d1d1d1;
+  border-radius: 10px;
+  background-image: url('https://via.placeholder.com/600x400/e0e0e0/555555?text=Custom+Design+Image');
+  background-size: cover;
+  background-position: center;
+}
+
+@media (max-width: 768px) {
+  .about-hero h1 { font-size: 3rem; }
+  .about-hero h2 { font-size: 1.8rem; }
+  .about-story h2 { font-size: 2rem; }
+  .note-title { font-size: 2.8rem; }
+  .about-note blockquote { font-size: 1.1rem; }
+  .about-cta { flex-direction: column; text-align: center; }
+  .about-cta-image { width: 100%; height: 300px; }
+  .about-cta-content h3 { font-size: 2rem; }
+}
+
+.nav-links li {
+  padding-bottom: 5px;
+  border-bottom: 2px solid transparent; 
+  transition: color 0.3s, border-color 0.3s;
+  display: flex;
+  align-items: center;
+}
+
+.nav-links li.active {
+  color: #e27c9f;
+  border-bottom: 2px solid #e27c9f;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: inherit;
+  width: 100%;
+  height: 100%;
+}

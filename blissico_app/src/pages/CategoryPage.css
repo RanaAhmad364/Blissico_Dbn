@@ -1,0 +1,160 @@
+/* --- Category Page --- */
+.category-hero {
+  background-color: #e9a0ba;
+  padding: 80px 20px;
+  text-align: center;
+  color: white;
+}
+.category-hero h1 { font-family: 'Playfair Display', serif; font-size: 3.5rem; margin-bottom: 20px; font-weight: 400; }
+.category-hero p { font-family: 'Poppins', sans-serif; max-width: 700px; margin: 0 auto; font-size: 0.95rem; line-height: 1.6; opacity: 0.95; }
+
+.category-content {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 30px 20px 80px;
+}
+
+.breadcrumbs { font-size: 0.9rem; color: #333; margin-bottom: 30px; }
+.breadcrumbs a { text-decoration: none; color: #666; }
+.breadcrumbs a:hover { color: #e27c9f; }
+.breadcrumbs span { color: #1a1a1a; }
+
+/* Professional Layout (No Sidebar, full width) */
+.category-layout { display: flex; flex-direction: column; gap: 30px; }
+.product-area { width: 100%; }
+
+/* Clean Toolbar matching screenshot */
+.category-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  font-size: 0.9rem;
+  color: #1a1a1a;
+  position: relative; /* For filter dropdown positioning */
+}
+
+.filter-wrapper { position: relative; }
+.filter-trigger {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-weight: 500;
+}
+
+/* Filter Dropdown (Appears beneath Filter text) */
+.filter-dropdown {
+  position: absolute;
+  top: 35px;
+  left: 0;
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  z-index: 10;
+  min-width: 150px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.filter-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 4px 0;
+  color: #555;
+  transition: color 0.2s;
+}
+.filter-option:hover { color: #e27c9f; }
+
+.radio-circle {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 1px solid #ccc;
+  display: inline-block;
+}
+.radio-circle.active {
+  background-color: #e27c9f;
+  border-color: #e27c9f;
+}
+
+/* Sorting Select */
+.toolbar-right select {
+  border: none;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.9rem;
+  cursor: pointer;
+  background: transparent;
+  padding: 5px 10px;
+  outline: none;
+  font-weight: 500;
+}
+
+/* Grid: 4 columns */
+.product-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; margin-bottom: 60px; }
+.product-card { display: flex; flex-direction: column; align-items: center; text-align: center; }
+.product-image-placeholder { width: 100%; aspect-ratio: 3 / 4; background: #666; margin-bottom: 12px; border-radius: 4px;}
+.product-info { display: flex; flex-direction: column; gap: 4px; }
+.product-name { font-size: 0.9rem; color: #1a1a1a; }
+.product-price { font-size: 0.85rem; color: #555; }
+.no-products { text-align: center; padding: 40px 0; color: #888; }
+
+/* Pagination (1 2 3 >) */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+.page-item {
+  width: 35px;
+  height: 35px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: #333;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.3s;
+}
+.page-item:hover:not(.active) { background: #f9eef1; }
+.page-item.active { background: #e9a0ba; color: white; }
+.page-item.arrow { font-size: 1rem; font-weight: bold; }
+
+/* Mobile responsiveness */
+@media (max-width: 1024px) { .product-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 768px) { 
+  .category-hero h1 { font-size: 2.5rem; } 
+  .product-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
+}
+@media (max-width: 480px) { .product-grid { grid-template-columns: 1fr; } }
+
+/* --- NEW IMAGE STYLES --- */
+.product-image-wrapper {
+  width: 100%;
+  aspect-ratio: 3 / 4; /* Keeps the exact 5x7 card proportions */
+  overflow: hidden;
+  border-radius: 4px;
+  background: #d1d1d1; /* Placeholder color before image loads */
+  margin-bottom: 12px;
+}
+
+.product-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* CRITICAL: Prevents stretching, crops perfectly */
+  display: block;
+}
+
+/* Keep your existing placeholder as a fallback if you remove it above */
+.product-image-placeholder {
+  width: 100%;
+  height: 100%;
+  background: #666;
+}

@@ -1,0 +1,50 @@
+/* --- Terms Page --- */
+
+/* Pink Hero Header */
+.terms-hero {
+  background-color: #e9a0ba;
+  padding: 109px 20px;
+  text-align: center;
+  color: white;
+}
+
+.terms-hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 3.5rem;
+  font-weight: 400;
+}
+
+/* Main Content Section */
+.terms-content {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 60px 20px 100px;
+  background: white;
+}
+
+.terms-content .last-updated {
+  font-weight: 500;
+  margin-bottom: 15px;
+  color: #1a1a1a;
+}
+
+.terms-content p {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #333;
+  margin-bottom: 25px;
+}
+
+.terms-content h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-top: 10px;
+  margin-bottom: 12px;
+  color: #1a1a1a;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .terms-hero h1 { font-size: 2.8rem; }
+  .terms-content { padding: 40px 20px 80px; }
+}

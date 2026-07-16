@@ -1,0 +1,22 @@
+body {
+  margin: 0;
+  font-family: 'NeueMontreal', 'KozGoPr6N', -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+:root {
+  --primary-pink: #e91e63;
+  --light-pink: #fce4ec;
+  --dark-bg: #111;
+  --accent: #ff4081;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}

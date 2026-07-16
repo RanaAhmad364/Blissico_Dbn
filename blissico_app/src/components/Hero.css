@@ -1,0 +1,183 @@
+.hero-slider { position: relative; height: 80vh; background: #e0a3af; overflow: hidden; display: flex; flex-direction: column; }
+/* .slider-container { display: flex; height: 100%; width: 100%; transition: transform 0.5s ease-in-out; }
+.slide { min-width: 100vw; height: 100%; display: flex; align-items: center; justify-content: space-between; padding: 0 10%; }
+.slide-content { flex: 1; max-width: 45%; }
+.slide-content h1 {font-size: 4rem; line-height: 1.1; margin-bottom: 20px; color: #1a1a1a; }
+.slide-content p { font-size: 1rem; color: #666; line-height: 1.6; margin-bottom: 30px; max-width: 80%; }
+.explore-btn { background: white; color: #e27c9f; padding: 12px 30px; border-radius: 25px; text-decoration: none; font-size: 0.9rem; font-weight: 500; box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: all 0.3s; }
+.explore-btn:hover { transform: translateY(-3px); box-shadow: 0 5px 20px rgba(226, 124, 159, 0.3); }
+.slide-image-placeholder { flex: 1; height: 70%; background: white; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-left: 50px; background-image: url('https://via.placeholder.com/500x600/ffccd5/e27c9f?text=Greeting+Card'); background-size: cover; background-position: center; }
+.slider-dots { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); display: flex; gap: 10px; }
+.dot { width: 10px; height: 10px; background: rgba(0,0,0,0.1); border-radius: 50%; cursor: pointer; }
+.dot.active { background: #e27c9f; } */
+
+.hero-slider {
+  position: relative;
+  height: 80vh;
+  min-height: 500px;
+  background: #ebbbc5;
+  overflow: hidden; /* Prevents horizontal scrollbars */
+  display: flex;
+  flex-direction: column;
+}
+
+.slider-container {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  transition: transform 0.5s ease-in-out;
+}
+
+.slide {
+  min-width: 100vw;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  /* Changed: justify-content is now handled via inline style in JSX, defaulting to flex-start */
+  padding: 0 10%;
+}
+
+.slide-content {
+  /* Removed max-width: 700px and auto margin for left alignment */
+  max-width: 550px;
+  text-align: left;
+}
+
+.slide-content h1 {
+  font-size: 3rem;
+  line-height: 1.1;
+  margin-bottom: 20px;
+  color: #ffffff;
+  /* text-shadow: 0 2px 10px rgba(255, 255, 255, 0.7); */
+}
+
+.slide-content p {
+  font-size: 1.7rem;
+  color: #ffffff;
+  line-height: 1.6;
+  margin-bottom: 30px;
+  max-width: 100%;
+}
+
+/* --- Updated Explore Button --- */
+.explore-btn {
+  /* background: #e27c9f;
+  padding: 12px 30px;
+  border-radius: 25px;
+  text-decoration: none; */
+  color: #ffffff;
+  font-size: 0.9rem;
+      letter-spacing: 3px;
+  display: inline-block;
+  /* box-shadow: 0 5px 15px rgba(226, 124, 159, 0.3);
+  transition: all 0.3s;
+  display: inline-block; */
+}
+
+/* .explore-btn:hover {
+  transform: translateY(-3px);
+  background: #d16a8b;
+  box-shadow: 0 8px 20px rgba(226, 124, 159, 0.4);
+} */
+
+/* --- Updated Slider Dots --- */
+.slider-dots {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.dot.active {
+  background: #e27c9f;
+  border-bottom: 3px solid #e27c9f;
+  border-radius: 50% 50% 50%  50% ;
+  transform: scale(1.1);
+}
+
+@media (max-width: 1024px) {
+  .slide-content h1 {
+    font-size: 3rem;
+  }
+  .slide-image-placeholder {
+    height: 60%;
+    margin-left: 30px;
+  }
+}
+
+
+/* --- MOBILE (768px and below) --- */
+@media (max-width: 768px) {
+  .hero-slider {
+    height: auto;
+    min-height: 100vh; /* Full screen height for mobile */
+    padding-top: 40px;
+    padding-bottom: 60px;
+  }
+  
+  .slide {
+    flex-direction: column-reverse; /* Image on Top, Text on Bottom */
+    padding: 20px;
+    justify-content: center;
+    gap: 30px;
+  }
+  
+  .slide-content {
+    max-width: 100%;
+    text-align: start;
+    padding-right: 0;
+    flex: none;
+  }
+  
+  .slide-content h1 {
+    font-size: 2.5rem;
+  }
+  
+  .slide-content p {
+    max-width: 100%;
+    font-size: 1rem;
+    margin: 0 auto 20px auto;
+  }
+  
+  .slide-image-placeholder {
+    width: 80%;
+    max-width: 350px;
+    height: 280px;
+    margin: 0 auto;
+    flex: none;
+  }
+  
+  .explore-btn {
+    font-size: 1rem;
+  }
+  
+  .slider-dots {
+    bottom: 15px;
+  }
+}
+
+
+/* --- SMALL MOBILE (425px and below) --- */
+@media (max-width: 425px) {
+  .slide-content h1 {
+    font-size: 2rem;
+  }
+  .slide-image-placeholder {
+    width: 90%;
+    height: 220px;
+  }
+}

@@ -1,0 +1,194 @@
+/* --- Footer Base Styles --- */
+.footer {
+  background: #1f1f1f;
+  color: #e0e0e0;
+  padding: 60px 5% 30px;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 2fr 2fr 2fr;
+  gap: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* --- Logo Column --- */
+.footer-col.logo-col {
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
+}
+
+.footer-logo-link {
+  display: inline-block;
+  margin-bottom: 15px;
+}
+
+.footer-logo-img {
+  height: 75px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+}
+
+/* --- Social Icons --- */
+.social-icons {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.s-icon-img {
+  width: 50px;
+  height: 100%;
+  object-fit: contain;
+  cursor: pointer;
+  transition: opacity 0.3s, transform 0.3s;
+}
+
+.s-icon-img:hover {
+  opacity: 0.8;
+  transform: scale(1.05);
+}
+
+.copyright {
+  font-size: 0.95rem;
+  color: #888;
+  margin-top: 5px;
+}
+
+/* --- Text Columns --- */
+.footer-col h4 {
+  font-size: 1rem;
+  margin-bottom: 20px;
+  font-weight: 500;
+  color: #ffffff;
+}
+
+.footer-col ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-col ul li {
+  margin-bottom: 12px;
+}
+
+.footer-col ul li a {
+  text-decoration: none;
+  color: #b0b0b0;
+  font-size: 0.85rem;
+  transition: color 0.3s;
+}
+
+.footer-col ul li a:hover {
+  color: #e27c9f;
+}
+
+/* --- Newsletter Column --- */
+.newsletter{
+  text-align: center;
+}
+.newsletter p {
+  font-size: 0.85rem;
+  color: #b0b0b0;
+  margin-bottom: 15px;
+  line-height: 1.5;
+}
+
+.subscribe-box {
+  display: flex;
+  background: #2a2a2a;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid #444;
+  max-width: 100%;
+}
+
+.subscribe-box input {
+  flex: 1;
+  border: none;
+  padding: 12px 15px;
+  background: white;
+  color: #333;
+  outline: none;
+  font-family: 'SaolDisplay', 'Playfair Display', serif;
+}
+
+.subscribe-box input::placeholder {
+  color: #888;
+}
+
+.subscribe-box button {
+  border: none;
+  background: #e27c9f;
+  color: white;
+  padding: 0 20px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.3s;
+}
+
+.subscribe-box button:hover {
+  background: #c86a89;
+}
+
+
+/* ========================================================== */
+/* BREAKPOINT 1: TABLET (768px and up) - DEFAULT 4 COLUMNS    */
+/* ========================================================== */
+@media (max-width: 769px) {
+  .footer-grid {
+    grid-template-columns: 1fr 1fr ; /* EXACTLY the default layout */
+  }
+  .footer { padding: 60px 5% 30px; }
+}
+
+/* ========================================================== */
+/* BREAKPOINT 2: MOBILE (425px and below) - 2f & 1f Layout   */
+/* ========================================================== */
+@media (max-width: 425px) {
+  .footer {
+    padding: 40px 20px;
+  }
+
+  .footer-grid {
+    /* Sets Info and Legal columns side-by-side (2 columns) */
+    grid-template-columns: 1fr 1fr; 
+    gap: 30px;
+    text-align: center;
+    justify-items: center;
+  }
+
+  /* Column 1: Logo & Social takes full width (1 row) */
+  .footer-col.logo-col {
+    grid-column: 1 / -1; 
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .footer-logo-img {
+    height: 40px;
+    margin: 0 auto 15px;
+  }
+  .social-icons {
+    justify-content: center;
+  }
+
+  /* Column 4: Newsletter takes full width (1 row) */
+  .footer-col.newsletter {
+    grid-column: 1 / -1;
+    margin-top: 10px;
+  }
+
+  /* Keep Info and Legal looking clean */
+  .footer-col h4 {
+    margin-bottom: 15px;
+  }
+
+  .subscribe-box {
+    max-width: 280px; /* Prevents newsletter input from stretching too wide */
+    margin: 0 auto;
+  }
+}

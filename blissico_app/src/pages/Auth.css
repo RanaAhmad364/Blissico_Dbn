@@ -1,0 +1,199 @@
+/* --- AUTH PAGE LAYOUT --- */
+.auth-page-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.auth-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 80px 20px;
+  /* --- PREMIUM HERO-SECTION BACKGROUND --- */
+  /* Soft pink gradient + Beautiful floral image to match your brand */
+  background-image: 
+    linear-gradient(135deg, rgba(252, 237, 240, 0.85) 0%, rgba(255, 255, 255, 0.75) 100%),
+    url('https://images.unsplash.com/photo-1519373910464-6d307b667e9c?q=80&w=2070&auto=format&fit=crop');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed; /* Parallax effect for a premium feel */
+}
+
+/* --- AUTH CARD --- */
+.auth-box {
+  background: #ffffff;
+  padding: 50px 45px;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 480px;
+  box-shadow: 0 20px 60px rgba(226, 124, 159, 0.1); /* Your exact brand pink shadow */
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.register-box {
+  max-width: 560px; /* Slightly wider for extra fields */
+}
+
+/* --- HEADERS --- */
+.auth-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.auth-header h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.4rem;
+  color: #1a1a1a;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.auth-header p {
+  font-family: 'Poppins', sans-serif;
+  color: #666;
+  font-size: 0.95rem;
+}
+
+/* --- FORM STYLES --- */
+.form-row {
+  display: flex;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #1a1a1a;
+  margin-bottom: 6px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid #e5e5e5;
+  border-radius: 10px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.95rem;
+  outline: none;
+  transition: all 0.3s ease;
+  background: #fafafa;
+}
+
+.form-group input:focus {
+  border-color: #e27c9f;
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(226, 124, 159, 0.1);
+}
+
+/* --- TERMS CHECKBOX --- */
+.terms-group {
+  margin-bottom: 25px;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.85rem;
+  color: #555;
+  cursor: pointer;
+}
+
+.checkbox-label input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #e27c9f;
+  cursor: pointer;
+}
+
+/* --- BUTTONS --- */
+.auth-btn {
+  width: 100%;
+  background: #e27c9f;
+  color: white;
+  border: none;
+  padding: 16px;
+  border-radius: 12px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 15px rgba(226, 124, 159, 0.3);
+}
+
+.auth-btn:hover {
+  transform: translateY(-2px);
+  background: #cf6f8d;
+  box-shadow: 0 8px 25px rgba(226, 124, 159, 0.4);
+}
+
+.auth-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* --- MESSAGES --- */
+.auth-error {
+  background: #fff0f0;
+  border: 1px solid #ffcdd2;
+  color: #d32f2f;
+  padding: 12px 16px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+  font-family: 'Poppins', sans-serif;
+}
+
+.auth-success {
+  background: #e6ffe6;
+  border: 1px solid #b9f6ca;
+  color: #2e7d32;
+  padding: 12px 16px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* --- FOOTER --- */
+.auth-footer {
+  margin-top: 25px;
+  text-align: center;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.auth-link {
+  color: #e27c9f;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.auth-link:hover {
+  color: #cf6f8d;
+  text-decoration: underline;
+}
+
+/* --- MOBILE RESPONSIVENESS --- */
+@media (max-width: 650px) {
+  .auth-container { padding: 40px 15px; }
+  .auth-box { padding: 30px 20px; border-radius: 16px; }
+  .form-row { flex-direction: column; gap: 0; }
+  .auth-header h2 { font-size: 2rem; }
+  .auth-btn { padding: 14px; }
+}
