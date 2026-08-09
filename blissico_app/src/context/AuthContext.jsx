@@ -18,8 +18,14 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   // --- REGISTER ---
-  const register = async (name, email, password) => {
-    const response = await api.post('/api/auth/register', { name, email, password });
+  const register = async (name, email, contact, password, confirmPassword) => {
+    const response = await api.post('/api/auth/register', {
+      name,
+      email,
+      contact,
+      password,
+      confirmPassword,
+    });
     return response.data;
   };
 
@@ -43,6 +49,9 @@ export const AuthProvider = ({ children }) => {
 
   // --- LOGOUT ---
   const logout = () => {
+    api.post('/api/auth/logout').catch(() => {
+      // Ignore backend logout failures and always clear local auth state.
+    });
     localStorage.removeItem('blissico_token');
     localStorage.removeItem('blissico_user');
     setUser(null);
