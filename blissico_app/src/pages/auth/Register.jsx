@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import Marquee from '../components/Marquee';
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
+import { useAuth } from '../../context/AuthContext';
+import Marquee from '../../components/Marquee';
+import Navbar from '../../components/Navbar';
+import Footer from '../../components/Footer';
 import './Auth.css';
 
 const Register = () => {
