@@ -8,7 +8,7 @@ import './Auth.css';
 
 const Register = () => {
   const [formData, setFormData] = useState({
-    name: '', email: '', contact: '', password: '', confirmPassword: ''
+  first_name: '', last_name: '', email: '', password: '', confirmPassword: ''
   });
   const [agreeToTerms, setAgreeToTerms] = useState(false);
   const [error, setError] = useState('');
@@ -33,7 +33,7 @@ const Register = () => {
 
     setLoading(true);
     try {
-      await register(formData.name, formData.email, formData.contact, formData.password, formData.confirmPassword);
+      await register(formData.first_name, formData.last_name, formData.email, formData.password, formData.confirmPassword);
       navigate('/verify-otp', { state: { email: formData.email } });
     } catch (err) {
       setError(err.response?.data?.error || 'Registration failed. Please try again.');
@@ -56,15 +56,15 @@ const Register = () => {
           {error && <div className="auth-error">{error}</div>}
 
           <form onSubmit={handleSubmit}>
-            <div className="form-row">
-              <div className="form-group">
-                <label>Full Name</label>
-                <input type="text" name="name" placeholder="John Doe" value={formData.name} onChange={handleChange} required disabled={loading} />
-              </div>
-              <div className="form-group">
-                <label>Phone Number</label>
-                <input type="tel" name="contact" placeholder="+1 234 567 890" value={formData.contact} onChange={handleChange} required disabled={loading} />
-              </div>
+           <div className="form-row">
+                <div className="form-group">
+                  <label>First Name</label>
+                  <input type="text" name="first_name" placeholder="John" value={formData.first_name} onChange={handleChange} required disabled={loading} />
+                </div>
+                <div className="form-group">
+                  <label>Last Name</label>
+                  <input type="text" name="last_name" placeholder="Doe" value={formData.last_name} onChange={handleChange} required disabled={loading} />
+                </div>
             </div>
 
             <div className="form-group">

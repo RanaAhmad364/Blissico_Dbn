@@ -181,3 +181,11 @@ def reset_password():
 
 
 
+@auth_bp.post("/logout")
+def logout():
+    # Stateless JWT: nothing to invalidate server-side yet.
+    # (If you later add a token blocklist table, revoke the jti here.)
+    return jsonify({
+        "success": True,
+        "message": "Logged out successfully."
+    }), 200
