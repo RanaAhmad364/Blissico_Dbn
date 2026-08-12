@@ -1,5 +1,9 @@
-import React, { useRef } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import React, { useRef, useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { getCard, assetUrl } from '../api/catalog';
+
+
+
 import { 
   FaRegFileImage, FaRegFilePdf, FaShareNodes, 
   FaChevronLeft, FaChevronRight 
@@ -10,21 +14,25 @@ import Footer from '../components/Footer';
 import './ProductDetail.css';
 
 const ProductDetail = () => {
-  const { id } = useParams(); // Gets the dynamic ID from the URL
-  const scrollRef = useRef(null);
+  const { id } = useParams();
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  // Dummy Data for "You May Also Like"
-  const relatedProducts = [
-    { id: 2, name: 'Card Name', price: '$14.99' },
-    { id: 3, name: 'Card Name', price: '$14.99' },
-    { id: 4, name: 'Card Name', price: '$14.99' },
-    { id: 5, name: 'Card Name', price: '$14.99' },
-    { id: 2, name: 'Card Name', price: '$14.99' },
-    { id: 3, name: 'Card Name', price: '$14.99' },
-    { id: 4, name: 'Card Name', price: '$14.99' },
-    { id: 54, name: 'Card Name', price: '$14.99' },
-    
-  ];
+  useEffect(() => {
+    setLoading(true);
+    getCard(id).then(setProduct).catch(() => setProduct(null)).finally(() => setLoading(false));
+  }, [id]);
+
+  if (loading) return <div style={{ padding: 80, textAlign: 'center' }}>Loading...</div>;
+  if (!product) return <div style={{ padding: 80, textAlign: 'center' }}>Card not found.</div>;
+
+
+
+
+
+
+
+
 
   // Carousel Scroll Handlers
   const scrollLeft = () => {

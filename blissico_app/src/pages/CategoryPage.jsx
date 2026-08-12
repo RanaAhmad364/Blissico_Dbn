@@ -1,48 +1,54 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import Marquee from '../components/Marquee';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import { mockProducts } from '../data/mockProducts';
+import { getCards } from '../api/catalog';
 import './CategoryPage.css';
+
+// Maps the URL's first segment to the query param the backend expects
+const FILTER_KEY = { cards: 'category', occasions: 'occasion', collections: 'collection' };
+
 const CategoryPage = () => {
   const { category, slug } = useParams();
   const [currentPage, setCurrentPage] = useState(1);
-  const [filterBy, setFilterBy] = useState('all');
   const [sortBy, setSortBy] = useState('featured');
-  const [isFilterOpen, setIsFilterOpen] = useState(false); // Toggle filter dropdown
+  const [cards, setCards] = useState([]);
+  const [totalPages, setTotalPages] = useState(1);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const itemsPerPage = 12;
 
-  const urlFilteredData = useMemo(() => {
-    if (category === 'cards') return mockProducts.filter(p => p.recipient === slug);
-    else if (category === 'occasions') return mockProducts.filter(p => p.occasion === slug);
-    else if (category === 'collections') return mockProducts.filter(p => p.collection === slug);
-    return mockProducts;
-  }, [category, slug]);
+  const sortParam = useMemo(() => {
+    if (sortBy === 'priceLowHigh') return 'price_low_high';
+    if (sortBy === 'priceHighLow') return 'price_high_low';
+    if (sortBy === 'nameAZ') return 'name_az';
+    return undefined;
+  }, [sortBy]);
 
-  const userFilteredData = useMemo(() => {
-    if (filterBy === 'all') return urlFilteredData;
-    return urlFilteredData.filter(p => p.style === filterBy);
-  }, [urlFilteredData, filterBy]);
-
-  const sortedData = useMemo(() => {
-    let sorted = [...userFilteredData];
-    if (sortBy === 'featured') { /* keep original */ }
-    else if (sortBy === 'priceLowHigh') sorted.sort((a, b) => a.price - b.price);
-    else if (sortBy === 'priceHighLow') sorted.sort((a, b) => b.price - a.price);
-    else if (sortBy === 'nameAZ') sorted.sort((a, b) => a.name.localeCompare(b.name));
-    return sorted;
-  }, [userFilteredData, sortBy]);
-
-  const totalPages = Math.ceil(sortedData.length / itemsPerPage);
-  const currentData = useMemo(() => {
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    return sortedData.slice(startIndex, startIndex + itemsPerPage);
-  }, [sortedData, currentPage]);
-
-  React.useEffect(() => {
+  useEffect(() => {
     setCurrentPage(1);
-  }, [filterBy, sortBy, category, slug]);
+  }, [category, slug, sortBy]);
+
+  useEffect(() => {
+    const filterKey = FILTER_KEY[category];
+    if (!filterKey) {
+      setError('Unknown category type.');
+      setLoading(false);
+      return;
+    }
+
+    setLoading(true);
+    setError('');
+
+    getCards({ [filterKey]: slug, sort: sortParam, page: currentPage, per_page: itemsPerPage })
+      .then((res) => {
+        setCards(res.items);
+        setTotalPages(res.pages || 1);
+      })
+      .catch(() => setError('Could not load cards. Please try again.'))
+      .finally(() => setLoading(false));
+  }, [category, slug, sortParam, currentPage]);
 
   const formatTitle = (str) => {
     if (!str) return 'Products';
@@ -55,7 +61,7 @@ const CategoryPage = () => {
       <Navbar />
 
       <section className="category-hero">
-        <h1>For {formatTitle(slug)}</h1>
+        <h1>{formatTitle(slug)}</h1>
         <p>
           Discover our thoughtfully crafted digital cards designed to make every occasion feel truly special.
           Personalise your chosen design, enjoy instant access, share it digitally, or print it beautifully.
@@ -63,50 +69,13 @@ const CategoryPage = () => {
       </section>
 
       <div className="category-content">
-        {/* Breadcrumbs */}
         <div className="breadcrumbs">
-          <Link to="/">Home</Link> &gt; 
-          <Link to={`/${category}`}>{formatTitle(category)}</Link> &gt; 
+          <Link to="/">Home</Link> &gt;
+          <Link to={`/${category}`}>{formatTitle(category)}</Link> &gt;
           <span>{formatTitle(slug)}</span>
         </div>
 
-        {/* Filter & Sort Toolbar */}
         <div className="category-toolbar">
-          <div className="toolbar-left">
-            <div className="filter-wrapper">
-              <span 
-                className="filter-trigger" 
-                onClick={() => setIsFilterOpen(!isFilterOpen)}
-              >
-                ⊞ Filter {isFilterOpen ? '▲' : '>'}
-              </span>
-              
-              {/* Professional Toggleable Filter Dropdown */}
-              {isFilterOpen && (
-                <div className="filter-dropdown">
-                  <div className="filter-option" onClick={() => { setFilterBy('all'); setIsFilterOpen(false); }}>
-                    <span className={`radio-circle ${filterBy === 'all' ? 'active' : ''}`}></span> All
-                  </div>
-                  <div className="filter-option" onClick={() => { setFilterBy('floral'); setIsFilterOpen(false); }}>
-                    <span className={`radio-circle ${filterBy === 'floral' ? 'active' : ''}`}></span> Floral
-                  </div>
-                  <div className="filter-option" onClick={() => { setFilterBy('minimal'); setIsFilterOpen(false); }}>
-                    <span className={`radio-circle ${filterBy === 'minimal' ? 'active' : ''}`}></span> Minimal
-                  </div>
-                  <div className="filter-option" onClick={() => { setFilterBy('elegant'); setIsFilterOpen(false); }}>
-                    <span className={`radio-circle ${filterBy === 'elegant' ? 'active' : ''}`}></span> Elegant
-                  </div>
-                  <div className="filter-option" onClick={() => { setFilterBy('luxury'); setIsFilterOpen(false); }}>
-                    <span className={`radio-circle ${filterBy === 'luxury' ? 'active' : ''}`}></span> Luxury
-                  </div>
-                  <div className="filter-option" onClick={() => { setFilterBy('fun'); setIsFilterOpen(false); }}>
-                    <span className={`radio-circle ${filterBy === 'fun' ? 'active' : ''}`}></span> Fun
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-          
           <div className="toolbar-right">
             <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
               <option value="featured">Featured</option>
@@ -117,34 +86,38 @@ const CategoryPage = () => {
           </div>
         </div>
 
-        {/* Product Grid */}
         <div className="product-area">
-          {currentData.length === 0 ? (
-            <div className="no-products">No products found matching your filters.</div>
+          {loading ? (
+            <div className="no-products">Loading...</div>
+          ) : error ? (
+            <div className="no-products">{error}</div>
+          ) : cards.length === 0 ? (
+            <div className="no-products">No products found in this category.</div>
           ) : (
             <div className="product-grid">
-              {currentData.map((product) => (
+              {cards.map((product) => (
                 <Link to={`/product/${product.id}`} key={product.id} className="product-card-link">
-                    <div className="product-card">
-                     <div className="product-image-wrapper">
-                      {product.image ? (
-                        <img src={product.image} alt={product.name} className="product-image" />
+                  <div className="product-card">
+                    <div className="product-image-wrapper">
+                      {product.thumbnail ? (
+                        <img src={product.thumbnail} alt={product.title} className="product-image" />
                       ) : (
-                        <div className="product-image-placeholder"></div> // Fallback if no image
+                        <div className="product-image-placeholder"></div>
                       )}
                     </div>
                     <div className="product-info">
-                        <span className="product-name">{product.name}</span>
-                        <span className="product-price">${product.price.toFixed(2)}</span>
+                      <span className="product-name">{product.title}</span>
+                      <span className="product-price">
+                        {product.is_free ? 'Free' : `$${product.price.toFixed(2)}`}
+                      </span>
                     </div>
-                    </div>
+                  </div>
                 </Link>
-                ))}
+              ))}
             </div>
           )}
 
-          {/* Pagination (1 2 3 >) */}
-          {totalPages > 0 && (
+          {totalPages > 1 && (
             <div className="pagination">
               {Array.from({ length: totalPages }, (_, i) => i + 1).map((num) => (
                 <button
@@ -156,7 +129,7 @@ const CategoryPage = () => {
                 </button>
               ))}
               {currentPage < totalPages && (
-                <button className="page-item arrow" onClick={() => setCurrentPage(prev => prev + 1)}>&gt;</button>
+                <button className="page-item arrow" onClick={() => setCurrentPage((p) => p + 1)}>&gt;</button>
               )}
             </div>
           )}

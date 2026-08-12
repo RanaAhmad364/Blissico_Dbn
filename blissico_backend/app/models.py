@@ -86,6 +86,7 @@ class Collection(BaseModel):
     __tablename__ = "collections"
 
     name = db.Column(db.String(100),nullable=False,unique=True)
+    slug = db.Column(db.String(120),nullable=False,unique=True,index=True)
     description = db.Column(db.Text)
     is_active = db.Column(db.Boolean,default=True,nullable=False)
     cards = db.relationship("Card",back_populates="collection",lazy=True)
@@ -96,6 +97,7 @@ class Occasion(BaseModel):
     __tablename__ = "occasions"
 
     name = db.Column(db.String(100),nullable=False,unique=True)
+    slug = db.Column(db.String(120),nullable=False,unique=True,index=True)
     description = db.Column(db.Text)
     is_active = db.Column(db.Boolean,default=True,nullable=False)
     cards = db.relationship("Card",back_populates="occasion",lazy=True)
