@@ -35,9 +35,11 @@ def create_app(config_class=Config):
     from app.auth.routes import auth_bp
     from app.admin.routes import admin_bp
     from app.catalog.routes import catalog_bp
+    from app.Card_Cutomization.routes import customization_bp
     app.register_blueprint(auth_bp)
     app.register_blueprint(admin_bp)
     app.register_blueprint(catalog_bp)
+    app.register_blueprint(customization_bp)
 
     return app
     

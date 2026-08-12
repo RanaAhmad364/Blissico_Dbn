@@ -81,7 +81,7 @@ const ProductDetail = () => {
             </div>
           )}
 
-          <Link to="/customize" className="detail-customize-btn">
+          <Link to={`/customize/${product.id}`} className="detail-customize-btn">
             Customize
           </Link>
 
