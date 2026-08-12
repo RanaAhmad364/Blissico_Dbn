@@ -10,6 +10,7 @@ from flask_mail import Mail
 from flask_jwt_extended import JWTManager
 from flask_migrate import Migrate
 
+
 load_dotenv()
 cor=CORS()
 db=SQLAlchemy()
