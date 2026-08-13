@@ -1,5 +1,5 @@
 from flask import Flask
-# from flask import Flask, jsonify     :URL was not found on the server / section fixed k lye 
+# from flask import Flask, jsonify  URL was not found on the server / section fixed k lye 
 
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
