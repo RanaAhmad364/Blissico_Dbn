@@ -1,4 +1,5 @@
 from flask import Flask
+# from flask import Flask, jsonify     :URL was not found on the server / section fixed k lye 
 
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
@@ -32,6 +33,16 @@ def create_app(config_class=Config):
     cor.init_app(app, resources={r"/api/*": {"origins": "*"}})
     migrate.init_app(app,db)
 
+  # -----------------------------------------
+    # ROOT ROUTE
+    # -----------------------------------------
+
+    # @app.get("/")
+    # def home():
+    #     return jsonify({
+    #         "success": True,
+    #         "message": "Blissico API is running."
+    #     }), 200
 
     from app.auth.routes import auth_bp
     from app.admin.routes import admin_bp

@@ -16,7 +16,7 @@ class EmailService:
 
         message.body = (
             f"Your verification OTP is: {otp}\n\n"
-            "This OTP will expire in 5 minutes.\n"
+            "This OTP will expire in 1 minutes.\n"
             "If you did not request this code, please ignore this email."
         )
 
@@ -36,7 +36,7 @@ class EmailService:
 
         message.body = (
             f"Your password reset OTP is: {otp}\n\n"
-            "This OTP will expire in 5 minutes.\n"
+            "This OTP will expire in 1 minutes.\n"
             "If you did not request a password reset, please ignore this email."
         )
 

@@ -13,7 +13,7 @@ class OTPService:
     """
 
     OTP_LENGTH = 6
-    OTP_EXPIRY_MINUTES = 5
+    OTP_EXPIRY_MINUTES = 1
 
     @staticmethod
     def generate_otp() -> str:
