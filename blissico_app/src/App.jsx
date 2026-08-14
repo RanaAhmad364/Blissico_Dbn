@@ -16,6 +16,10 @@ import Privacy from './pages/Privacy';
 import Terms from './pages/Terms';
 import Customize from './pages/Customize';
 import ProductDetail from './pages/ProductDetail';
+import AddToCart from './pages/cart/AddToCart';
+import Checkout from './pages/checkout/Checkout';
+import PaymentSuccess from './pages/checkout/PaymentSuccess';
+// import AdminDashboard from './pages/admin/Dashboard';
 
 // 3. Import the new Auth Pages
   import Login from './pages/auth/Login';
@@ -44,6 +48,9 @@ function App() {
           <Route path="/terms" element={<Terms />} />
           <Route path="/product/:id" element={<ProductDetail />} /> 
           <Route path="/customize" element={<Customize />} />
+          <Route path="/cart" element={<AddToCart />} />
+          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/payment-success" element={<PaymentSuccess />} />
 
           {/* NEW AUTH ROUTES (Added here) */}
           <Route path="/login" element={<Login />} />
@@ -52,6 +59,8 @@ function App() {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/customize/:cardId" element={<Customize />} />
           <Route path="/reset-password" element={<ResetPassword />} />
+          {/* <Route path="/admin/dashboard" element={<AdminDashboard />} /> */}
+          
         </Routes>
       </AuthProvider>
     </BrowserRouter>

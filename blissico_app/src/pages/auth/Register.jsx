@@ -36,8 +36,26 @@ const Register = () => {
       await register(formData.first_name, formData.last_name, formData.email, formData.password, formData.confirmPassword);
       navigate('/verify-otp', { state: { email: formData.email } });
     } catch (err) {
-      setError(err.response?.data?.error || 'Registration failed. Please try again.');
-    } finally {
+  console.error('Registration error:', err);
+
+  const data = err?.response?.data;
+
+  // Backend field validation errors
+  if (data?.errors) {
+    const firstError = Object.values(data.errors)[0];
+
+    setError(firstError || data.message || 'Registration failed.');
+  }
+  // Backend general error
+  else if (data?.message) {
+    setError(data.message);
+  }
+  // Network/server error
+  else {
+    setError('Registration failed. Please try again.');
+  }
+
+} finally {
       setLoading(false);
     }
   };

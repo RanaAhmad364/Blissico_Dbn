@@ -189,6 +189,18 @@
   text-decoration: underline;
 }
 
+
+.otp-timer {
+  text-align: center;
+  margin: 15px 0;
+  font-size: 14px;
+}
+
+.otp-timer strong {
+  font-size: 16px;
+}
+
+
 /* --- MOBILE RESPONSIVENESS --- */
 @media (max-width: 650px) {
   .auth-container { padding: 40px 15px; }
