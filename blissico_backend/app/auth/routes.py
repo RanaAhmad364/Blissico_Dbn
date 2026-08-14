@@ -150,6 +150,34 @@ def forgot_password():
             "message": "Something went wrong."
         }), 500
 
+# ---------------------------------------------------------
+# RESEND PASSWORD RESET OTP
+# ---------------------------------------------------------
+
+@auth_bp.post("/resend-password-reset-otp")
+def resend_password_reset_otp():
+    try:
+        data = request.get_json(silent=True) or {}
+
+        AuthValidator.validate_forgot_password(data)
+
+        response, status_code = AuthService.resend_password_reset_otp(data)
+
+        return jsonify(response), status_code
+
+    except ValidationError as error:
+        return jsonify({
+            "success": False,
+            "message": "Validation failed.",
+            "errors": error.errors
+        }), 400
+
+    except Exception:
+        return jsonify({
+            "success": False,
+            "message": "Something went wrong."
+        }), 500
+
 
 # ---------------------------------------------------------
 # RESET PASSWORD
@@ -179,7 +207,9 @@ def reset_password():
             "message": "Something went wrong."
         }), 500
 
-
+# ---------------------------------------------------------
+# LOGOUT
+# ---------------------------------------------------------
 
 @auth_bp.post("/logout")
 def logout():

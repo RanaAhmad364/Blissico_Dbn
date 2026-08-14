@@ -1,4 +1,4 @@
-from app.models import User,EmailOTP,Role
+from app.models import User, EmailOTP, Role
 from app.utils.password_services import PasswordService
 from app.utils.otp_services import OTPService
 from app.utils.email_services import EmailService
@@ -55,7 +55,7 @@ class AuthService:
                 "success": False,
                 "message": "Default user role is not configured."
             }, 500
-        
+
         # Create user
         user = User(
             role_id=role.id,
@@ -158,7 +158,7 @@ class AuthService:
                 "message": "No valid verification OTP found."
             }, 400
 
-        # Check expiry using model property
+        # Check expiry
         if email_otp.is_expired:
             return {
                 "success": False,
@@ -300,32 +300,31 @@ class AuthService:
     def forgot_password(data):
         """
         Generate and send password-reset OTP.
+
+        Only existing and verified emails can request
+        a password reset.
         """
 
         email = data["email"].strip().lower()
 
+        # Find user
         user = User.query.filter_by(
             email=email
         ).first()
 
-        # Do not reveal whether email exists
+        # Email does not exist
         if not user:
             return {
-                "success": True,
-                "message": (
-                    "If the email is registered, "
-                    "a password reset OTP has been sent."
-                )
-            }, 200
+                "success": False,
+                "message": "Email does not exist."
+            }, 404
 
+        # Email exists but is not verified
         if not user.is_verified:
             return {
-                "success": True,
-                "message": (
-                    "If the email is registered, "
-                    "a password reset OTP has been sent."
-                )
-            }, 200
+                "success": False,
+                "message": "Email is not verified."
+            }, 400
 
         # Generate password reset OTP
         otp = OTPService.generate_otp()
@@ -375,8 +374,93 @@ class AuthService:
         return {
             "success": True,
             "message": (
-                "If the email is registered, "
-                "a password reset OTP has been sent."
+                "Password reset OTP sent successfully."
+            )
+        }, 200
+
+    # ---------------------------------------------------------
+    # RESEND PASSWORD RESET OTP
+    # ---------------------------------------------------------
+
+    @staticmethod
+    def resend_password_reset_otp(data):
+        """
+        Generate and send a new password-reset OTP.
+
+        Only existing and verified emails can receive
+        a password-reset OTP.
+        """
+
+        email = data["email"].strip().lower()
+
+        # Find user
+        user = User.query.filter_by(
+            email=email
+        ).first()
+
+        # Email does not exist
+        if not user:
+            return {
+                "success": False,
+                "message": "Email does not exist."
+            }, 404
+
+        # Email exists but is not verified
+        if not user.is_verified:
+            return {
+                "success": False,
+                "message": "Email is not verified."
+            }, 400
+
+        # Invalidate previous unverified OTPs
+        EmailOTP.query.filter_by(
+            user_id=user.id,
+            verified=False
+        ).update(
+            {
+                "verified": True
+            }
+        )
+
+        # Generate new password reset OTP
+        otp = OTPService.generate_otp()
+
+        otp_hash = OTPService.hash_otp(otp)
+
+        expires_at = OTPService.get_expiry_time()
+
+        # Store new OTP
+        email_otp = EmailOTP(
+            user_id=user.id,
+            otp_hash=otp_hash,
+            expires_at=expires_at,
+            verified=False
+        )
+
+        db.session.add(email_otp)
+        db.session.commit()
+
+        # Send password reset OTP
+        try:
+            EmailService.send_password_reset_otp(
+                email=user.email,
+                otp=otp
+            )
+
+        except Exception:
+            db.session.rollback()
+
+            return {
+                "success": False,
+                "message": (
+                    "Unable to send password reset email."
+                )
+            }, 500
+
+        return {
+            "success": True,
+            "message": (
+                "Password reset OTP sent successfully."
             )
         }, 200
 
@@ -403,6 +487,13 @@ class AuthService:
             return {
                 "success": False,
                 "message": "Invalid email or OTP."
+            }, 400
+
+        # Email must be verified
+        if not user.is_verified:
+            return {
+                "success": False,
+                "message": "Email is not verified."
             }, 400
 
         # Find latest unverified OTP
@@ -520,4 +611,3 @@ class AuthService:
                 "Verification OTP sent successfully."
             )
         }, 200
-
