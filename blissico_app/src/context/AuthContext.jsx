@@ -50,7 +50,7 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem('blissico_refresh_token', refresh_token);
     localStorage.setItem('blissico_user', JSON.stringify(user));
     setUser(user);
-    return response.data;
+    return user;
   };
 
   // --- LOGOUT ---

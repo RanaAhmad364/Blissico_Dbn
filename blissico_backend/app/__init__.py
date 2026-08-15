@@ -11,7 +11,6 @@ from flask_mail import Mail
 from flask_jwt_extended import JWTManager
 from flask_migrate import Migrate
 
-
 load_dotenv()
 cor=CORS()
 db=SQLAlchemy()
@@ -33,25 +32,19 @@ def create_app(config_class=Config):
     cor.init_app(app, resources={r"/api/*": {"origins": "*"}})
     migrate.init_app(app,db)
 
-  # -----------------------------------------
-    # ROOT ROUTE
-    # -----------------------------------------
-
-    # @app.get("/")
-    # def home():
-    #     return jsonify({
-    #         "success": True,
-    #         "message": "Blissico API is running."
-    #     }), 200
-
     from app.auth.routes import auth_bp
     from app.admin.routes import admin_bp
     from app.catalog.routes import catalog_bp
     from app.Card_Cutomization.routes import customization_bp
+    from app.cli import seed_roles, create_admin
     app.register_blueprint(auth_bp)
     app.register_blueprint(admin_bp)
     app.register_blueprint(catalog_bp)
     app.register_blueprint(customization_bp)
+    app.cli.add_command(seed_roles)
+    app.cli.add_command(create_admin)
+
+
 
     return app
     

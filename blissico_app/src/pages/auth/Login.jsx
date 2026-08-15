@@ -19,14 +19,16 @@ const Login = () => {
     setError('');
     setLoading(true);
     try {
-      await login(email, password);
-      navigate('/dashboard');
+      const user = await login(email, password);
+      navigate(user.role === 'Admin' ? '/admin/dashboard' : '/dashboard');
     } catch (err) {
       setError(err.response?.data?.error || 'Login failed. Please check your credentials.');
     } finally {
       setLoading(false);
     }
   };
+
+
 
   return (
     <div className="auth-page-wrapper">

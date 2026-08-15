@@ -32,6 +32,9 @@ import UserDashboard from './pages/User_dashboard';
   import ForgotPassword from './pages/auth/ForgotPassword';
   import ResetPassword from './pages/auth/ResetPassword';
 
+  import AdminRoute from './components/AdminRoute';
+  import AdminDashboard from './pages/admin/admin_dashboard';
+
 import './App.css';
 
 function App() {
@@ -64,6 +67,16 @@ function App() {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/customize/:cardId" element={<Customize />} />
           <Route path="/reset-password" element={<ResetPassword />} />
+
+          <Route path="/admin/dashboard"
+  element={
+    <AdminRoute>
+      <AdminDashboard />
+    </AdminRoute>
+  }
+/>
+
+          
           {/* <Route path="/admin/dashboard" element={<AdminDashboard />} /> */}
           
         </Routes>

@@ -287,7 +287,8 @@ class AuthService:
                     "id": user.id,
                     "first_name": user.first_name,
                     "last_name": user.last_name,
-                    "email": user.email
+                    "email": user.email,
+                    "role": user.role.name if user.role else None
                 }
             }
         }, 200
