@@ -19,6 +19,10 @@ import ProductDetail from './pages/ProductDetail';
 import AddToCart from './pages/cart/AddToCart';
 import Checkout from './pages/checkout/Checkout';
 import PaymentSuccess from './pages/checkout/PaymentSuccess';
+
+
+import UserDashboard from './pages/User_dashboard';
+
 // import AdminDashboard from './pages/admin/Dashboard';
 
 // 3. Import the new Auth Pages
@@ -51,6 +55,7 @@ function App() {
           <Route path="/cart" element={<AddToCart />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/payment-success" element={<PaymentSuccess />} />
+          <Route path="/dashboard" element={<UserDashboard />} />
 
           {/* NEW AUTH ROUTES (Added here) */}
           <Route path="/login" element={<Login />} />
