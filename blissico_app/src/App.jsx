@@ -37,6 +37,9 @@ import UserEditProfile from './pages/user/UserEditProfile';
   import AdminDashboard from './pages/admin/AdminDashboard';
   import EditProfile from './pages/admin/EditProfile';
 
+  import Categories from './pages/admin/Categories';
+  import Products from './pages/admin/Products';
+
 
 import './App.css';
 
@@ -71,6 +74,9 @@ function App() {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/customize/:cardId" element={<Customize />} />
           <Route path="/reset-password" element={<ResetPassword />} />
+
+          <Route path="/admin/categories" element={<AdminRoute><Categories /></AdminRoute>} />
+          <Route path="/admin/products" element={<AdminRoute><Products /></AdminRoute>} />
 
           
 

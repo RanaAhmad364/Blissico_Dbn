@@ -16,34 +16,57 @@ class AdminCatalogService:
         return [AdminCatalogService._serialize_taxonomy(c) for c in categories]
 
     @staticmethod
-    def create_collection(data):
+    def create_category(data):
         name = data["name"].strip()
         slug = AdminCatalogService._slugify(name)
-        if Collection.query.filter_by(slug=slug).first():
-            return {"success": False, "message": "A collection with this name already exists."}, 409
 
-        collection = Collection(name=name, slug=slug, description=data.get("description"), is_active=data.get("is_active", True))
-        db.session.add(collection)
+        if Category.query.filter_by(slug=slug).first():
+            return {"success": False, "message": "A category with this name already exists."}, 409
+
+        parent_id = data.get("parent_id") or None
+        if parent_id:
+            if not Category.query.get(parent_id):
+                return {"success": False, "message": "Parent category not found."}, 400
+
+        category = Category(
+            name=name,
+            slug=slug,
+            description=data.get("description"),
+            icon=data.get("icon"),
+            is_active=data.get("is_active", True),
+            parent_id=parent_id,
+        )
+        db.session.add(category)
         db.session.commit()
-        return {"success": True, "message": "Collection created.", "data": AdminCatalogService._serialize_taxonomy(collection)}, 201
+
+        return {"success": True, "message": "Category created.", "data": AdminCatalogService._serialize_taxonomy(category)}, 201
 
     @staticmethod
-    def update_collection(collection_id, data):
-        collection = Collection.query.get(collection_id)
-        if not collection:
-            return {"success": False, "message": "Collection not found."}, 404
+    def update_category(category_id, data):
+        category = Category.query.get(category_id)
+        if not category:
+            return {"success": False, "message": "Category not found."}, 404
 
         if "name" in data:
-            collection.name = data["name"].strip()
-            collection.slug = AdminCatalogService._slugify(collection.name)
+            category.name = data["name"].strip()
+            category.slug = AdminCatalogService._slugify(category.name)
         if "description" in data:
-            collection.description = data["description"]
+            category.description = data["description"]
+        if "icon" in data:
+            category.icon = data["icon"]
         if "is_active" in data:
-            collection.is_active = data["is_active"]
+            category.is_active = data["is_active"]
+        if "parent_id" in data:
+            parent_id = data["parent_id"] or None
+            if parent_id:
+                if int(parent_id) == category.id:
+                    return {"success": False, "message": "A category cannot be its own parent."}, 400
+                if not Category.query.get(parent_id):
+                    return {"success": False, "message": "Parent category not found."}, 400
+            category.parent_id = parent_id
 
         db.session.commit()
-        return {"success": True, "message": "Collection updated.", "data": AdminCatalogService._serialize_taxonomy(collection)}, 200
-
+        return {"success": True, "message": "Category updated.", "data": AdminCatalogService._serialize_taxonomy(category)}, 200
 
 
     @staticmethod
@@ -53,6 +76,8 @@ class AdminCatalogService:
             return {"success": False, "message": "Category not found."}, 404
         if category.cards:
             return {"success": False, "message": "Cannot delete a category that still has cards assigned to it."}, 409
+        if category.subcategories:
+            return {"success": False, "message": "Cannot delete a category that still has subcategories."}, 409
 
         db.session.delete(category)
         db.session.commit()
@@ -335,6 +360,8 @@ class AdminCatalogService:
             data["slug"] = obj.slug
         if hasattr(obj, "icon"):
             data["icon"] = obj.icon
+        if hasattr(obj, "parent_id"):
+            data["parent_id"] = obj.parent_id
         return data
 
     @staticmethod

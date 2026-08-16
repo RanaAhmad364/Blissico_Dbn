@@ -76,7 +76,11 @@ class Category(BaseModel):
     slug = db.Column(db.String(120),nullable=False,unique=True,index=True) 
     icon = db.Column(db.String(255)) 
     description = db.Column(db.Text) 
-    is_active = db.Column(db.Boolean,default=True,nullable=False) 
+    is_active = db.Column(db.Boolean,default=True,nullable=False)
+    parent_id = db.Column(db.Integer, db.ForeignKey("categories.id"), nullable=True)
+    subcategories = db.relationship(                                                    
+        "Category", backref=db.backref("parent", remote_side="Category.id"), lazy=True
+    ) 
     cards = db.relationship("Card",back_populates="category",lazy=True) 
     def __repr__(self):
         return f"<Category {self.name}>"

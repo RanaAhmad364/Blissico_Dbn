@@ -5,19 +5,21 @@ class CatalogService:
 
     @staticmethod
     def list_categories():
-        return [
-            {
-                "id": c.id,
-                "name": c.name,
-                "slug": c.slug,
-                "icon": c.icon,
-                "description": c.description
+        all_categories = Category.query.filter_by(is_active=True).order_by(Category.name).all()
+        top_level = [c for c in all_categories if c.parent_id is None]
+
+        def serialize(cat, all_cats):
+            return {
+                "id": cat.id,
+                "name": cat.name,
+                "slug": cat.slug,
+                "icon": cat.icon,
+                "subcategories": [
+                    serialize(c, all_cats) for c in all_cats if c.parent_id == cat.id
+                ],
             }
-            for c in Category.query
-            .filter_by(is_active=True)
-            .order_by(Category.name)
-            .all()
-        ]
+
+        return [serialize(c, all_categories) for c in top_level]
 
     @staticmethod
     def list_collections():
@@ -54,12 +56,12 @@ class CatalogService:
         query = Card.query.filter_by(is_active=True)
 
         if filters.get("category"):
-            query = query.join(
-                Category,
-                Card.category_id == Category.id
-            ).filter(
-                Category.slug == filters["category"]
-            )
+            category = Category.query.filter_by(slug=filters["category"]).first()
+            if category:
+                category_ids = [category.id] + [c.id for c in category.subcategories]
+                query = query.filter(Card.category_id.in_(category_ids))
+            else:
+                query = query.filter(False) 
 
         if filters.get("collection"):
             query = query.join(
