@@ -1,0 +1,74 @@
+/* src/components/dashboard/CategoriesList.css */
+.categories-list-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 16px 24px;
+  border: 1px solid #e8ecf4;
+}
+
+.categories-header {
+  margin-bottom: 12px;
+}
+
+.categories-header h3 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a1a2e;
+  margin: 0;
+}
+
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+}
+
+.category-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  background: #f8fafc;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.category-item:hover {
+  background: #f0f4ff;
+}
+
+.category-icon {
+  font-size: 14px;
+}
+
+.category-name {
+  font-size: 12px;
+  font-weight: 500;
+  color: #1a1a2e;
+  flex: 1;
+}
+
+.category-count {
+  font-size: 11px;
+  font-weight: 600;
+  color: #8892b0;
+  background: #e8ecf4;
+  padding: 0 8px;
+  border-radius: 10px;
+}
+
+@media (max-width: 768px) {
+  .categories-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .categories-list-card {
+    padding: 12px 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .categories-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

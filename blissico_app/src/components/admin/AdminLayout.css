@@ -1,0 +1,29 @@
+/* src/components/admin/AdminLayout.css */
+.admin-shell {
+  display: flex;
+  min-height: 100vh;
+  background: #f0f2f8;
+}
+
+.admin-content {
+  flex: 1;
+  margin-left: 260px;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.admin-body {
+  padding: 24px 32px;
+  flex: 1;
+}
+
+@media (max-width: 1024px) {
+  .admin-content {
+    margin-left: 0;
+  }
+  
+  .admin-body {
+    padding: 16px;
+  }
+}

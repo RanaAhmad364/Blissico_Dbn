@@ -1,0 +1,136 @@
+/* src/components/dashboard/RecentOrders.css */
+.recent-orders-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 20px 24px;
+  border: 1px solid #e8ecf4;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.card-header h3 {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1a1a2e;
+  margin: 0;
+}
+
+.view-all-btn {
+  background: none;
+  border: none;
+  color: #7c3aed;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 4px 12px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.view-all-btn:hover {
+  background: #f0f4ff;
+}
+
+.orders-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.order-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background: #f8fafc;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.order-item:hover {
+  background: #f0f4ff;
+}
+
+.order-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.order-id {
+  font-weight: 600;
+  color: #7c3aed;
+  font-size: 13px;
+  min-width: 80px;
+}
+
+.order-date {
+  color: #8892b0;
+  font-size: 12px;
+  min-width: 100px;
+}
+
+.order-customer {
+  color: #1a1a2e;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.order-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.order-amount {
+  font-weight: 600;
+  color: #1a1a2e;
+  min-width: 60px;
+}
+
+.status-badge {
+  padding: 2px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  min-width: 60px;
+  text-align: center;
+}
+
+.status-badge.paid {
+  color: #10b981;
+  background: #ecfdf5;
+}
+
+.status-badge.pending {
+  color: #f59e0b;
+  background: #fffbeb;
+}
+
+@media (max-width: 768px) {
+  .recent-orders-card {
+    padding: 16px;
+  }
+  
+  .order-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+  
+  .order-left {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  
+  .order-right {
+    width: 100%;
+    justify-content: space-between;
+  }
+}

@@ -1,0 +1,81 @@
+/* src/components/dashboard/TopCategories.css */
+.top-categories-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 20px 24px;
+  border: 1px solid #e8ecf4;
+}
+
+.card-header {
+  margin-bottom: 14px;
+}
+
+.card-header h3 {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1a1a2e;
+  margin: 0;
+}
+
+.categories-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.category-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.category-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 80px;
+}
+
+.category-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.category-name {
+  font-size: 13px;
+  color: #1a1a2e;
+}
+
+.category-bar-wrapper {
+  flex: 1;
+  height: 6px;
+  background: #f0f2f8;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.category-bar {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.6s ease;
+}
+
+.category-count {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1a1a2e;
+  min-width: 30px;
+  text-align: right;
+}
+
+@media (max-width: 768px) {
+  .top-categories-card {
+    padding: 16px;
+  }
+  
+  .category-info {
+    min-width: 60px;
+  }
+}

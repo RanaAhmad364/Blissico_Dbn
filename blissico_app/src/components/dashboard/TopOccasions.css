@@ -1,0 +1,91 @@
+/* src/components/dashboard/TopOccasions.css */
+.top-occasions-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 20px 24px;
+  border: 1px solid #e8ecf4;
+}
+
+.card-header {
+  margin-bottom: 14px;
+}
+
+.card-header h3 {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1a1a2e;
+  margin: 0;
+}
+
+.occasions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.occasion-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.occasion-item:hover {
+  background: #f8fafc;
+}
+
+.occasion-rank {
+  width: 22px;
+  height: 22px;
+  background: #e8ecf4;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 600;
+  color: #8892b0;
+  flex-shrink: 0;
+}
+
+.occasion-name {
+  font-size: 13px;
+  color: #1a1a2e;
+  min-width: 80px;
+}
+
+.occasion-bar-wrapper {
+  flex: 1;
+  height: 4px;
+  background: #f0f2f8;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.occasion-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #7c3aed, #a78bfa);
+  border-radius: 4px;
+  transition: width 0.6s ease;
+}
+
+.occasion-count {
+  font-size: 12px;
+  font-weight: 500;
+  color: #8892b0;
+  min-width: 28px;
+  text-align: right;
+}
+
+@media (max-width: 768px) {
+  .top-occasions-card {
+    padding: 16px;
+  }
+  
+  .occasion-name {
+    min-width: 60px;
+    font-size: 12px;
+  }
+}

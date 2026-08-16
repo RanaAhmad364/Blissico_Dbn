@@ -1,0 +1,71 @@
+/* src/components/dashboard/StatCard.css */
+.stat-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 20px 22px;
+  border: 1px solid #e8ecf4;
+  transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  transform: translateY(-2px);
+}
+
+.stat-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.stat-icon-wrapper {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.stat-change {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+.stat-change.positive {
+  color: #10b981;
+  background: #ecfdf5;
+}
+
+.stat-value {
+  font-size: 26px;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin-bottom: 2px;
+}
+
+.stat-label {
+  font-size: 13px;
+  color: #8892b0;
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .stat-card {
+    padding: 14px 16px;
+  }
+  
+  .stat-value {
+    font-size: 20px;
+  }
+  
+  .stat-change {
+    font-size: 9px;
+    padding: 2px 8px;
+  }
+}
