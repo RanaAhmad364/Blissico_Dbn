@@ -1,0 +1,35 @@
+/* src/components/user/UserLayout.css */
+.user-layout-wrapper {
+  display: flex;
+  min-height: 100vh;
+  background: #f8fafc;
+}
+
+.user-main-content {
+  flex: 1;
+  margin-left: 270px;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.user-page-body {
+  padding: 24px 32px;
+  flex: 1;
+}
+
+@media (max-width: 1024px) {
+  .user-main-content {
+    margin-left: 0;
+  }
+  
+  .user-page-body {
+    padding: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .user-page-body {
+    padding: 12px;
+  }
+}

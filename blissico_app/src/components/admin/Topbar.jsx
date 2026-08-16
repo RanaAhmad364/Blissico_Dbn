@@ -167,9 +167,9 @@ const Topbar = ({ onMenuClick }) => {
               </div>
               <div className="dropdown-divider"></div>
                  <Link to="/admin/profile" className="dropdown-item" onClick={() => setShowUserMenu(false)}>
-      <FiUser />
-      <span>Edit Profile</span>
-    </Link>
+                    <FiUser />
+                    <span>Edit Profile</span>
+                  </Link>
               <Link to="/admin/settings" className="dropdown-item" onClick={() => setShowUserMenu(false)}>
                 <FiSettings />
                 <span>Settings</span>
