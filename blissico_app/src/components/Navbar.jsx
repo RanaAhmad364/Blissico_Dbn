@@ -127,12 +127,122 @@ const NAV_ITEMS = [
   },
 ];
 
+// Builds the full nav array. The Cards dropdown's category columns are generated
+// from real Category/subcategory data instead of being hardcoded.
+const buildNavItems = (cardCategories) => {
+  const dynamicColumns = cardCategories.map((cat) => ({
+    heading: cat.name.toUpperCase(),
+    links:
+      cat.subcategories && cat.subcategories.length > 0
+        ? cat.subcategories.map((sub) => ({ label: sub.name, path: `/cards/${sub.slug}` }))
+        : [{ label: `Shop ${cat.name}`, path: `/cards/${cat.slug}` }],
+  }));
+
+  return [
+    { label: 'Home', path: '/' },
+    { label: 'About', path: '/about' },
+    {
+      label: 'Cards',
+      path: '/cards',
+      dropdown: {
+        type: '4col',
+        columns: [
+          {
+            heading: 'FEATURED',
+            links: [
+              { label: 'Shop All Cards', path: '/cards' },
+              { label: 'Best Selling', path: '/cards/best-selling' },
+              { label: 'New Arrivals', path: '/cards/new-arrivals' },
+              { label: 'Trending Design', path: '/cards/trending' },
+            ],
+          },
+          ...dynamicColumns,
+        ],
+        image: {
+          src: 'https://via.placeholder.com/200x280/666666/ffffff?text=Best+Sellers',
+          alt: 'Best Sellers',
+          label: 'Best Sellers',
+        },
+      },
+    },
+    {
+      label: 'Occasions',
+      path: '/occasions',
+      dropdown: {
+        type: '5col',
+        columns: [
+          {
+            heading: 'CELEBRATIONS',
+            links: [
+              { label: 'For Birthday', path: '/occasions/birthday' },
+              { label: 'For Anniversary', path: '/occasions/anniversary' },
+              { label: 'Congratulations', path: '/occasions/congratulations' },
+              { label: 'For Graduation', path: '/occasions/graduation' },
+              { label: 'For Good Luck', path: '/occasions/good-luck' },
+            ],
+          },
+          {
+            heading: 'FAMILY & LIFE EVENTS',
+            links: [
+              { label: 'For Wedding & Engagement', path: '/occasions/wedding' },
+              { label: 'For Bridal Shower', path: '/occasions/bridal-shower' },
+              { label: 'For Baby Shower', path: '/occasions/baby-shower' },
+              { label: 'For New Baby', path: '/occasions/new-baby' },
+              { label: 'For New Home', path: '/occasions/new-home' },
+            ],
+          },
+          {
+            heading: 'THOUGHTFUL MOMENTS',
+            links: [
+              { label: 'Thank You', path: '/occasions/thank-you' },
+              { label: 'Thinking of You', path: '/occasions/thinking-of-you' },
+              { label: 'Get Well Soon', path: '/occasions/get-well' },
+              { label: 'Sympathy Cards', path: '/occasions/sympathy' },
+            ],
+          },
+          {
+            heading: 'SEASONAL & RELIGIOUS',
+            links: [
+              { label: 'For Ramadan', path: '/occasions/ramadan' },
+              { label: 'For Hajj & Umrah', path: '/occasions/hajj' },
+              { label: 'For New Year', path: '/occasions/new-year' },
+              { label: 'For Christmas', path: '/occasions/christmas' },
+              { label: "For Mother's Day", path: '/occasions/mothers-day' },
+              { label: "For Father's Day", path: '/occasions/fathers-day' },
+              { label: "For Valentine's Day", path: '/occasions/valentines' },
+            ],
+          },
+        ],
+        image: {
+          src: 'https://via.placeholder.com/200x280/666666/ffffff?text=Best+Sellers',
+          alt: 'Best Sellers',
+          label: 'Best Sellers',
+        },
+      },
+    },
+    {
+      label: 'Collections',
+      path: '/collections',
+      dropdown: {
+        type: '3img',
+        collections: [
+          { src: 'https://via.placeholder.com/300x400/666666/ffffff?text=Collection+1', alt: 'Signature', label: 'Signature Collection' },
+          { src: 'https://via.placeholder.com/300x400/666666/ffffff?text=Collection+2', alt: 'Bloom', label: 'Bloom Collection' },
+          { src: 'https://via.placeholder.com/300x400/666666/ffffff?text=Collection+3', alt: 'Cherished', label: 'Cherished Collection' },
+        ],
+      },
+    },
+  ];
+};
+
+
 const Navbar = () => {
   const [cardCategories, setCardCategories] = useState([]);   // ADD THIS
 
   useEffect(() => {                                            // ADD THIS
     getCategories().then(setCardCategories).catch(() => {});
   }, []);
+  
 
 
 
