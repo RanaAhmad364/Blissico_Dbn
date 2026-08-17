@@ -15,15 +15,13 @@ const emptyForm = {
   is_free: false, price: '',
 };
 
-const flattenCategories = (cats, depth = 0) =>
-  cats.flatMap((c) => [{ ...c, depth }, ...flattenCategories(c.subcategories || [], depth + 1)]);
-
 const Products = () => {
   const [cards, setCards] = useState([]);
-  const [categories, setCategories] = useState([]);
+  const [categories, setCategories] = useState([]); // flat list, each item has parent_id
   const [collections, setCollections] = useState([]);
   const [occasions, setOccasions] = useState([]);
   const [form, setForm] = useState(emptyForm);
+  const [parentCategoryId, setParentCategoryId] = useState(''); // UI-only: selected group (FEATURED / SHOP BY RECIPIENT etc)
   const [thumbnailFile, setThumbnailFile] = useState(null);
   const [error, setError] = useState('');
   const [saving, setSaving] = useState(false);
@@ -39,7 +37,12 @@ const Products = () => {
     getOccasions().then(setOccasions).catch(() => {});
   }, []);
 
-  const flatCategories = flattenCategories(categories);
+  // --- category tree helpers (same pattern as Categories.jsx) ---
+  // Note: <select> values are always strings, while parent_id/id from the API
+  // may come back as numbers — so all comparisons below are normalized with String().
+  const topLevelCategories = categories.filter((c) => !c.parent_id);
+  const childCategoriesOf = (id) =>
+    categories.filter((c) => c.parent_id != null && String(c.parent_id) === String(id));
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -47,6 +50,9 @@ const Products = () => {
 
     if (!form.id && !thumbnailFile) {
       return setError('A thumbnail image is required.');
+    }
+    if (!form.category_id) {
+      return setError('Please select a category.');
     }
 
     const fd = new FormData();
@@ -69,6 +75,7 @@ const Products = () => {
         await createCard(fd);
       }
       setForm(emptyForm);
+      setParentCategoryId('');
       setThumbnailFile(null);
       setShowForm(false); // save k baad table pr wapis
       loadCards();
@@ -80,11 +87,17 @@ const Products = () => {
   };
 
   const handleEdit = (card) => {
+    const catId = card.category?.id || '';
+    const cat = categories.find((c) => String(c.id) === String(catId));
+    // agar category ka parent hai to wo group pehle select karo, taake child dropdown me sahi list aaye
+    const derivedParentId = cat?.parent_id != null ? String(cat.parent_id) : (cat ? String(cat.id) : '');
+
     setForm({
       id: card.id, title: card.title, description: card.description || '',
-      category_id: card.category?.id || '', collection_id: card.collection?.id || '',
+      category_id: catId ? String(catId) : '', collection_id: card.collection?.id || '',
       occasion_id: card.occasion?.id || '', is_free: card.is_free, price: card.price,
     });
+    setParentCategoryId(derivedParentId);
     setThumbnailFile(null);
     setShowForm(true);
   };
@@ -125,6 +138,7 @@ const Products = () => {
 
   const openAddForm = () => {
     setForm(emptyForm);
+    setParentCategoryId('');
     setThumbnailFile(null);
     setError('');
     setShowForm(true);
@@ -133,6 +147,7 @@ const Products = () => {
   const closeForm = () => {
     setShowForm(false);
     setForm(emptyForm);
+    setParentCategoryId('');
     setThumbnailFile(null);
     setError('');
   };
@@ -170,11 +185,33 @@ const Products = () => {
                 </div>
 
                 <div className="form-group">
+                  <label>Category Group</label>
+                  <select
+                    value={parentCategoryId}
+                    onChange={(e) => {
+                      const newParentId = e.target.value;
+                      setParentCategoryId(newParentId);
+                      setForm({ ...form, category_id: '' }); // group badalte hi child reset
+                    }}
+                  >
+                    <option value="">Select a group</option>
+                    {topLevelCategories.map((p) => (
+                      <option key={p.id} value={String(p.id)}>{p.name}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="form-group">
                   <label>Category</label>
-                  <select value={form.category_id} onChange={(e) => setForm({ ...form, category_id: e.target.value })} required>
-                    <option value="">Select a category</option>
-                    {flatCategories.map((c) => (
-                      <option key={c.id} value={c.id}>{'—'.repeat(c.depth)} {c.name}</option>
+                  <select
+                    value={form.category_id}
+                    onChange={(e) => setForm({ ...form, category_id: e.target.value })}
+                    disabled={!parentCategoryId}
+                    required
+                  >
+                    <option value="">{parentCategoryId ? 'Select a category' : 'Select a group first'}</option>
+                    {childCategoriesOf(parentCategoryId).map((c) => (
+                      <option key={c.id} value={String(c.id)}>{c.name}</option>
                     ))}
                   </select>
                 </div>
