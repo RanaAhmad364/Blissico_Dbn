@@ -1,250 +1,112 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { FaUser, FaSearch, FaShoppingCart, FaBars, FaTimes, FaChevronDown } from 'react-icons/fa';
 import logo from '../assets/images/Website main logo.png';
 import { getCategories } from '../api/catalog';
 import './Navbar.css';
 
-// Centralized nav/dropdown data so desktop + mobile render from one source (removes duplication)
-const NAV_ITEMS = [
-  { label: 'Home', path: '/' },
-  { label: 'About', path: '/about' },
-  {
-    label: 'Cards',
-    path: '/cards',
-    dropdown: {
-      type: '4col',
-      columns: [
-        {
-          heading: 'FEATURED',
-          links: [
-            { label: 'Shop All Cards', path: '/cards' },
-            { label: 'Best Selling', path: '/cards/best-selling' },
-            { label: 'New Arrivals', path: '/cards/new-arrivals' },
-            { label: 'Trending Design', path: '/cards/trending' },
-          ],
-        },
-        {
-          heading: 'SHOP BY RECIPIENT',
-          links: [
-            { label: 'For Mom', path: '/cards/mom' },
-            { label: 'For Dad', path: '/cards/dad' },
-            { label: 'For Husband', path: '/cards/husband' },
-            { label: 'For Wife / Fiance', path: '/cards/wife' },
-            { label: 'For Sister', path: '/cards/sister' },
-            { label: 'For Brother', path: '/cards/brother' },
-            { label: 'For Son', path: '/cards/son' },
-            { label: 'For Daughter', path: '/cards/daughter' },
-            { label: 'For Friends', path: '/cards/friends' },
-            { label: 'For Teacher', path: '/cards/teacher' },
-            { label: 'For Colleague', path: '/cards/colleague' },
-          ],
-        },
-        {
-          heading: 'SHOP BY STYLE',
-          links: [
-            { label: 'Floral', path: '/cards/floral' },
-            { label: 'Minimal', path: '/cards/minimal' },
-            { label: 'Elegant', path: '/cards/elegant' },
-            { label: 'Luxury', path: '/cards/luxury' },
-            { label: 'Fun', path: '/cards/fun' },
-          ],
-        },
-      ],
-      image: {
-        src: 'https://via.placeholder.com/200x280/666666/ffffff?text=Best+Sellers',
-        alt: 'Best Sellers',
-        label: 'Best Sellers',
-      },
-    },
-  },
-  {
-    label: 'Occasions',
-    path: '/occasions',
-    dropdown: {
-      type: '5col',
-      columns: [
-        {
-          heading: 'CELEBRATIONS',
-          links: [
-            { label: 'For Birthday', path: '/occasions/birthday' },
-            { label: 'For Anniversary', path: '/occasions/anniversary' },
-            { label: 'Congratulations', path: '/occasions/congratulations' },
-            { label: 'For Graduation', path: '/occasions/graduation' },
-            { label: 'For Good Luck', path: '/occasions/good-luck' },
-          ],
-        },
-        {
-          heading: 'FAMILY & LIFE EVENTS',
-          links: [
-            { label: 'For Wedding & Engagement', path: '/occasions/wedding' },
-            { label: 'For Bridal Shower', path: '/occasions/bridal-shower' },
-            { label: 'For Baby Shower', path: '/occasions/baby-shower' },
-            { label: 'For New Baby', path: '/occasions/new-baby' },
-            { label: 'For New Home', path: '/occasions/new-home' },
-          ],
-        },
-        {
-          heading: 'THOUGHTFUL MOMENTS',
-          links: [
-            { label: 'Thank You', path: '/occasions/thank-you' },
-            { label: 'Thinking of You', path: '/occasions/thinking-of-you' },
-            { label: 'Get Well Soon', path: '/occasions/get-well' },
-            { label: 'Sympathy Cards', path: '/occasions/sympathy' },
-          ],
-        },
-        {
-          heading: 'SEASONAL & RELIGIOUS',
-          links: [
-            { label: 'For Ramadan', path: '/occasions/ramadan' },
-            { label: 'For Hajj & Umrah', path: '/occasions/hajj' },
-            { label: 'For New Year', path: '/occasions/new-year' },
-            { label: 'For Christmas', path: '/occasions/christmas' },
-            { label: "For Mother's Day", path: '/occasions/mothers-day' },
-            { label: "For Father's Day", path: '/occasions/fathers-day' },
-            { label: "For Valentine's Day", path: '/occasions/valentines' },
-          ],
-        },
-      ],
-      image: {
-        src: 'https://via.placeholder.com/200x280/666666/ffffff?text=Best+Sellers',
-        alt: 'Best Sellers',
-        label: 'Best Sellers',
-      },
-    },
-  },
-  {
-    label: 'Collections',
-    path: '/collections',
-    dropdown: {
-      type: '3img',
-      collections: [
-        { src: 'https://via.placeholder.com/300x400/666666/ffffff?text=Collection+1', alt: 'Signature', label: 'Signature Collection' },
-        { src: 'https://via.placeholder.com/300x400/666666/ffffff?text=Collection+2', alt: 'Bloom', label: 'Bloom Collection' },
-        { src: 'https://via.placeholder.com/300x400/666666/ffffff?text=Collection+3', alt: 'Cherished', label: 'Cherished Collection' },
+// Static nav items that don't depend on admin categories.
+const STATIC_OCCASIONS_DROPDOWN = {
+  type: '5col',
+  columns: [
+    {
+      heading: 'CELEBRATIONS',
+      links: [
+        { label: 'For Birthday', path: '/occasions/birthday' },
+        { label: 'For Anniversary', path: '/occasions/anniversary' },
+        { label: 'Congratulations', path: '/occasions/congratulations' },
+        { label: 'For Graduation', path: '/occasions/graduation' },
+        { label: 'For Good Luck', path: '/occasions/good-luck' },
       ],
     },
+    {
+      heading: 'FAMILY & LIFE EVENTS',
+      links: [
+        { label: 'For Wedding & Engagement', path: '/occasions/wedding' },
+        { label: 'For Bridal Shower', path: '/occasions/bridal-shower' },
+        { label: 'For Baby Shower', path: '/occasions/baby-shower' },
+        { label: 'For New Baby', path: '/occasions/new-baby' },
+        { label: 'For New Home', path: '/occasions/new-home' },
+      ],
+    },
+    {
+      heading: 'THOUGHTFUL MOMENTS',
+      links: [
+        { label: 'Thank You', path: '/occasions/thank-you' },
+        { label: 'Thinking of You', path: '/occasions/thinking-of-you' },
+        { label: 'Get Well Soon', path: '/occasions/get-well' },
+        { label: 'Sympathy Cards', path: '/occasions/sympathy' },
+      ],
+    },
+    {
+      heading: 'SEASONAL & RELIGIOUS',
+      links: [
+        { label: 'For Ramadan', path: '/occasions/ramadan' },
+        { label: 'For Hajj & Umrah', path: '/occasions/hajj' },
+        { label: 'For New Year', path: '/occasions/new-year' },
+        { label: 'For Christmas', path: '/occasions/christmas' },
+        { label: "For Mother's Day", path: '/occasions/mothers-day' },
+        { label: "For Father's Day", path: '/occasions/fathers-day' },
+        { label: "For Valentine's Day", path: '/occasions/valentines' },
+      ],
+    },
+  ],
+  image: {
+    src: 'https://via.placeholder.com/200x280/666666/ffffff?text=Best+Sellers',
+    alt: 'Best Sellers',
+    label: 'Best Sellers',
   },
-];
+};
 
-// Builds the full nav array. The Cards dropdown's category columns are generated
-// from real Category/subcategory data instead of being hardcoded.
-const buildNavItems = (cardCategories) => {
-  const dynamicColumns = cardCategories.map((cat) => ({
+const STATIC_COLLECTIONS_DROPDOWN = {
+  type: '3img',
+  collections: [
+    { src: 'https://via.placeholder.com/300x400/666666/ffffff?text=Collection+1', alt: 'Signature', label: 'Signature Collection' },
+    { src: 'https://via.placeholder.com/300x400/666666/ffffff?text=Collection+2', alt: 'Bloom', label: 'Bloom Collection' },
+    { src: 'https://via.placeholder.com/300x400/666666/ffffff?text=Collection+3', alt: 'Cherished', label: 'Cherished Collection' },
+  ],
+};
+
+// Builds the "Cards" dropdown purely from admin-managed categories.
+// Each top-level category (FEATURED, SHOP BY RECIPIENT, SHOP BY STYLE, ...) becomes
+// a column heading, in the same order admin added them, and its subcategories
+// become that column's links — so a new parent/child added in the admin panel
+// shows up here automatically, no code change needed.
+const buildCardsDropdown = (cardCategories) => ({
+  type: '4col',
+  columns: cardCategories.map((cat) => ({
     heading: cat.name.toUpperCase(),
     links:
       cat.subcategories && cat.subcategories.length > 0
         ? cat.subcategories.map((sub) => ({ label: sub.name, path: `/cards/${sub.slug}` }))
         : [{ label: `Shop ${cat.name}`, path: `/cards/${cat.slug}` }],
-  }));
-
-  return [
-    { label: 'Home', path: '/' },
-    { label: 'About', path: '/about' },
-    {
-      label: 'Cards',
-      path: '/cards',
-      dropdown: {
-        type: '4col',
-        columns: [
-          {
-            heading: 'FEATURED',
-            links: [
-              { label: 'Shop All Cards', path: '/cards' },
-              { label: 'Best Selling', path: '/cards/best-selling' },
-              { label: 'New Arrivals', path: '/cards/new-arrivals' },
-              { label: 'Trending Design', path: '/cards/trending' },
-            ],
-          },
-          ...dynamicColumns,
-        ],
-        image: {
-          src: 'https://via.placeholder.com/200x280/666666/ffffff?text=Best+Sellers',
-          alt: 'Best Sellers',
-          label: 'Best Sellers',
-        },
-      },
-    },
-    {
-      label: 'Occasions',
-      path: '/occasions',
-      dropdown: {
-        type: '5col',
-        columns: [
-          {
-            heading: 'CELEBRATIONS',
-            links: [
-              { label: 'For Birthday', path: '/occasions/birthday' },
-              { label: 'For Anniversary', path: '/occasions/anniversary' },
-              { label: 'Congratulations', path: '/occasions/congratulations' },
-              { label: 'For Graduation', path: '/occasions/graduation' },
-              { label: 'For Good Luck', path: '/occasions/good-luck' },
-            ],
-          },
-          {
-            heading: 'FAMILY & LIFE EVENTS',
-            links: [
-              { label: 'For Wedding & Engagement', path: '/occasions/wedding' },
-              { label: 'For Bridal Shower', path: '/occasions/bridal-shower' },
-              { label: 'For Baby Shower', path: '/occasions/baby-shower' },
-              { label: 'For New Baby', path: '/occasions/new-baby' },
-              { label: 'For New Home', path: '/occasions/new-home' },
-            ],
-          },
-          {
-            heading: 'THOUGHTFUL MOMENTS',
-            links: [
-              { label: 'Thank You', path: '/occasions/thank-you' },
-              { label: 'Thinking of You', path: '/occasions/thinking-of-you' },
-              { label: 'Get Well Soon', path: '/occasions/get-well' },
-              { label: 'Sympathy Cards', path: '/occasions/sympathy' },
-            ],
-          },
-          {
-            heading: 'SEASONAL & RELIGIOUS',
-            links: [
-              { label: 'For Ramadan', path: '/occasions/ramadan' },
-              { label: 'For Hajj & Umrah', path: '/occasions/hajj' },
-              { label: 'For New Year', path: '/occasions/new-year' },
-              { label: 'For Christmas', path: '/occasions/christmas' },
-              { label: "For Mother's Day", path: '/occasions/mothers-day' },
-              { label: "For Father's Day", path: '/occasions/fathers-day' },
-              { label: "For Valentine's Day", path: '/occasions/valentines' },
-            ],
-          },
-        ],
-        image: {
-          src: 'https://via.placeholder.com/200x280/666666/ffffff?text=Best+Sellers',
-          alt: 'Best Sellers',
-          label: 'Best Sellers',
-        },
-      },
-    },
-    {
-      label: 'Collections',
-      path: '/collections',
-      dropdown: {
-        type: '3img',
-        collections: [
-          { src: 'https://via.placeholder.com/300x400/666666/ffffff?text=Collection+1', alt: 'Signature', label: 'Signature Collection' },
-          { src: 'https://via.placeholder.com/300x400/666666/ffffff?text=Collection+2', alt: 'Bloom', label: 'Bloom Collection' },
-          { src: 'https://via.placeholder.com/300x400/666666/ffffff?text=Collection+3', alt: 'Cherished', label: 'Cherished Collection' },
-        ],
-      },
-    },
-  ];
-};
-
+  })),
+  image: {
+    src: 'https://via.placeholder.com/200x280/666666/ffffff?text=Best+Sellers',
+    alt: 'Best Sellers',
+    label: 'Best Sellers',
+  },
+});
 
 const Navbar = () => {
-  const [cardCategories, setCardCategories] = useState([]);   // ADD THIS
+  const location = useLocation();
+  const [cardCategories, setCardCategories] = useState([]);
 
-  useEffect(() => {                                            // ADD THIS
+  useEffect(() => {
     getCategories().then(setCardCategories).catch(() => {});
   }, []);
-  
 
-
+  // Full nav array, rebuilt whenever admin categories change.
+  const navItems = useMemo(
+    () => [
+      { label: 'Home', path: '/' },
+      { label: 'About', path: '/about' },
+      { label: 'Cards', path: '/cards', dropdown: buildCardsDropdown(cardCategories) },
+      { label: 'Occasions', path: '/occasions', dropdown: STATIC_OCCASIONS_DROPDOWN },
+      { label: 'Collections', path: '/collections', dropdown: STATIC_COLLECTIONS_DROPDOWN },
+    ],
+    [cardCategories]
+  );
 
   // Desktop hover-dropdown state (kept compatible with original behaviour)
   const [openDesktopDropdown, setOpenDesktopDropdown] = useState(null);
@@ -416,7 +278,7 @@ const Navbar = () => {
 
       {/* ---------------- Desktop Nav ---------------- */}
       <ul className="nav-links" role="menubar">
-        {NAV_ITEMS.map((item) => (
+        {navItems.map((item) => (
           <li
             key={item.label}
             role="none"
@@ -520,7 +382,7 @@ const Navbar = () => {
         </div>
 
         <ul className="mobile-nav-links">
-          {NAV_ITEMS.map((item) => (
+          {navItems.map((item) => (
             <li key={item.label} className={`mobile-nav-item ${getActiveClass(item.path)}`}>
               {item.dropdown ? (
                 <>
