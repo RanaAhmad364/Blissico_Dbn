@@ -21,7 +21,7 @@ class CatalogValidator:
     @staticmethod
     def validate_card(data, require_all=True):
         errors = {}
-        required_fields = ["title", "category_id", "collection_id", "occasion_id"]
+        required_fields = ["title", "category_id"]
 
         if require_all:
             for field in required_fields:

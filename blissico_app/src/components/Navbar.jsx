@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { FaUser, FaSearch, FaShoppingCart, FaBars, FaTimes, FaChevronDown } from 'react-icons/fa';
 import logo from '../assets/images/Website main logo.png';
+import { getCategories } from '../api/catalog';
 import './Navbar.css';
 
 // Centralized nav/dropdown data so desktop + mobile render from one source (removes duplication)
@@ -127,7 +128,13 @@ const NAV_ITEMS = [
 ];
 
 const Navbar = () => {
-  const location = useLocation();
+  const [cardCategories, setCardCategories] = useState([]);   // ADD THIS
+
+  useEffect(() => {                                            // ADD THIS
+    getCategories().then(setCardCategories).catch(() => {});
+  }, []);
+
+
 
   // Desktop hover-dropdown state (kept compatible with original behaviour)
   const [openDesktopDropdown, setOpenDesktopDropdown] = useState(null);

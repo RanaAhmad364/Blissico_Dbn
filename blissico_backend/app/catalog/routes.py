@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 from app.catalog.service import CatalogService
 
-catalog_bp = Blueprint("catalog", __name__, url_prefix="/api/catalog")
+catalog_bp = Blueprint("catalog", __name__, url_prefix="/api")
 
 
 @catalog_bp.get("/categories")

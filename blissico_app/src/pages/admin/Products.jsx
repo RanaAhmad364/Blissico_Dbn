@@ -48,11 +48,15 @@ const Products = () => {
     fd.append('title', form.title);
     fd.append('description', form.description);
     fd.append('category_id', form.category_id);
-    fd.append('collection_id', form.collection_id);
-    fd.append('occasion_id', form.occasion_id);
+    // fd.append('collection_id', form.collection_id);
+    // fd.append('occasion_id', form.occasion_id);
     fd.append('is_free', form.is_free);
     fd.append('price', form.is_free ? 0 : form.price || 0);
     if (thumbnailFile) fd.append('thumbnail', thumbnailFile);
+
+    fd.append('category_id', form.category_id);
+    if (form.collection_id) fd.append('collection_id', form.collection_id);
+    if (form.occasion_id) fd.append('occasion_id', form.occasion_id);
 
     setSaving(true);
     try {
@@ -138,16 +142,16 @@ const Products = () => {
             </select>
           </div>
           <div>
-            <label style={{ display: 'block', fontSize: 12 }}>Collection</label>
-            <select value={form.collection_id} onChange={(e) => setForm({ ...form, collection_id: e.target.value })} required style={{ width: '100%' }}>
-              <option value="">Select a collection</option>
+            <label style={{ display: 'block', fontSize: 12 }}>Collection (optional)</label>
+            <select value={form.collection_id} onChange={(e) => setForm({ ...form, collection_id: e.target.value })} style={{ width: '100%' }}>
+              <option value="">None</option>
               {collections.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
             </select>
           </div>
           <div>
-            <label style={{ display: 'block', fontSize: 12 }}>Occasion</label>
-            <select value={form.occasion_id} onChange={(e) => setForm({ ...form, occasion_id: e.target.value })} required style={{ width: '100%' }}>
-              <option value="">Select an occasion</option>
+            <label style={{ display: 'block', fontSize: 12 }}>Occasion (optional)</label>
+            <select value={form.occasion_id} onChange={(e) => setForm({ ...form, occasion_id: e.target.value })} style={{ width: '100%' }}>
+              <option value="">None</option>
               {occasions.map((o) => <option key={o.id} value={o.id}>{o.name}</option>)}
             </select>
           </div>

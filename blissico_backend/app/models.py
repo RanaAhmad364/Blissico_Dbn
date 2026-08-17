@@ -113,8 +113,8 @@ class Card(BaseModel):
     __tablename__ = "cards"
 
     category_id = db.Column(db.Integer,db.ForeignKey("categories.id"),nullable=False)
-    collection_id = db.Column(db.Integer,db.ForeignKey("collections.id"),nullable=False)
-    occasion_id = db.Column(db.Integer,db.ForeignKey("occasions.id"),nullable=False)
+    collection_id = db.Column(db.Integer,db.ForeignKey("collections.id"),nullable=True)
+    occasion_id = db.Column(db.Integer,db.ForeignKey("occasions.id"),nullable=True)
     title = db.Column(db.String(200),nullable=False)
     description = db.Column(db.Text)
 

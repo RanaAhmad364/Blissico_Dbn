@@ -206,13 +206,16 @@ class AdminCatalogService:
 
     @staticmethod
     def create_card(data, thumbnail_file):
-        for fk, model, label in [
-            ("category_id", Category, "Category"),
-            ("collection_id", Collection, "Collection"),
-            ("occasion_id", Occasion, "Occasion"),
-        ]:
-            if not model.query.get(data[fk]):
-                return {"success": False, "message": f"{label} not found."}, 400
+        if not Category.query.get(data["category_id"]):
+            return {"success": False, "message": "Category not found."}, 400
+
+        collection_id = data.get("collection_id") or None
+        if collection_id and not Collection.query.get(collection_id):
+            return {"success": False, "message": "Collection not found."}, 400
+
+        occasion_id = data.get("occasion_id") or None
+        if occasion_id and not Occasion.query.get(occasion_id):
+            return {"success": False, "message": "Occasion not found."}, 400
 
         try:
             thumbnail_url = FileService.save_file(
@@ -228,8 +231,8 @@ class AdminCatalogService:
 
         card = Card(
             category_id=data["category_id"],
-            collection_id=data["collection_id"],
-            occasion_id=data["occasion_id"],
+            collection_id=collection_id,
+            occasion_id=occasion_id,
             title=data["title"].strip(),
             description=data.get("description"),
             thumbnail=thumbnail_url,
@@ -253,10 +256,13 @@ class AdminCatalogService:
             ("collection_id", Collection, "Collection"),
             ("occasion_id", Occasion, "Occasion"),
         ]:
-            if fk in data and data[fk]:
-                if not model.query.get(data[fk]):
+            if fk in data:
+                value = data[fk] or None
+                if fk == "category_id" and not value:
+                    return {"success": False, "message": "Category is required."}, 400
+                if value and not model.query.get(value):
                     return {"success": False, "message": f"{label} not found."}, 400
-                setattr(card, fk, data[fk])
+                setattr(card, fk, value)
 
         if "title" in data:
             card.title = data["title"].strip()
