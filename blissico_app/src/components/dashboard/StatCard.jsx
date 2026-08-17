@@ -28,9 +28,9 @@ const StatCard = ({ title, value, growth, icon, color, bgColor }) => {
         <div className="stat-icon-wrapper" style={{ backgroundColor: bgColor, color }}>
           <IconComponent size={20} />
         </div>
-        <span className="stat-change positive">
-          ↑ {growth}% this month
-        </span>
+        {growth !== undefined && growth !== null && (
+          <span className="stat-change positive">↑ {growth}% this month</span>
+        )}
       </div>
       <div className="stat-value">{value}</div>
       <div className="stat-label">{title}</div>

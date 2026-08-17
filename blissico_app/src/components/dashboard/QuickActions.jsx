@@ -1,17 +1,24 @@
-// src/components/dashboard/QuickActions.jsx
 import React from 'react';
-import { quickActions } from '../../data/dashboardData';
+import { useNavigate } from 'react-router-dom';
 import './QuickActions.css';
 
-const QuickActions = () => {
+const QuickActions = ({ actions }) => {
+  const navigate = useNavigate();
+
   return (
     <div className="quick-actions-card">
       <div className="card-header">
         <h3>Quick Actions</h3>
       </div>
       <div className="actions-grid">
-        {quickActions.map((action, index) => (
-          <button key={index} className="action-btn">
+        {actions.map((action, index) => (
+          <button
+            key={index}
+            className="action-btn"
+            disabled={!action.path}
+            onClick={() => action.path && navigate(action.path)}
+            title={!action.path ? 'Coming soon' : undefined}
+          >
             <span className="action-icon">{action.icon}</span>
             <span className="action-label">{action.label}</span>
           </button>

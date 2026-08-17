@@ -8,8 +8,8 @@ import { AuthProvider } from './context/AuthContext';
 import Home from './pages/Home';
 import About from './pages/About';
 import Cards from './pages/Cards';
-import Occasions from './pages/Occasions';
-import Collections from './pages/Collections';
+import PublicOccasions from './pages/Occasions';
+import PublicCollections from './pages/Collections';
 import CategoryPage from './pages/CategoryPage';
 import Contact from './pages/Contact';
 import Privacy from './pages/Privacy';
@@ -39,6 +39,8 @@ import UserEditProfile from './pages/user/UserEditProfile';
 
   import Categories from './pages/admin/Categories';
   import Products from './pages/admin/Products';
+  import AdminCollections from './components/admin/Collection';
+  import AdminOccasions from './components/admin/Occasion';
 
 
 import './App.css';
@@ -54,8 +56,8 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/cards" element={<Cards />} />
           <Route path="/:category/:slug" element={<CategoryPage />} />
-          <Route path="/occasions" element={<Occasions />} />
-          <Route path="/collections" element={<Collections />} />
+          <Route path="/occasions" element={<PublicOccasions />} />
+          <Route path="/collections" element={<PublicCollections />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/privacy" element={<Privacy />} />
           <Route path="/terms" element={<Terms />} />
@@ -77,6 +79,8 @@ function App() {
 
           <Route path="/admin/categories" element={<AdminRoute><Categories /></AdminRoute>} />
           <Route path="/admin/products" element={<AdminRoute><Products /></AdminRoute>} />
+          <Route path="/admin/collections" element={<AdminRoute><AdminCollections /></AdminRoute>} />
+          <Route path="/admin/occasions" element={<AdminRoute><AdminOccasions /></AdminRoute>} />
 
           
 

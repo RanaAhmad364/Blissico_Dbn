@@ -25,8 +25,11 @@ class AdminCatalogService:
 
         parent_id = data.get("parent_id") or None
         if parent_id:
-            if not Category.query.get(parent_id):
+            parent = Category.query.get(parent_id)
+            if not parent:
                 return {"success": False, "message": "Parent category not found."}, 400
+            if parent.parent_id is not None:
+                return {"success": False, "message": "A subcategory cannot itself have a parent — only one level of nesting is allowed."}, 400
 
         category = Category(
             name=name,
@@ -61,8 +64,13 @@ class AdminCatalogService:
             if parent_id:
                 if int(parent_id) == category.id:
                     return {"success": False, "message": "A category cannot be its own parent."}, 400
-                if not Category.query.get(parent_id):
+                parent = Category.query.get(parent_id)
+                if not parent:
                     return {"success": False, "message": "Parent category not found."}, 400
+                if parent.parent_id is not None:
+                    return {"success": False, "message": "A subcategory cannot itself have a parent — only one level of nesting is allowed."}, 400
+                if category.subcategories:
+                    return {"success": False, "message": "This category already has subcategories of its own — it can't also become a subcategory."}, 400
             category.parent_id = parent_id
 
         db.session.commit()

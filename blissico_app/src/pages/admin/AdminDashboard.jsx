@@ -1,81 +1,75 @@
-// src/pages/admin/AdminDashboard.jsx
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import AdminLayout from '../../components/admin/AdminLayout';
-
-// Import all components
 import StatCard from '../../components/dashboard/StatCard';
 import QuickStats from '../../components/dashboard/QuickStats';
 import QuickActions from '../../components/dashboard/QuickActions';
-import RevenueChart from '../../components/dashboard/RevenueChart';
-import RecentOrders from '../../components/dashboard/RecentOrders';
-import BestSellingCards from '../../components/dashboard/BestSellingCards';
-import TopCategories from '../../components/dashboard/TopCategories';
-import TopOccasions from '../../components/dashboard/TopOccasions';
-import ActiveDiscounts from '../../components/dashboard/ActiveDiscounts';
 import CategoriesList from '../../components/dashboard/CategoriesList';
-
-// Import all data from dashboardData.js
-import {
-  mainStats,
-  quickStats,
-  quickActions,
-  revenueData,
-  recentOrders,
-  bestSellingCards,
-  topCategories,
-  topOccasions,
-  activeDiscounts,
-  categories,  // ✅ Now this exists
-} from '../../data/dashboardData';
-
+import { getUsers, getAdminCards, getCategories, getCollections, getOccasions } from '../../api/admin';
 import './AdminDashboard.css';
 
 const AdminDashboard = () => {
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    Promise.all([getUsers(), getAdminCards(1, 1), getCategories(), getCollections(), getOccasions()])
+      .then(([users, cardsRes, categories, collections, occasions]) => {
+        setData({ totalUsers: users.length, totalCards: cardsRes.total, categories, collections, occasions });
+      })
+      .catch(() => setError('Could not load live dashboard data.'))
+      .finally(() => setLoading(false));
+  }, []);
+
+  if (loading) return <AdminLayout><div style={{ padding: 40 }}>Loading...</div></AdminLayout>;
+  if (error) return <AdminLayout><div style={{ padding: 40, color: '#c0392b' }}>{error}</div></AdminLayout>;
+
+  const totalCategories = data.categories.reduce((sum, c) => sum + 1 + (c.subcategories?.length || 0), 0);
+
+  const mainStats = [
+    { id: 1, title: 'Total Cards', value: data.totalCards, icon: 'FiShoppingBag', color: '#7c3aed', bgColor: '#f3e8ff' },
+    { id: 2, title: 'Total Users', value: data.totalUsers, icon: 'FiUsers', color: '#059669', bgColor: '#d1fae5' },
+    { id: 3, title: 'Categories', value: totalCategories, icon: 'FiGrid', color: '#2563eb', bgColor: '#dbeafe' },
+    { id: 4, title: 'Occasions', value: data.occasions.length, icon: 'FiTrendingUp', color: '#d97706', bgColor: '#fef3c7' },
+  ];
+
+  const categoryChips = [
+    { id: 'cat', icon: '📁', name: 'Categories', count: totalCategories },
+    { id: 'col', icon: '🎨', name: 'Collections', count: data.collections.length },
+    { id: 'occ', icon: '🎉', name: 'Occasions', count: data.occasions.length },
+    { id: 'usr', icon: '👥', name: 'Customers', count: data.totalUsers },
+  ];
+
+  const quickStats = [
+    { id: 1, icon: 'FiPackage', value: data.totalCards, label: 'Total Cards' },
+    { id: 2, icon: 'FiTag', value: data.collections.length, label: 'Total Collections' },
+    { id: 3, icon: 'FiStar', value: data.occasions.length, label: 'Total Occasions' },
+  ];
+
+  const quickActions = [
+    { icon: '➕', label: 'Add New Card', path: '/admin/products' },
+    { icon: '📁', label: 'Add Collection', path: '/admin/collections' },
+    { icon: '🎉', label: 'Create Occasion', path: '/admin/occasions' },
+    { icon: '🏠', label: 'Manage Homepage', path: null },
+  ];
+
   return (
     <AdminLayout>
       <div className="dashboard-container">
-        {/* ===== TOP ROW: MAIN STATS (4 Cards) ===== */}
         <div className="stats-grid">
-          {mainStats.map((stat) => (
-            <StatCard
-              key={stat.id}
-              title={stat.title}
-              value={stat.value}
-              growth={stat.growth}
-              icon={stat.icon}
-              color={stat.color}
-              bgColor={stat.bgColor}
-            />
-          ))}
+          {mainStats.map((stat) => <StatCard key={stat.id} {...stat} />)}
         </div>
 
-        {/* ===== CATEGORIES ROW (Recipients) ===== */}
-        <CategoriesList categories={categories} />
+        <CategoriesList categories={categoryChips} />
 
-        {/* ===== REVENUE CHART & QUICK ACTIONS ===== */}
         <div className="revenue-section">
-          <div className="revenue-chart-wrapper">
-            <RevenueChart revenueData={revenueData} />
+          <div className="revenue-chart-wrapper" style={{ padding: 24, background: '#fff', borderRadius: 10, color: '#888' }}>
+            Orders, revenue, and sales analytics will appear here once the Orders/Payment module is built.
           </div>
           <div className="right-sidebar">
             <QuickStats stats={quickStats} />
             <QuickActions actions={quickActions} />
           </div>
-        </div>
-
-        {/* ===== RECENT ORDERS ===== */}
-        <RecentOrders orders={recentOrders} />
-
-        {/* ===== BOTTOM GRID: Best Selling + Top Categories ===== */}
-        <div className="bottom-grid">
-          <BestSellingCards cards={bestSellingCards} />
-          <TopCategories categories={topCategories} />
-        </div>
-
-        {/* ===== BOTTOM GRID 2: Top Occasions + Active Discounts ===== */}
-        <div className="bottom-grid">
-          <TopOccasions occasions={topOccasions} />
-          <ActiveDiscounts discounts={activeDiscounts} />
         </div>
       </div>
     </AdminLayout>

@@ -21,11 +21,23 @@ const Cards = () => {
         <p>Select a category to browse.</p>
       </section>
 
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', padding: '20px 40px' }}>
+      <div style={{ padding: '20px 40px', display: 'flex', flexDirection: 'column', gap: '28px' }}>
         {categories.map((cat) => (
-          <Link key={cat.id} to={`/cards/${cat.slug}`} className="product-card-link">
-            {cat.name}
-          </Link>
+          <div key={cat.id}>
+            <Link to={`/cards/${cat.slug}`} className="product-card-link" style={{ fontSize: '1.1rem', fontWeight: 600 }}>
+              {cat.name}
+            </Link>
+
+            {cat.subcategories?.length > 0 && (
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', marginTop: '10px', paddingLeft: '4px' }}>
+                {cat.subcategories.map((sub) => (
+                  <Link key={sub.id} to={`/cards/${sub.slug}`} className="product-card-link" style={{ fontSize: '0.9rem', color: '#888' }}>
+                    {sub.name}
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
         ))}
       </div>
 
