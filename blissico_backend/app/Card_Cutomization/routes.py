@@ -3,7 +3,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.Card_Cutomization.services import CustomizationService
 from app.Card_Cutomization.validators import CustomizationValidator, CustomizationValidationError
 
-customization_bp = Blueprint("customization", __name__, url_prefix="/api/admin")
+customization_bp = Blueprint("Card_Customization", __name__, url_prefix="/api")
 
 
 @customization_bp.get("/cards/<int:card_id>/customization")

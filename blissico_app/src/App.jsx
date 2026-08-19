@@ -69,6 +69,8 @@ function App() {
           <Route path="/dashboard" element={<UserDashboard />} />
           <Route path="/edit-profile" element={<UserEditProfile />} />
 
+          <Route path="/checkout/:orderId" element={<Checkout />} />
+
           {/* NEW AUTH ROUTES (Added here) */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
