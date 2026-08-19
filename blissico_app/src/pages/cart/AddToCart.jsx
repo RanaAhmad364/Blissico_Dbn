@@ -113,10 +113,11 @@ const AddToCart = () => {
               <span>${total.toFixed(2)}</span>
             </div>
 
+          <Link to="/checkout">
             <button className="checkout-btn">
               Proceed to Checkout
             </button>
-            
+            </Link>
             <div className="secure-badge">
               <span>🔒 Secured Checkout</span>
               <span>PayPal / Credit Card</span>

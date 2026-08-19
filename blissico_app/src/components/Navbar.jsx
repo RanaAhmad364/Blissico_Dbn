@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { FaUser, FaSearch, FaShoppingCart, FaBars, FaTimes, FaChevronDown } from 'react-icons/fa';
+import { FaUser, FaSearch, FaShoppingCart, FaBars, FaTimes, FaChevronDown , FaHeart  } from 'react-icons/fa';
 import logo from '../assets/images/Website main logo.png';
 import { getCategories } from '../api/catalog';
 import './Navbar.css';
@@ -126,7 +126,18 @@ const Navbar = () => {
   const mobilePanelRef = useRef(null);
   const hamburgerButtonRef = useRef(null);
 
-  const getActiveClass = (path) => (location.pathname === path ? 'active' : '');
+  // Active-link matching: exact match for "/", and "startsWith" for everything
+  // else so nested routes (e.g. /cards/mom, /occasions/birthday) still keep
+  // their parent nav item (Cards, Occasions...) highlighted.
+  const getActiveClass = (item) => {
+    if (!item.path) return '';
+    if (item.path === '/') {
+      return location.pathname === '/' ? 'active' : '';
+    }
+    const isActive =
+      location.pathname === item.path || location.pathname.startsWith(`${item.path}/`);
+    return isActive ? 'active' : '';
+  };
 
   /* ---------------- Scroll shadow/blur ---------------- */
   useEffect(() => {
@@ -145,7 +156,10 @@ const Navbar = () => {
     hoverTimeoutRef.current = setTimeout(() => setOpenDesktopDropdown(null), 120);
   };
 
-  /* ---------------- Search open/close ---------------- */
+  /* ---------------- Search open/close ----------------
+     Search input is now only ever rendered in the DOM while isSearchOpen is
+     true, so it can never visually occupy space (or accept focus/typing)
+     until the user actually clicks the search icon. */
   const openSearch = useCallback(() => {
     setIsSearchOpen(true);
   }, []);
@@ -156,7 +170,7 @@ const Navbar = () => {
 
   useEffect(() => {
     if (isSearchOpen && searchInputRef.current) {
-      // Auto-focus once the expand animation has had a moment to start
+      // Auto-focus once the input has mounted / expand animation started
       const id = requestAnimationFrame(() => searchInputRef.current?.focus());
       return () => cancelAnimationFrame(id);
     }
@@ -189,10 +203,11 @@ const Navbar = () => {
     };
   }, [isMobileMenuOpen]);
 
-  // Close mobile menu on route change
+  // Close mobile menu + search on route change
   useEffect(() => {
     setIsMobileMenuOpen(false);
     setOpenMobileDropdown(null);
+    setIsSearchOpen(false);
   }, [location.pathname]);
 
   /* ---------------- Global Escape key handling ---------------- */
@@ -282,7 +297,7 @@ const Navbar = () => {
           <li
             key={item.label}
             role="none"
-            className={`${item.dropdown ? 'nav-dropdown-item' : ''} ${openDesktopDropdown === item.label ? 'open' : ''} ${getActiveClass(item.path)}`}
+            className={`${item.dropdown ? 'nav-dropdown-item' : ''} ${openDesktopDropdown === item.label ? 'open' : ''} ${getActiveClass(item)}`}
             onMouseEnter={item.dropdown ? () => handleDesktopEnter(item.label) : undefined}
             onMouseLeave={item.dropdown ? handleDesktopLeave : undefined}
           >
@@ -312,14 +327,15 @@ const Navbar = () => {
         <button className="signature-btn">Signature Design</button>
 
         <div className={`search-wrapper ${isSearchOpen ? 'search-open' : ''}`} ref={searchWrapperRef}>
-          <input
-            ref={searchInputRef}
-            type="text"
-            className="search-input"
-            placeholder="Search designs..."
-            aria-label="Search"
-            tabIndex={isSearchOpen ? 0 : -1}
-          />
+          {isSearchOpen && (
+            <input
+              ref={searchInputRef}
+              type="text"
+              className="search-input"
+              placeholder="Search designs..."
+              aria-label="Search"
+            />
+          )}
           <button
             className="icon-btn search-icon-btn"
             aria-label={isSearchOpen ? 'Close search' : 'Open search'}
@@ -335,9 +351,16 @@ const Navbar = () => {
               <FaUser className="icon" />
             </button>
           </Link>
-          <button className="icon-btn" aria-label="Shopping cart">
-            <FaShoppingCart className="icon" />
-          </button>
+          <Link to="/favorites" style={{ display: 'flex', alignItems: 'center', color: 'inherit' }}>
+            <button className="icon-btn" aria-label="Favorites">
+              <FaHeart className="icon" />
+            </button>
+          </Link>
+          <Link to="/cart" style={{ display: 'flex', alignItems: 'center', color: 'inherit' }}>
+            <button className="icon-btn" aria-label="Shopping cart">
+              <FaShoppingCart className="icon" />
+            </button>
+          </Link>
         </div>
 
         <button
@@ -383,7 +406,7 @@ const Navbar = () => {
 
         <ul className="mobile-nav-links">
           {navItems.map((item) => (
-            <li key={item.label} className={`mobile-nav-item ${getActiveClass(item.path)}`}>
+            <li key={item.label} className={`mobile-nav-item ${getActiveClass(item)}`}>
               {item.dropdown ? (
                 <>
                   <button
@@ -422,6 +445,11 @@ const Navbar = () => {
             <button className="icon-btn" aria-label="User account">
               <FaUser className="icon" />
             </button>
+             <Link to="/favorites" style={{ display: 'flex', alignItems: 'center', color: 'inherit' }}>
+            <button className="icon-btn" aria-label="Favorites">
+              <FaHeart className="icon" />
+            </button>
+          </Link>
             <button className="icon-btn" aria-label="Shopping cart">
               <FaShoppingCart className="icon" />
             </button>

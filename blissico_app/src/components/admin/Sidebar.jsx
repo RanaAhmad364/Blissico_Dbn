@@ -68,7 +68,7 @@ const Sidebar = ({ isOpen, onClose }) => {
     return (
       <Link
         to={item.path}
-        className={`nav-link ${isActive ? 'active' : ''}`}
+        className={`admin-nav-link ${isActive ? 'active' : ''}`}
         onClick={onClose}
       >
         <item.icon className="nav-icon" />

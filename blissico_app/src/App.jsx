@@ -19,6 +19,7 @@ import ProductDetail from './pages/ProductDetail';
 import AddToCart from './pages/cart/AddToCart';
 import Checkout from './pages/checkout/Checkout';
 import PaymentSuccess from './pages/checkout/PaymentSuccess';
+import FavoritesPage from './pages/favourites/FavoritesPage';
 
 
 // import UserDashboard from './pages/User_dashboard';
@@ -70,6 +71,7 @@ function App() {
           <Route path="/edit-profile" element={<UserEditProfile />} />
 
           <Route path="/checkout/:orderId" element={<Checkout />} />
+          <Route path="/favorites" element={<FavoritesPage />} />
 
           {/* NEW AUTH ROUTES (Added here) */}
           <Route path="/login" element={<Login />} />
