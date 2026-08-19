@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from Orders.service import OrderService
-from Orders.validators import OrderValidator, OrderValidationError
+from app.Orders.service import OrderService
+from app.Orders.validators import OrderValidator, OrderValidationError
 
 orders_bp = Blueprint("Orders", __name__, url_prefix="/api")
 

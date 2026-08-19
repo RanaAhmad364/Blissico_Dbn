@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from Favourite.service import FavoriteService
+from app.Favourite.service import FavoriteService
 
 favorites_bp = Blueprint("Favourite", __name__, url_prefix="/api")
 

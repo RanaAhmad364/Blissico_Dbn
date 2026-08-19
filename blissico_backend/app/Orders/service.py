@@ -2,7 +2,7 @@ import uuid
 from datetime import datetime
 from app import db
 from app.models import Order, OrderItem, Card
-from app.payments.service import PaymentService
+from app.payment.service import PaymentService
 
 
 class OrderService:

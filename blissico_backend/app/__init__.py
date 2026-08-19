@@ -34,8 +34,7 @@ def create_app(config_class=Config):
 
     from app.auth.routes import auth_bp
     from app.admin.routes import admin_bp
-    import app.admin.analytics_routes
-    import app.admin.analytics_service 
+    from app.admin import analytics_routes, analytics_service
     from app.catalog.routes import catalog_bp
     from app.Card_Cutomization.routes import customization_bp
     from app.cli import seed_roles, create_admin
