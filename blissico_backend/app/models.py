@@ -94,6 +94,10 @@ class Collection(BaseModel):
     description = db.Column(db.Text)
     is_active = db.Column(db.Boolean,default=True,nullable=False)
     cards = db.relationship("Card",back_populates="collection",lazy=True)
+    parent_id = db.Column(db.Integer, db.ForeignKey("collections.id"), nullable=True)   # NEW
+    subcategories = db.relationship(                                                     # NEW
+        "Collection", backref=db.backref("parent", remote_side="Collection.id"), lazy=True
+    )
     def __repr__(self):
         return f"<Collection {self.name}>"
 
@@ -105,6 +109,10 @@ class Occasion(BaseModel):
     description = db.Column(db.Text)
     is_active = db.Column(db.Boolean,default=True,nullable=False)
     cards = db.relationship("Card",back_populates="occasion",lazy=True)
+    parent_id = db.Column(db.Integer, db.ForeignKey("occasions.id"), nullable=True)   # NEW
+    subcategories = db.relationship(                                                   # NEW
+        "Occasion", backref=db.backref("parent", remote_side="Occasion.id"), lazy=True
+    )
     def __repr__(self):
         return f"<Occasion {self.name}>"
 

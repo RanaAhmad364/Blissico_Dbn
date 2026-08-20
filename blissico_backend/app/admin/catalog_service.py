@@ -102,10 +102,19 @@ class AdminCatalogService:
     @staticmethod
     def create_collection(data):
         name = data["name"].strip()
-        if Collection.query.filter_by(name=name).first():
+        slug = AdminCatalogService._slugify(name)
+        if Collection.query.filter_by(slug=slug).first():
             return {"success": False, "message": "A collection with this name already exists."}, 409
 
-        collection = Collection(name=name, description=data.get("description"), is_active=data.get("is_active", True))
+        parent_id = data.get("parent_id") or None
+        if parent_id:
+            parent = Collection.query.get(parent_id)
+            if not parent:
+                return {"success": False, "message": "Parent collection not found."}, 400
+            if parent.parent_id is not None:
+                return {"success": False, "message": "A subcategory cannot itself have a parent — only one level of nesting is allowed."}, 400
+
+        collection = Collection(name=name, slug=slug, description=data.get("description"), is_active=data.get("is_active", True), parent_id=parent_id)
         db.session.add(collection)
         db.session.commit()
         return {"success": True, "message": "Collection created.", "data": AdminCatalogService._serialize_taxonomy(collection)}, 201
@@ -118,10 +127,24 @@ class AdminCatalogService:
 
         if "name" in data:
             collection.name = data["name"].strip()
+            collection.slug = AdminCatalogService._slugify(collection.name)
         if "description" in data:
             collection.description = data["description"]
         if "is_active" in data:
             collection.is_active = data["is_active"]
+        if "parent_id" in data:
+            parent_id = data["parent_id"] or None
+            if parent_id:
+                if int(parent_id) == collection.id:
+                    return {"success": False, "message": "A collection cannot be its own parent."}, 400
+                parent = Collection.query.get(parent_id)
+                if not parent:
+                    return {"success": False, "message": "Parent collection not found."}, 400
+                if parent.parent_id is not None:
+                    return {"success": False, "message": "A subcategory cannot itself have a parent — only one level of nesting is allowed."}, 400
+                if collection.subcategories:
+                    return {"success": False, "message": "This collection already has subcategories of its own — it can't also become a subcategory."}, 400
+            collection.parent_id = parent_id
 
         db.session.commit()
         return {"success": True, "message": "Collection updated.", "data": AdminCatalogService._serialize_taxonomy(collection)}, 200
@@ -133,6 +156,9 @@ class AdminCatalogService:
             return {"success": False, "message": "Collection not found."}, 404
         if collection.cards:
             return {"success": False, "message": "Cannot delete a collection that still has cards assigned to it."}, 409
+
+        if collection.subcategories:   
+            return {"success": False, "message": "Cannot delete a collection that still has subcategories."}, 409
 
         db.session.delete(collection)
         db.session.commit()
@@ -149,10 +175,19 @@ class AdminCatalogService:
     @staticmethod
     def create_occasion(data):
         name = data["name"].strip()
-        if Occasion.query.filter_by(name=name).first():
+        slug = AdminCatalogService._slugify(name)
+        if Occasion.query.filter_by(slug=slug).first():
             return {"success": False, "message": "An occasion with this name already exists."}, 409
 
-        occasion = Occasion(name=name, description=data.get("description"), is_active=data.get("is_active", True))
+        parent_id = data.get("parent_id") or None
+        if parent_id:
+            parent = Occasion.query.get(parent_id)
+            if not parent:
+                return {"success": False, "message": "Parent occasion not found."}, 400
+            if parent.parent_id is not None:
+                return {"success": False, "message": "A subcategory cannot itself have a parent — only one level of nesting is allowed."}, 400
+
+        occasion = Occasion(name=name, slug=slug, description=data.get("description"), is_active=data.get("is_active", True), parent_id=parent_id)
         db.session.add(occasion)
         db.session.commit()
         return {"success": True, "message": "Occasion created.", "data": AdminCatalogService._serialize_taxonomy(occasion)}, 201
@@ -165,10 +200,24 @@ class AdminCatalogService:
 
         if "name" in data:
             occasion.name = data["name"].strip()
+            occasion.slug = AdminCatalogService._slugify(occasion.name)
         if "description" in data:
             occasion.description = data["description"]
         if "is_active" in data:
             occasion.is_active = data["is_active"]
+        if "parent_id" in data:
+            parent_id = data["parent_id"] or None
+            if parent_id:
+                if int(parent_id) == occasion.id:
+                    return {"success": False, "message": "An occasion cannot be its own parent."}, 400
+                parent = Occasion.query.get(parent_id)
+                if not parent:
+                    return {"success": False, "message": "Parent occasion not found."}, 400
+                if parent.parent_id is not None:
+                    return {"success": False, "message": "A subcategory cannot itself have a parent — only one level of nesting is allowed."}, 400
+                if occasion.subcategories:
+                    return {"success": False, "message": "This occasion already has subcategories of its own — it can't also become a subcategory."}, 400
+            occasion.parent_id = parent_id
 
         db.session.commit()
         return {"success": True, "message": "Occasion updated.", "data": AdminCatalogService._serialize_taxonomy(occasion)}, 200
@@ -180,6 +229,8 @@ class AdminCatalogService:
             return {"success": False, "message": "Occasion not found."}, 404
         if occasion.cards:
             return {"success": False, "message": "Cannot delete an occasion that still has cards assigned to it."}, 409
+        if occasion.subcategories:   
+            return {"success": False, "message": "Cannot delete a occasion that still has subcategories."}, 409
 
         db.session.delete(occasion)
         db.session.commit()
