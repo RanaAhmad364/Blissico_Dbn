@@ -63,9 +63,7 @@ const Products = () => {
     if (!form.id && !thumbnailFile) {
       return setError('A thumbnail image is required.');
     }
-    if (!form.category_id) {
-      return setError('Please select a category.');
-    }
+   
 
     const fd = new FormData();
     fd.append('title', form.title);
