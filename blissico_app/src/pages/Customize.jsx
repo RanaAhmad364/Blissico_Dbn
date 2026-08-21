@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import {
   FaAlignLeft, FaAlignCenter, FaAlignRight,
   FaBold, FaItalic, FaUnderline,
-  FaArrowLeft
+  FaArrowLeft, FaArrowsAlt
 } from 'react-icons/fa';
 import { useAuth } from '../context/AuthContext';
 import { getCard, assetUrl } from '../api/catalog';
@@ -37,7 +37,16 @@ const Customize = () => {
   const [letterSpacing, setLetterSpacing] = useState(0);
   const [lineHeight, setLineHeight] = useState(1.2);
 
+  // NEW: free text position — stored as % of card width/height so it
+  // scales correctly regardless of zoom or screen size. 50/50 = center.
+  const [positionX, setPositionX] = useState(50);
+  const [positionY, setPositionY] = useState(50);
+  const [isDragging, setIsDragging] = useState(false);
+
   const textRef = useRef(null);
+  const cardStageRef = useRef(null); // the .canvas-card element — drag bounds
+  const dragWrapperRef = useRef(null);
+  const dragStateRef = useRef({ startX: 0, startY: 0, moved: false });
 
   // Redirect guests — only registered users may customize (per spec)
   useEffect(() => {
@@ -65,6 +74,9 @@ const Customize = () => {
         setAlignment(custom.alignment);
         setLetterSpacing(custom.letter_spacing);
         setLineHeight(custom.line_height);
+        // fall back to center if this customization has no saved position yet
+        setPositionX(custom.position_x ?? 50);
+        setPositionY(custom.position_y ?? 50);
       })
       .catch(() => setError('Could not load this card. Please go back and try again.'))
       .finally(() => setLoading(false));
@@ -83,6 +95,61 @@ const Customize = () => {
     if (format === 'underline') setIsUnderline((v) => !v);
   };
 
+  /* ---------------- Drag-to-position logic ---------------- */
+
+  const clamp = (val, min, max) => Math.min(max, Math.max(min, val));
+
+  const updatePositionFromPointer = useCallback((clientX, clientY) => {
+    const stage = cardStageRef.current;
+    if (!stage) return;
+    const rect = stage.getBoundingClientRect();
+    // Convert cursor position to a percentage of the card's own box,
+    // independent of current zoom level (rect already reflects the scaled size).
+    const xPct = clamp(((clientX - rect.left) / rect.width) * 100, 0, 100);
+    const yPct = clamp(((clientY - rect.top) / rect.height) * 100, 0, 100);
+    setPositionX(xPct);
+    setPositionY(yPct);
+  }, []);
+
+  const handleDragStart = (e) => {
+    // Only start a drag from the handle / wrapper border, so a plain click
+    // still lets the user place their cursor inside the text to edit it.
+    e.preventDefault();
+    const point = e.touches ? e.touches[0] : e;
+    dragStateRef.current = { startX: point.clientX, startY: point.clientY, moved: false };
+    setIsDragging(true);
+  };
+
+  useEffect(() => {
+    if (!isDragging) return;
+
+    const handleMove = (e) => {
+      const point = e.touches ? e.touches[0] : e;
+      dragStateRef.current.moved = true;
+      updatePositionFromPointer(point.clientX, point.clientY);
+    };
+    const handleUp = () => setIsDragging(false);
+
+    window.addEventListener('mousemove', handleMove);
+    window.addEventListener('mouseup', handleUp);
+    window.addEventListener('touchmove', handleMove, { passive: false });
+    window.addEventListener('touchend', handleUp);
+
+    return () => {
+      window.removeEventListener('mousemove', handleMove);
+      window.removeEventListener('mouseup', handleUp);
+      window.removeEventListener('touchmove', handleMove);
+      window.removeEventListener('touchend', handleUp);
+    };
+  }, [isDragging, updatePositionFromPointer]);
+
+  const resetPosition = () => {
+    setPositionX(50);
+    setPositionY(50);
+  };
+
+  /* ---------------- Save ---------------- */
+
   const handleSave = async () => {
     const text = textRef.current ? textRef.current.innerText : greetingText;
     setSaving(true);
@@ -100,6 +167,8 @@ const Customize = () => {
         alignment,
         letter_spacing: letterSpacing,
         line_height: lineHeight,
+        position_x: positionX,
+        position_y: positionY,
       });
       setGreetingText(text);
       setSaveMessage('Design saved!');
@@ -224,6 +293,17 @@ const Customize = () => {
               </div>
             </div>
 
+            {/* NEW: Text Position control */}
+            <div className="tool-group" style={{ marginTop: 20, paddingTop: 20, borderTop: '1px solid #eee' }}>
+              <label>Text Position</label>
+              <p style={{ fontSize: 12, color: '#888', margin: '4px 0 10px' }}>
+                Card par text ko drag handle (<FaArrowsAlt style={{ verticalAlign: 'middle' }} />) se ghaseet kar apni marzi ki jagah rakhein.
+              </p>
+              <button type="button" className="format-btn" onClick={resetPosition} style={{ width: 'auto', padding: '6px 14px' }}>
+                Reset to Center
+              </button>
+            </div>
+
             {/* Style picker — only shown if this card has more than one admin-provided template variant */}
             {templates.length > 1 && (
               <div className="tool-group" style={{ marginTop: 20, paddingTop: 20, borderTop: '1px solid #eee' }}>
@@ -253,27 +333,47 @@ const Customize = () => {
             <div className="canvas-viewport">
               <div className="canvas-card-wrapper" style={{ transform: `scale(${zoomLevel})` }}>
                 <div
+                  ref={cardStageRef}
                   className="canvas-card"
                   style={backgroundImage ? { backgroundImage: `url(${backgroundImage})`, backgroundSize: 'cover', backgroundPosition: 'center' } : undefined}
                 >
+                  {/* Draggable wrapper — positioned freely inside the card via % coords */}
                   <div
-                    ref={textRef}
-                    className="editable-text"
+                    ref={dragWrapperRef}
+                    className={`text-drag-wrapper ${isDragging ? 'dragging' : ''}`}
                     style={{
-                      fontFamily,
-                      fontSize: `${fontSize}px`,
-                      fontWeight: isBold ? 'bold' : 'normal',
-                      fontStyle: isItalic ? 'italic' : 'normal',
-                      textDecoration: isUnderline ? 'underline' : 'none',
-                      color: textColor,
-                      textAlign: alignment,
-                      letterSpacing: `${letterSpacing}px`,
-                      lineHeight: lineHeight,
+                      left: `${positionX}%`,
+                      top: `${positionY}%`,
                     }}
-                    contentEditable={true}
-                    suppressContentEditableWarning={true}
-                    onInput={(e) => setGreetingText(e.currentTarget.innerText)}
-                  />
+                  >
+                    <div
+                      className="drag-handle"
+                      onMouseDown={handleDragStart}
+                      onTouchStart={handleDragStart}
+                      title="Drag to reposition"
+                    >
+                      <FaArrowsAlt size={12} />
+                    </div>
+
+                    <div
+                      ref={textRef}
+                      className="editable-text"
+                      style={{
+                        fontFamily,
+                        fontSize: `${fontSize}px`,
+                        fontWeight: isBold ? 'bold' : 'normal',
+                        fontStyle: isItalic ? 'italic' : 'normal',
+                        textDecoration: isUnderline ? 'underline' : 'none',
+                        color: textColor,
+                        textAlign: alignment,
+                        letterSpacing: `${letterSpacing}px`,
+                        lineHeight: lineHeight,
+                      }}
+                      contentEditable={true}
+                      suppressContentEditableWarning={true}
+                      onInput={(e) => setGreetingText(e.currentTarget.innerText)}
+                    />
+                  </div>
                 </div>
               </div>
             </div>
