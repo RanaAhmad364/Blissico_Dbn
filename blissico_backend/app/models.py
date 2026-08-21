@@ -120,7 +120,7 @@ class Occasion(BaseModel):
 class Card(BaseModel):
     __tablename__ = "cards"
 
-    category_id = db.Column(db.Integer,db.ForeignKey("categories.id"),nullable=False)
+    category_id = db.Column(db.Integer,db.ForeignKey("categories.id"),nullable=True)
     collection_id = db.Column(db.Integer,db.ForeignKey("collections.id"),nullable=True)
     occasion_id = db.Column(db.Integer,db.ForeignKey("occasions.id"),nullable=True)
     title = db.Column(db.String(200),nullable=False)

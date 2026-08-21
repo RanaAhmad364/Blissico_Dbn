@@ -12,7 +12,7 @@ import './Products.css';
 
 const emptyForm = {
   id: null, title: '', description: '', category_id: '', collection_id: '', occasion_id: '',
-  is_free: false, price: '',
+  is_free: false, price: '', is_active: true
 };
 
 const Products = () => {
@@ -21,7 +21,11 @@ const Products = () => {
   const [collections, setCollections] = useState([]);
   const [occasions, setOccasions] = useState([]);
   const [form, setForm] = useState(emptyForm);
-  const [parentCategoryId, setParentCategoryId] = useState(''); // UI-only: selected group (FEATURED / SHOP BY RECIPIENT etc)
+  const [parentCategoryId, setParentCategoryId] = useState(''); // UI-only: selected group 
+  const [parentCollectionId, setParentCollectionId] = useState('');
+  const [parentOccasionId, setParentOccasionId] = useState('');
+  
+  // (FEATURED / SHOP BY RECIPIENT etc)
   const [thumbnailFile, setThumbnailFile] = useState(null);
   const [error, setError] = useState('');
   const [saving, setSaving] = useState(false);
@@ -44,6 +48,14 @@ const Products = () => {
   const childCategoriesOf = (id) =>
     categories.filter((c) => c.parent_id != null && String(c.parent_id) === String(id));
 
+  const topLevelCollections = collections.filter((c) => !c.parent_id);
+  const childCollectionsOf = (id) =>
+    collections.filter((c) => c.parent_id != null && String(c.parent_id) === String(id));
+
+  const topLevelOccasions = occasions.filter((o) => !o.parent_id);
+  const childOccasionsOf = (id) =>
+    occasions.filter((o) => o.parent_id != null && String(o.parent_id) === String(id));
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
@@ -58,9 +70,9 @@ const Products = () => {
     const fd = new FormData();
     fd.append('title', form.title);
     fd.append('description', form.description);
-    fd.append('category_id', form.category_id);
     fd.append('is_free', form.is_free);
     fd.append('price', form.is_free ? 0 : form.price || 0);
+    fd.append('is_active', form.is_active);
     if (thumbnailFile) fd.append('thumbnail', thumbnailFile);
 
     fd.append('category_id', form.category_id);
@@ -86,21 +98,31 @@ const Products = () => {
     }
   };
 
-  const handleEdit = (card) => {
-    const catId = card.category?.id || '';
-    const cat = categories.find((c) => String(c.id) === String(catId));
-    // agar category ka parent hai to wo group pehle select karo, taake child dropdown me sahi list aaye
-    const derivedParentId = cat?.parent_id != null ? String(cat.parent_id) : (cat ? String(cat.id) : '');
+ const handleEdit = (card) => {
+  const catId = card.category?.id || '';
+  const cat = categories.find((c) => String(c.id) === String(catId));
+  const derivedParentId = cat?.parent_id != null ? String(cat.parent_id) : (cat ? String(cat.id) : '');
 
-    setForm({
-      id: card.id, title: card.title, description: card.description || '',
-      category_id: catId ? String(catId) : '', collection_id: card.collection?.id || '',
-      occasion_id: card.occasion?.id || '', is_free: card.is_free, price: card.price,
-    });
-    setParentCategoryId(derivedParentId);
-    setThumbnailFile(null);
-    setShowForm(true);
-  };
+  const colId = card.collection?.id || '';
+  const col = collections.find((c) => String(c.id) === String(colId));
+  const derivedParentCollectionId = col?.parent_id != null ? String(col.parent_id) : (col ? String(col.id) : '');
+
+  const occId = card.occasion?.id || '';
+  const occ = occasions.find((o) => String(o.id) === String(occId));
+  const derivedParentOccasionId = occ?.parent_id != null ? String(occ.parent_id) : (occ ? String(occ.id) : '');
+
+  setForm({
+    id: card.id, title: card.title, description: card.description || '',
+    category_id: catId ? String(catId) : '', collection_id: colId ? String(colId) : '',
+    occasion_id: occId ? String(occId) : '', is_free: card.is_free, price: card.price,
+    is_active: card.is_active,
+  });
+  setParentCategoryId(derivedParentId);
+  setParentCollectionId(derivedParentCollectionId);
+  setParentOccasionId(derivedParentOccasionId);
+  setThumbnailFile(null);
+  setShowForm(true);
+};
 
   const handleDelete = async (id) => {
     if (!window.confirm('Delete this card? This also removes its uploaded templates.')) return;
@@ -185,16 +207,16 @@ const Products = () => {
                 </div>
 
                 <div className="form-group">
-                  <label>Category Group</label>
+                  <label>Category Group (optional)</label>
                   <select
                     value={parentCategoryId}
                     onChange={(e) => {
                       const newParentId = e.target.value;
                       setParentCategoryId(newParentId);
-                      setForm({ ...form, category_id: '' }); // group badalte hi child reset
+                      setForm({ ...form, category_id: '' });
                     }}
                   >
-                    <option value="">Select a group</option>
+                    <option value="">None</option>
                     {topLevelCategories.map((p) => (
                       <option key={p.id} value={String(p.id)}>{p.name}</option>
                     ))}
@@ -207,7 +229,7 @@ const Products = () => {
                     value={form.category_id}
                     onChange={(e) => setForm({ ...form, category_id: e.target.value })}
                     disabled={!parentCategoryId}
-                    required
+                  
                   >
                     <option value="">{parentCategoryId ? 'Select a category' : 'Select a group first'}</option>
                     {childCategoriesOf(parentCategoryId).map((c) => (
@@ -217,18 +239,64 @@ const Products = () => {
                 </div>
 
                 <div className="form-group">
-                  <label>Collection (optional)</label>
-                  <select value={form.collection_id} onChange={(e) => setForm({ ...form, collection_id: e.target.value })}>
+                  <label>Collection Group (optional)</label>
+                  <select
+                    value={parentCollectionId}
+                    onChange={(e) => {
+                      const newParentId = e.target.value;
+                      setParentCollectionId(newParentId);
+                      setForm({ ...form, collection_id: '' });
+                    }}
+                  >
                     <option value="">None</option>
-                    {collections.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
+                    {topLevelCollections.map((p) => (
+                      <option key={p.id} value={String(p.id)}>{p.name}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="form-group">
+                  <label>Collection (optional)</label>
+                  <select
+                    value={form.collection_id}
+                    onChange={(e) => setForm({ ...form, collection_id: e.target.value })}
+                    disabled={!parentCollectionId}
+                  >
+                    <option value="">{parentCollectionId ? 'Select a collection' : 'Select a group first'}</option>
+                    {childCollectionsOf(parentCollectionId).map((c) => (
+                      <option key={c.id} value={String(c.id)}>{c.name}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="form-group">
+                  <label>Occasion Group (optional)</label>
+                  <select
+                    value={parentOccasionId}
+                    onChange={(e) => {
+                      const newParentId = e.target.value;
+                      setParentOccasionId(newParentId);
+                      setForm({ ...form, occasion_id: '' });
+                    }}
+                  >
+                    <option value="">None</option>
+                    {topLevelOccasions.map((p) => (
+                      <option key={p.id} value={String(p.id)}>{p.name}</option>
+                    ))}
                   </select>
                 </div>
 
                 <div className="form-group">
                   <label>Occasion (optional)</label>
-                  <select value={form.occasion_id} onChange={(e) => setForm({ ...form, occasion_id: e.target.value })}>
-                    <option value="">None</option>
-                    {occasions.map((o) => <option key={o.id} value={o.id}>{o.name}</option>)}
+                  <select
+                    value={form.occasion_id}
+                    onChange={(e) => setForm({ ...form, occasion_id: e.target.value })}
+                    disabled={!parentOccasionId}
+                  >
+                    <option value="">{parentOccasionId ? 'Select an occasion' : 'Select a group first'}</option>
+                    {childOccasionsOf(parentOccasionId).map((o) => (
+                      <option key={o.id} value={String(o.id)}>{o.name}</option>
+                    ))}
                   </select>
                 </div>
 
@@ -236,6 +304,13 @@ const Products = () => {
                   <label className="checkbox-row">
                     <input type="checkbox" checked={form.is_free} onChange={(e) => setForm({ ...form, is_free: e.target.checked })} />
                     Free card
+                  </label>
+                </div>
+
+                <div className="form-group checkbox-group">
+                  <label className="checkbox-row">
+                    <input type="checkbox" checked={form.is_active} onChange={(e) => setForm({ ...form, is_active: e.target.checked })} />
+                    Active (visible to customers)
                   </label>
                 </div>
 
@@ -299,10 +374,17 @@ const Products = () => {
                         <span className="style-count-badge">{card.templates?.length || 0}</span>
                       </td>
                       <td>
+                        <span className={`status-pill ${card.is_active ? 'active' : 'inactive'}`}>
+                          {card.is_active ? 'Active' : 'Inactive'}
+                        </span>
+                      </td>
+
+
+                      <td>
                         <div className="row-actions">
                           <button className="action-pill edit" onClick={() => handleEdit(card)}>
                             <FiEdit2 size={13} /> Edit
-                          </button>
+                          </button>    
                           <button className="action-pill delete" onClick={() => handleDelete(card.id)}>
                             <FiTrash2 size={13} /> Delete
                           </button>

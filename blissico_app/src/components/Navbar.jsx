@@ -2,70 +2,9 @@ import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react'
 import { Link, useLocation } from 'react-router-dom';
 import { FaUser, FaSearch, FaShoppingCart, FaBars, FaTimes, FaChevronDown , FaHeart  } from 'react-icons/fa';
 import logo from '../assets/images/Website main logo.png';
-import { getCategories } from '../api/catalog';
+import { getCategories, getCollections, getOccasions } from '../api/catalog';
 import './Navbar.css';
 
-// Static nav items that don't depend on admin categories.
-const STATIC_OCCASIONS_DROPDOWN = {
-  type: '5col',
-  columns: [
-    {
-      heading: 'CELEBRATIONS',
-      links: [
-        { label: 'For Birthday', path: '/occasions/birthday' },
-        { label: 'For Anniversary', path: '/occasions/anniversary' },
-        { label: 'Congratulations', path: '/occasions/congratulations' },
-        { label: 'For Graduation', path: '/occasions/graduation' },
-        { label: 'For Good Luck', path: '/occasions/good-luck' },
-      ],
-    },
-    {
-      heading: 'FAMILY & LIFE EVENTS',
-      links: [
-        { label: 'For Wedding & Engagement', path: '/occasions/wedding' },
-        { label: 'For Bridal Shower', path: '/occasions/bridal-shower' },
-        { label: 'For Baby Shower', path: '/occasions/baby-shower' },
-        { label: 'For New Baby', path: '/occasions/new-baby' },
-        { label: 'For New Home', path: '/occasions/new-home' },
-      ],
-    },
-    {
-      heading: 'THOUGHTFUL MOMENTS',
-      links: [
-        { label: 'Thank You', path: '/occasions/thank-you' },
-        { label: 'Thinking of You', path: '/occasions/thinking-of-you' },
-        { label: 'Get Well Soon', path: '/occasions/get-well' },
-        { label: 'Sympathy Cards', path: '/occasions/sympathy' },
-      ],
-    },
-    {
-      heading: 'SEASONAL & RELIGIOUS',
-      links: [
-        { label: 'For Ramadan', path: '/occasions/ramadan' },
-        { label: 'For Hajj & Umrah', path: '/occasions/hajj' },
-        { label: 'For New Year', path: '/occasions/new-year' },
-        { label: 'For Christmas', path: '/occasions/christmas' },
-        { label: "For Mother's Day", path: '/occasions/mothers-day' },
-        { label: "For Father's Day", path: '/occasions/fathers-day' },
-        { label: "For Valentine's Day", path: '/occasions/valentines' },
-      ],
-    },
-  ],
-  image: {
-    src: 'https://via.placeholder.com/200x280/666666/ffffff?text=Best+Sellers',
-    alt: 'Best Sellers',
-    label: 'Best Sellers',
-  },
-};
-
-const STATIC_COLLECTIONS_DROPDOWN = {
-  type: '3img',
-  collections: [
-    { src: 'https://via.placeholder.com/300x400/666666/ffffff?text=Collection+1', alt: 'Signature', label: 'Signature Collection' },
-    { src: 'https://via.placeholder.com/300x400/666666/ffffff?text=Collection+2', alt: 'Bloom', label: 'Bloom Collection' },
-    { src: 'https://via.placeholder.com/300x400/666666/ffffff?text=Collection+3', alt: 'Cherished', label: 'Cherished Collection' },
-  ],
-};
 
 // Builds the "Cards" dropdown purely from admin-managed categories.
 // Each top-level category (FEATURED, SHOP BY RECIPIENT, SHOP BY STYLE, ...) becomes
@@ -88,12 +27,48 @@ const buildCardsDropdown = (cardCategories) => ({
   },
 });
 
+const buildOccasionsDropdown = (occasionCategories) => ({
+  type: '5col',
+  columns: occasionCategories.map((occ) => ({
+    heading: occ.name.toUpperCase(),
+    links:
+      occ.subcategories && occ.subcategories.length > 0
+        ? occ.subcategories.map((sub) => ({ label: sub.name, path: `/occasions/${sub.slug}` }))
+        : [{ label: `Shop ${occ.name}`, path: `/occasions/${occ.slug}` }],
+  })),
+  image: {
+    src: 'https://via.placeholder.com/200x280/666666/ffffff?text=Best+Sellers',
+    alt: 'Best Sellers',
+    label: 'Best Sellers',
+  },
+});
+
+const buildCollectionsDropdown = (collectionCategories) => ({
+  type: '4col',
+  columns: collectionCategories.map((col) => ({
+    heading: col.name.toUpperCase(),
+    links:
+      col.subcategories && col.subcategories.length > 0
+        ? col.subcategories.map((sub) => ({ label: sub.name, path: `/collections/${sub.slug}` }))
+        : [{ label: `Shop ${col.name}`, path: `/collections/${col.slug}` }],
+  })),
+  image: {
+    src: 'https://via.placeholder.com/200x280/666666/ffffff?text=Best+Sellers',
+    alt: 'Best Sellers',
+    label: 'Best Sellers',
+  },
+});
+
 const Navbar = () => {
   const location = useLocation();
   const [cardCategories, setCardCategories] = useState([]);
+  const [occasionCategories, setOccasionCategories] = useState([]);  
+  const [collectionCategories, setCollectionCategories] = useState([]); 
 
   useEffect(() => {
     getCategories().then(setCardCategories).catch(() => {});
+    getOccasions().then(setOccasionCategories).catch(() => {});    
+    getCollections().then(setCollectionCategories).catch(() => {}); 
   }, []);
 
   // Full nav array, rebuilt whenever admin categories change.
@@ -102,10 +77,10 @@ const Navbar = () => {
       { label: 'Home', path: '/' },
       { label: 'About', path: '/about' },
       { label: 'Cards', path: '/cards', dropdown: buildCardsDropdown(cardCategories) },
-      { label: 'Occasions', path: '/occasions', dropdown: STATIC_OCCASIONS_DROPDOWN },
-      { label: 'Collections', path: '/collections', dropdown: STATIC_COLLECTIONS_DROPDOWN },
+      { label: 'Occasions', path: '/occasions', dropdown: buildOccasionsDropdown(occasionCategories) },
+      { label: 'Collections', path: '/collections', dropdown: buildCollectionsDropdown(collectionCategories) },
     ],
-    [cardCategories]
+    [cardCategories, occasionCategories, collectionCategories]
   );
 
   // Desktop hover-dropdown state (kept compatible with original behaviour)

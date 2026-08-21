@@ -257,7 +257,9 @@ class AdminCatalogService:
 
     @staticmethod
     def create_card(data, thumbnail_file):
-        if not Category.query.get(data["category_id"]):
+
+        category_id = data.get("category_id") or None
+        if category_id and not Category.query.get(category_id):
             return {"success": False, "message": "Category not found."}, 400
 
         collection_id = data.get("collection_id") or None
@@ -281,7 +283,7 @@ class AdminCatalogService:
         is_free = str(data.get("is_free", "false")).lower() == "true"
 
         card = Card(
-            category_id=data["category_id"],
+            category_id=category_id,
             collection_id=collection_id,
             occasion_id=occasion_id,
             title=data["title"].strip(),
@@ -302,6 +304,7 @@ class AdminCatalogService:
         if not card:
             return {"success": False, "message": "Card not found."}, 404
 
+
         for fk, model, label in [
             ("category_id", Category, "Category"),
             ("collection_id", Collection, "Collection"),
@@ -309,8 +312,6 @@ class AdminCatalogService:
         ]:
             if fk in data:
                 value = data[fk] or None
-                if fk == "category_id" and not value:
-                    return {"success": False, "message": "Category is required."}, 400
                 if value and not model.query.get(value):
                     return {"success": False, "message": f"{label} not found."}, 400
                 setattr(card, fk, value)
