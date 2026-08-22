@@ -149,6 +149,7 @@ html, body {
   cursor: pointer;
   color: #333;
   transition: color 0.2s ease, transform 0.2s ease;
+  position: relative;
 }
 .icon-btn:hover {
   color: var(--brand-pink-active);
@@ -157,6 +158,22 @@ html, body {
 
 .icons { display: flex; gap: 15px; }
 .icon { font-size: 1.1rem; }
+
+.favorites-count-badge {
+  align-items: center;
+  background: #e27c9f;
+  border-radius: 999px;
+  color: white;
+  display: flex;
+  font-size: 10px;
+  height: 16px;
+  justify-content: center;
+  min-width: 16px;
+  padding: 0 3px;
+  position: absolute;
+  right: -7px;
+  top: -6px;
+}
 
 /* ---------------- Search expand ---------------- */
 .search-wrapper {

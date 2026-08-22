@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 // 1. Import your Auth Context
 import { AuthProvider } from './context/AuthContext';
+import { FavoritesProvider } from './context/FavoritesContext';
 
 // 2. Import your existing Pages
 import Home from './pages/Home';
@@ -25,6 +26,8 @@ import FavoritesPage from './pages/favourites/FavoritesPage';
 // import UserDashboard from './pages/User_dashboard';
 import UserDashboard from './pages/user/UserDashboard';
 import UserEditProfile from './pages/user/UserEditProfile';
+// import MyDownloads from './pages/user/MyDownloads';
+import DashboardFavorites from './pages/user/DashboardFavorites';
 // import AdminDashboard from './pages/admin/Dashboard';
 
 // 3. Import the new Auth Pages
@@ -51,7 +54,8 @@ function App() {
     <BrowserRouter>
       {/* Wrap everything in AuthProvider so all pages know if a user is logged in */}
       <AuthProvider>
-        <Routes>
+        <FavoritesProvider>
+          <Routes>
           {/* Existing Routes */}
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
@@ -69,6 +73,8 @@ function App() {
           <Route path="/payment-success" element={<PaymentSuccess />} />
           <Route path="/dashboard" element={<UserDashboard />} />
           <Route path="/edit-profile" element={<UserEditProfile />} />
+          {/* <Route path="/user/downloads" element={<MyDownloads />} /> */}
+          <Route path="/user/favorites" element={<DashboardFavorites />} />
 
           <Route path="/checkout/:orderId" element={<Checkout />} />
           <Route path="/favorites" element={<FavoritesPage />} />
@@ -107,7 +113,8 @@ function App() {
           
           {/* <Route path="/admin/dashboard" element={<AdminDashboard />} /> */}
           
-        </Routes>
+          </Routes>
+        </FavoritesProvider>
       </AuthProvider>
     </BrowserRouter>
   );

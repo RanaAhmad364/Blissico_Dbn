@@ -1,0 +1,216 @@
+.dashboard-favorites-page {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.dashboard-favorites-header {
+  align-items: flex-start;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.dashboard-favorites-header h2 {
+  color: #1a1a2e;
+  font-size: 26px;
+  margin: 0 0 6px;
+}
+
+.dashboard-favorites-header p {
+  color: #8892b0;
+  font-size: 14px;
+  margin: 0;
+}
+
+.dashboard-favorites-browse-link,
+.dashboard-favorites-browse-button {
+  background: #7c3aed;
+  border-radius: 6px;
+  color: #fff;
+  font-size: 14px;
+  padding: 10px 16px;
+  text-decoration: none;
+}
+
+.dashboard-favorites-browse-link:hover,
+.dashboard-favorites-browse-button:hover {
+  background: #6d28d9;
+}
+
+.dashboard-favorites-grid {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.dashboard-favorite-card,
+.dashboard-favorite-skeleton {
+  background: #fff;
+  border: 1px solid #e8ecf4;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+}
+
+.dashboard-favorite-card {
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.dashboard-favorite-card:hover {
+  box-shadow: 0 6px 18px rgba(26, 26, 46, 0.08);
+  transform: translateY(-2px);
+}
+
+.dashboard-favorite-card-link {
+  color: inherit;
+  display: block;
+  text-decoration: none;
+}
+
+.dashboard-favorite-image-wrap,
+.dashboard-favorite-skeleton-image {
+  aspect-ratio: 3 / 4;
+  background: #f1f3f7;
+  width: 100%;
+}
+
+.dashboard-favorite-image {
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
+}
+
+.dashboard-favorite-card-info {
+  padding: 14px 16px 16px;
+}
+
+.dashboard-favorite-card-info h3 {
+  color: #1a1a2e;
+  font-size: 15px;
+  margin: 0 0 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dashboard-favorite-price,
+.dashboard-favorite-free {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.dashboard-favorite-price {
+  color: #4b5563;
+}
+
+.dashboard-favorite-free {
+  color: #14b8a6;
+}
+
+.dashboard-favorite-remove {
+  align-items: center;
+  background: rgba(255, 255, 255, 0.92);
+  border: 0;
+  border-radius: 50%;
+  color: #e27c9f;
+  cursor: pointer;
+  display: flex;
+  height: 34px;
+  justify-content: center;
+  position: absolute;
+  right: 12px;
+  top: 12px;
+  width: 34px;
+}
+
+.dashboard-favorite-remove:hover {
+  background: #fff;
+  color: #c0395f;
+}
+
+.dashboard-favorite-remove:disabled {
+  cursor: wait;
+  opacity: 0.55;
+}
+
+.dashboard-favorites-empty,
+.dashboard-favorites-loading {
+  align-items: center;
+  background: #fff;
+  border: 1px dashed #d1d5db;
+  border-radius: 12px;
+  color: #8892b0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 280px;
+  padding: 32px 20px;
+  text-align: center;
+}
+
+.dashboard-favorites-empty h3 {
+  color: #1a1a2e;
+  font-size: 18px;
+  margin: 12px 0 8px;
+}
+
+.dashboard-favorites-empty p {
+  margin: 0 0 20px;
+}
+
+.dashboard-favorites-empty-icon {
+  color: #e27c9f;
+  font-size: 42px;
+}
+
+.dashboard-favorite-skeleton-image,
+.dashboard-favorite-skeleton-line,
+.dashboard-favorite-skeleton-short-line {
+  animation: dashboardFavoritesPulse 1.3s ease-in-out infinite;
+  background: #edf0f5;
+}
+
+.dashboard-favorite-skeleton-line,
+.dashboard-favorite-skeleton-short-line {
+  border-radius: 4px;
+  height: 14px;
+  margin: 16px;
+}
+
+.dashboard-favorite-skeleton-short-line {
+  margin-top: -8px;
+  width: 42%;
+}
+
+@keyframes dashboardFavoritesPulse {
+  0%, 100% { opacity: 0.55; }
+  50% { opacity: 1; }
+}
+
+@media (max-width: 1024px) {
+  .dashboard-favorites-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-favorites-header {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .dashboard-favorites-browse-link {
+    align-self: flex-start;
+  }
+
+  .dashboard-favorites-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-favorites-grid {
+    grid-template-columns: 1fr;
+  }
+}

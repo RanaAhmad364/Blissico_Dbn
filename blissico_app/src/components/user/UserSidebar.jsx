@@ -26,9 +26,10 @@ const UserSidebar = ({ isOpen, onClose }) => {
   const { logout } = useAuth();
 
   const mainMenu = [
-    { label: 'Dashboard', path: '/user/dashboard', icon: FiHome },
+    { label: 'Dashboard', path: '/dashboard', icon: FiHome },
     { label: 'Orders', path: '/user/orders', icon: FiShoppingBag },
-    { label: 'Downloads', path: '/user/downloads', icon: FiDownload },
+    { label: 'My Downloads', path: '/user/downloads', icon: FiDownload },
+    { label: 'Favorites', path: '/user/favorites', icon: FiHeart },
     { label: 'Subscriptions', path: '/user/subscriptions', icon: FiRepeat },
     { label: 'Pricing Plans', path: '/user/pricing-plans', icon: FiDollarSign },
     { label: 'Saved Items', path: '/user/saved-items', icon: FiHeart },

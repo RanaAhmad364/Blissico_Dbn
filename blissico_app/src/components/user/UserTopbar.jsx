@@ -2,6 +2,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { useFavorites } from '../../context/FavoritesContext';
+import { assetUrl } from '../../api/catalog';
 import { 
   FiMenu, FiSearch, FiHeart, FiShoppingCart, FiBell, 
   FiChevronDown, FiUser, FiSettings, FiLogOut, FiX
@@ -10,6 +12,7 @@ import './UserTopbar.css';
 
 const UserTopbar = ({ onMenuClick }) => {
   const { user, logout } = useAuth();
+  const { favorites, favoritesCount, loading: favoritesLoading } = useFavorites();
   const navigate = useNavigate();
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
@@ -52,12 +55,6 @@ const UserTopbar = ({ onMenuClick }) => {
   };
 
   // ===== DUMMY DATA =====
-  const favoriteItems = [
-    { id: 1, name: 'Elegant Wedding Card', price: '$12.00', image: '💒' },
-    { id: 2, name: 'Birthday Blooms', price: '$8.00', image: '🌺' },
-    { id: 3, name: 'Baby Arrival', price: '$10.00', image: '👶' },
-  ];
-
   const cartItems = [
     { id: 1, name: 'Eid Mubarak Card', price: '$15.00', quantity: 2, image: '🌙' },
     { id: 2, name: 'Anniversary Love', price: '$12.00', quantity: 1, image: '💕' },
@@ -112,7 +109,7 @@ const UserTopbar = ({ onMenuClick }) => {
             }}
           >
             <FiHeart size={20} />
-            <span className="user-badge">{favoriteItems.length}</span>
+            {favoritesCount > 0 && <span className="user-badge">{favoritesCount}</span>}
           </button>
 
           {showFavorites && (
@@ -124,15 +121,39 @@ const UserTopbar = ({ onMenuClick }) => {
                 </button>
               </div>
               <div className="user-dropdown-list">
-                {favoriteItems.map((item) => (
-                  <div key={item.id} className="user-dropdown-item-card">
-                    <span className="user-item-icon">{item.image}</span>
-                    <div className="user-item-info">
-                      <span className="user-item-name">{item.name}</span>
-                      <span className="user-item-price">{item.price}</span>
-                    </div>
+                {favoritesLoading ? (
+                  <div className="user-favorites-dropdown-message">Loading favorites...</div>
+                ) : favorites.length === 0 ? (
+                  <div className="user-favorites-dropdown-message">
+                    <span>No favorites yet</span>
+                    <Link to="/cards" onClick={closeAllDropdowns}>Browse Cards</Link>
                   </div>
-                ))}
+                ) : (
+                  favorites.slice(0, 4).map((item) => (
+                    <Link
+                      key={item.id || item.card_id}
+                      to={`/product/${item.card_id}`}
+                      className="user-dropdown-item-card user-favorite-dropdown-link"
+                      onClick={closeAllDropdowns}
+                    >
+                      {item.thumbnail ? (
+                        <img
+                          src={assetUrl(item.thumbnail)}
+                          alt=""
+                          className="user-favorite-item-thumbnail"
+                        />
+                      ) : (
+                        <span className="user-item-icon"><FiHeart size={18} /></span>
+                      )}
+                      <div className="user-item-info">
+                        <span className="user-item-name">{item.title || 'Favorite card'}</span>
+                        <span className="user-item-price">
+                          {item.is_free ? 'Free' : `$${(Number(item.price) || 0).toFixed(2)}`}
+                        </span>
+                      </div>
+                    </Link>
+                  ))
+                )}
               </div>
               <div className="user-dropdown-footer">
                 <Link to="/user/favorites" onClick={closeAllDropdowns}>View All Favorites</Link>

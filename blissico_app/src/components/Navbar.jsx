@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { FaUser, FaSearch, FaShoppingCart, FaBars, FaTimes, FaChevronDown , FaHeart  } from 'react-icons/fa';
 import logo from '../assets/images/Website main logo.png';
 import { getCategories, getCollections, getOccasions } from '../api/catalog';
+import { useFavorites } from '../context/FavoritesContext';
 import './Navbar.css';
 
 
@@ -61,6 +62,7 @@ const buildCollectionsDropdown = (collectionCategories) => ({
 
 const Navbar = () => {
   const location = useLocation();
+  const { favoritesCount } = useFavorites();
   const [cardCategories, setCardCategories] = useState([]);
   const [occasionCategories, setOccasionCategories] = useState([]);  
   const [collectionCategories, setCollectionCategories] = useState([]); 
@@ -329,6 +331,7 @@ const Navbar = () => {
           <Link to="/favorites" style={{ display: 'flex', alignItems: 'center', color: 'inherit' }}>
             <button className="icon-btn" aria-label="Favorites">
               <FaHeart className="icon" />
+              {favoritesCount > 0 && <span className="favorites-count-badge">{favoritesCount}</span>}
             </button>
           </Link>
           <Link to="/cart" style={{ display: 'flex', alignItems: 'center', color: 'inherit' }}>
@@ -423,6 +426,7 @@ const Navbar = () => {
              <Link to="/favorites" style={{ display: 'flex', alignItems: 'center', color: 'inherit' }}>
             <button className="icon-btn" aria-label="Favorites">
               <FaHeart className="icon" />
+              {favoritesCount > 0 && <span className="favorites-count-badge">{favoritesCount}</span>}
             </button>
           </Link>
             <button className="icon-btn" aria-label="Shopping cart">

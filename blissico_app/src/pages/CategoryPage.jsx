@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import { FaHeart, FaRegHeart } from 'react-icons/fa'; // ✅ Heart icons import kiya
+import { useFavorites } from '../context/FavoritesContext';
+import { useAuth } from '../context/AuthContext';
 import Marquee from '../components/Marquee';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
@@ -12,6 +14,9 @@ const FILTER_KEY = { cards: 'category', occasions: 'occasion', collections: 'col
 
 const CategoryPage = () => {
   const { category, slug } = useParams();
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  const { isFavorite, toggleFavorite, pendingIds } = useFavorites();
   const [currentPage, setCurrentPage] = useState(1);
   const [sortBy, setSortBy] = useState('featured');
   const [filterBy, setFilterBy] = useState('all');
@@ -60,16 +65,15 @@ const CategoryPage = () => {
       .finally(() => setLoading(false));
   }, [category, slug, sortParam, currentPage, filterBy]);
 
-  // Toggle Favourite Function
-  const toggleFavourite = (e, productId) => {
+  const toggleFavourite = async (e, productId) => {
     e.preventDefault();
     e.stopPropagation();
-    setFavourites((prev) => 
-      prev.includes(productId) ? prev.filter(id => id !== productId) : [...prev, productId]
-    );
+    if (!user) {
+      navigate('/login');
+      return;
+    }
+    await toggleFavorite(productId);
   };
-
-  const [favourites, setFavourites] = useState([]);
 
   const formatTitle = (str) => {
     if (!str) return 'Products';
@@ -208,6 +212,7 @@ const CategoryPage = () => {
                     <button 
                       className="fav-icon-btn"
                       onClick={(e) => toggleFavourite(e, product.id)}
+                      disabled={pendingIds.has(product.id)}
                       style={{
                         position: 'absolute',
                         top: '12px',
@@ -228,7 +233,7 @@ const CategoryPage = () => {
                       onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.1)'}
                       onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
                     >
-                      {favourites.includes(product.id) ? (
+                      {isFavorite(product.id) ? (
                         <FaHeart style={{ color: '#e27c9f', fontSize: '18px' }} />
                       ) : (
                         <FaRegHeart style={{ color: '#555', fontSize: '18px' }} />
