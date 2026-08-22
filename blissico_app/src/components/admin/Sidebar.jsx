@@ -30,15 +30,15 @@ const Sidebar = ({ isOpen, onClose }) => {
 
   const mainNav = [
     { label: 'Dashboard', path: '/admin/dashboard', icon: FiHome },
-    { label: 'Orders', path: '/admin/orders', icon: FiShoppingBag },
-    { label: 'Customers', path: '/admin/customers', icon: FiUsers },
+    { label: 'Purchase', path: '/admin/orders', icon: FiShoppingBag },
+    // { label: 'Customers', path: '/admin/customers', icon: FiUsers },
     { label: 'Products', path: '/admin/products', icon: FiPackage },
     { label: 'Categories', path: '/admin/categories', icon: FiGrid },
     { label: 'Collections', path: '/admin/collections', icon: FiTag },  
     { label: 'Occasions', path: '/admin/occasions', icon: FiStar },
-    { label: 'Pricing Plans', path: '/admin/pricing', icon: FiDollarSign },
-    { label: 'Coupons', path: '/admin/coupons', icon: FiTag },
-    { label: 'Reviews', path: '/admin/reviews', icon: FiStar },
+    // { label: 'Pricing Plans', path: '/admin/pricing', icon: FiDollarSign },
+    // { label: 'Coupons', path: '/admin/coupons', icon: FiTag },
+    // { label: 'Reviews', path: '/admin/reviews', icon: FiStar },
   ];
 
   const managementNav = [
@@ -49,8 +49,8 @@ const Sidebar = ({ isOpen, onClose }) => {
 
   const systemNav = [
     { label: 'Settings', path: '/admin/settings', icon: FiSettings },
-    { label: 'Appearance', path: '/admin/appearance', icon: FiLayers },
-    { label: 'Activity Logs', path: '/admin/activity-logs', icon: FiActivity },
+    // { label: 'Appearance', path: '/admin/appearance', icon: FiLayers },
+    // { label: 'Activity Logs', path: '/admin/activity-logs', icon: FiActivity },
   ];
 
   // Handle logout

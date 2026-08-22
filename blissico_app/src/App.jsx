@@ -37,6 +37,8 @@ import DashboardFavorites from './pages/user/DashboardFavorites';
   import ForgotPassword from './pages/auth/ForgotPassword';
   import ResetPassword from './pages/auth/ResetPassword';
 
+  import Users from './pages/admin/Users';
+
   import AdminRoute from './components/AdminRoute';
   import AdminDashboard from './pages/admin/AdminDashboard';
   import EditProfile from './pages/admin/EditProfile';
@@ -92,9 +94,11 @@ function App() {
           <Route path="/admin/collections" element={<AdminRoute><AdminCollections /></AdminRoute>} />
           <Route path="/admin/occasions" element={<AdminRoute><AdminOccasions /></AdminRoute>} />
 
-          
+          <Route path="/admin/users" element={<AdminRoute><Users /></AdminRoute>} />
 
           <Route path="/admin/dashboard"
+
+          
   element={
     <AdminRoute>
       <AdminDashboard />

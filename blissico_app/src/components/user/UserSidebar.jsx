@@ -27,21 +27,21 @@ const UserSidebar = ({ isOpen, onClose }) => {
 
   const mainMenu = [
     { label: 'Dashboard', path: '/dashboard', icon: FiHome },
-    { label: 'Orders', path: '/user/orders', icon: FiShoppingBag },
+    { label: 'Purchases', path: '/user/orders', icon: FiShoppingBag },
     { label: 'My Downloads', path: '/user/downloads', icon: FiDownload },
     { label: 'Favorites', path: '/user/favorites', icon: FiHeart },
-    { label: 'Subscriptions', path: '/user/subscriptions', icon: FiRepeat },
-    { label: 'Pricing Plans', path: '/user/pricing-plans', icon: FiDollarSign },
+    // { label: 'Subscriptions', path: '/user/subscriptions', icon: FiRepeat },
+    // { label: 'Pricing Plans', path: '/user/pricing-plans', icon: FiDollarSign },
     { label: 'Saved Items', path: '/user/saved-items', icon: FiHeart },
-    { label: 'Coupons', path: '/user/coupons', icon: FiTag },
+    // { label: 'Coupons', path: '/user/coupons', icon: FiTag },
   ];
 
   const settingsMenu = [
-    { label: 'Addresses', path: '/user/addresses', icon: FiMapPin },
-    { label: 'Payment Methods', path: '/user/payments', icon: FiCreditCard },
+    // { label: 'Addresses', path: '/user/addresses', icon: FiMapPin },
+    // { label: 'Payment Methods', path: '/user/payments', icon: FiCreditCard },
     { label: 'Account Settings', path: '/user/account-settings', icon: FiSettings },
     { label: 'Notifications', path: '/user/notifications', icon: FiBell },
-    { label: 'Reviews', path: '/user/reviews', icon: FiStar },
+    // { label: 'Reviews', path: '/user/reviews', icon: FiStar },
     { label: 'Support', path: '/user/support', icon: FiHeadphones },
   ];
 

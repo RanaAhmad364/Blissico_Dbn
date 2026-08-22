@@ -6,6 +6,9 @@ export const getUser = (id) => api.get(`/api/admin/users/${id}`).then(r => r.dat
 export const updateUser = (id, data) => api.put(`/api/admin/users/${id}`, data).then(r => r.data);
 export const deleteUser = (id) => api.delete(`/api/admin/users/${id}`).then(r => r.data);
 
+export const updateUserStatus = (id, is_active) => api.patch(`/api/admin/users/${id}/status`, { is_active }).then(r => r.data);
+export const verifyUser = (id, is_verified) => api.patch(`/api/admin/users/${id}/verify`, { is_verified }).then(r => r.data);
+
 // --- Categories / Collections / Occasions ---
 export const getCategories = () => api.get('/api/admin/categories').then(r => r.data.data);
 export const createCategory = (data) => api.post('/api/admin/categories', data).then(r => r.data);
