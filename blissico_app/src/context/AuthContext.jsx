@@ -84,8 +84,17 @@ const resendPasswordResetOTP = async (email) => {
   return response.data;
 };
 
+  const updateUser = (updatedFields) => {
+    setUser((prev) => {
+      const newUser = { ...prev, ...updatedFields };
+      localStorage.setItem('blissico_user', JSON.stringify(newUser));
+      return newUser;
+    });
+  };  
+
+
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, verifyOTP, resendOTP, resendPasswordResetOTP, logout, forgotPassword, resetPassword }}>
+    <AuthContext.Provider value={{ user, loading, login, register, verifyOTP, resendOTP, resendPasswordResetOTP, logout, forgotPassword, resetPassword,updateUser }}>
       {children}
     </AuthContext.Provider>
   );

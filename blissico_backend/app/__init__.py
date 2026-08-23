@@ -38,6 +38,7 @@ def create_app(config_class=Config):
     from app.catalog.routes import catalog_bp
     from app.Card_Cutomization.routes import customization_bp
     from app.cli import seed_roles, create_admin
+    from app.profile.routes import profile_bp
 
     from app.Orders.routes import orders_bp
     from app.Favourite.routes import favorites_bp
@@ -53,6 +54,7 @@ def create_app(config_class=Config):
     app.register_blueprint(favorites_bp)
     app.register_blueprint(payments_bp)
     app.register_blueprint(downloads_bp)
+    app.register_blueprint(profile_bp)
     app.cli.add_command(seed_roles)
     app.cli.add_command(create_admin)
 
