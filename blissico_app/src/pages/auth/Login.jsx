@@ -24,7 +24,7 @@ const Login = () => {
       const user = await login(email, password);
       navigate(user.role === 'Admin' ? '/admin/dashboard' : '/dashboard');
     } catch (err) {
-      setError(err.response?.data?.error || 'Login failed. Please check your credentials.');
+      setError(err.response?.data?.message || err.response?.data?.error || 'Login failed. Please check your credentials.');
     } finally {
       setLoading(false);
     }
@@ -59,27 +59,27 @@ const Login = () => {
             </div>
 
             <div className="form-group">
-  <label>Password</label>
-  <div className="password-input-wrapper"> {/* ✅ Wrapper */}
-    <input 
-      type={showPassword ? 'text' : 'password'} // ✅ Dynamic type
-      placeholder="Enter your password" 
-      value={password} 
-      onChange={(e) => setPassword(e.target.value)} 
-      required 
-      disabled={loading}
-    />
-    <button
-      type="button"
-      className="password-toggle-btn"
-      onClick={() => setShowPassword(!showPassword)}
-      aria-label={showPassword ? 'Hide password' : 'Show password'}
-      tabIndex="-1"
-    >
-      {showPassword ? <FaEyeSlash /> : <FaEye />} {/* ✅ Eye icons */}
-    </button>
-  </div>
-</div>
+              <label>Password</label>
+              <div className="password-input-wrapper"> {/* ✅ Wrapper */}
+                <input 
+                  type={showPassword ? 'text' : 'password'} // ✅ Dynamic type
+                  placeholder="Enter your password" 
+                  value={password} 
+                  onChange={(e) => setPassword(e.target.value)} 
+                  required 
+                  disabled={loading}
+                />
+                <button
+                  type="button"
+                  className="password-toggle-btn"
+                  onClick={() => setShowPassword(!showPassword)}
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
+                  tabIndex="-1"
+                >
+                  {showPassword ? <FaEyeSlash /> : <FaEye />} {/* ✅ Eye icons */}
+                </button>
+              </div>
+            </div>
 
             <button type="submit" className="auth-btn" disabled={loading}>
               {loading ? 'Signing in...' : 'Sign In'}
