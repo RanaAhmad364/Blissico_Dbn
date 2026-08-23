@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { FaUser, FaSearch, FaShoppingCart, FaBars, FaTimes, FaChevronDown , FaHeart  } from 'react-icons/fa';
 import logo from '../assets/images/Website main logo.png';
 import { getCategories, getCollections, getOccasions } from '../api/catalog';
+import { useAuth } from '../context/AuthContext';
 import { useFavorites } from '../context/FavoritesContext';
 import './Navbar.css';
 
@@ -62,6 +63,7 @@ const buildCollectionsDropdown = (collectionCategories) => ({
 
 const Navbar = () => {
   const location = useLocation();
+  const { user, loading: authLoading } = useAuth();
   const { favoritesCount } = useFavorites();
   const [cardCategories, setCardCategories] = useState([]);
   const [occasionCategories, setOccasionCategories] = useState([]);  
@@ -102,6 +104,9 @@ const Navbar = () => {
   const [openMobileDropdown, setOpenMobileDropdown] = useState(null);
   const mobilePanelRef = useRef(null);
   const hamburgerButtonRef = useRef(null);
+  const dashboardPath = !authLoading && user
+    ? (user.role === 'Admin' ? '/admin/dashboard' : '/dashboard')
+    : '/login';
 
   // Active-link matching: exact match for "/", and "startsWith" for everything
   // else so nested routes (e.g. /cards/mom, /occasions/birthday) still keep
@@ -323,7 +328,7 @@ const Navbar = () => {
         </div>
 
         <div className="icons">
-          <Link to="/login" style={{ display: 'flex', alignItems: 'center', color: 'inherit' }}>
+          <Link to={dashboardPath} style={{ display: 'flex', alignItems: 'center', color: 'inherit' }}>
             <button className="icon-btn" aria-label="User account">
               <FaUser className="icon" />
             </button>
@@ -420,9 +425,11 @@ const Navbar = () => {
         <div className="mobile-panel-footer">
           <button className="signature-btn mobile-signature-btn">Signature Design</button>
           <div className="icons mobile-icons">
-            <button className="icon-btn" aria-label="User account">
-              <FaUser className="icon" />
-            </button>
+            <Link to={dashboardPath} style={{ display: 'flex', alignItems: 'center', color: 'inherit' }}>
+              <button className="icon-btn" aria-label="User account">
+                <FaUser className="icon" />
+              </button>
+            </Link>
              <Link to="/favorites" style={{ display: 'flex', alignItems: 'center', color: 'inherit' }}>
             <button className="icon-btn" aria-label="Favorites">
               <FaHeart className="icon" />

@@ -40,6 +40,7 @@ import DashboardFavorites from './pages/user/DashboardFavorites';
   import Users from './pages/admin/Users';
 
   import AdminRoute from './components/AdminRoute';
+  import UserRoute from './components/UserRoute';
   import AdminDashboard from './pages/admin/AdminDashboard';
   import EditProfile from './pages/admin/EditProfile';
 
@@ -73,7 +74,7 @@ function App() {
           <Route path="/cart" element={<AddToCart />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/payment-success" element={<PaymentSuccess />} />
-          <Route path="/dashboard" element={<UserDashboard />} />
+          <Route path="/dashboard" element={<UserRoute><UserDashboard /></UserRoute>} />
           <Route path="/edit-profile" element={<UserEditProfile />} />
           {/* <Route path="/user/downloads" element={<MyDownloads />} /> */}
           <Route path="/user/favorites" element={<DashboardFavorites />} />

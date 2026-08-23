@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import Marquee from '../../components/Marquee';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import './Auth.css';
@@ -9,6 +10,7 @@ import './Auth.css';
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false); 
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
@@ -57,16 +59,27 @@ const Login = () => {
             </div>
 
             <div className="form-group">
-              <label>Password</label>
-              <input 
-                type="password" 
-                placeholder="Enter your password" 
-                value={password} 
-                onChange={(e) => setPassword(e.target.value)} 
-                required 
-                disabled={loading}
-              />
-            </div>
+  <label>Password</label>
+  <div className="password-input-wrapper"> {/* ✅ Wrapper */}
+    <input 
+      type={showPassword ? 'text' : 'password'} // ✅ Dynamic type
+      placeholder="Enter your password" 
+      value={password} 
+      onChange={(e) => setPassword(e.target.value)} 
+      required 
+      disabled={loading}
+    />
+    <button
+      type="button"
+      className="password-toggle-btn"
+      onClick={() => setShowPassword(!showPassword)}
+      aria-label={showPassword ? 'Hide password' : 'Show password'}
+      tabIndex="-1"
+    >
+      {showPassword ? <FaEyeSlash /> : <FaEye />} {/* ✅ Eye icons */}
+    </button>
+  </div>
+</div>
 
             <button type="submit" className="auth-btn" disabled={loading}>
               {loading ? 'Signing in...' : 'Sign In'}

@@ -209,3 +209,33 @@
   .auth-header h2 { font-size: 2rem; }
   .auth-btn { padding: 14px; }
 }
+
+/* --- Password Eye Toggle --- */
+.password-input-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.password-input-wrapper input {
+  padding-right: 45px; /* Space for the eye icon */
+}
+
+.password-toggle-btn {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #888;
+  cursor: pointer;
+  font-size: 1.1rem;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  transition: color 0.2s;
+}
+
+.password-toggle-btn:hover {
+  color: #e27c9f;
+}
