@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useFavorites } from '../../context/FavoritesContext';
-import { assetUrl } from '../../api/catalog';
+import { assetUrl } from '../../api/Catalog';
 import { 
   FiMenu, FiSearch, FiHeart, FiShoppingCart, FiBell, 
   FiChevronDown, FiUser, FiSettings, FiLogOut, FiX
@@ -259,7 +259,8 @@ const UserTopbar = ({ onMenuClick }) => {
             }}
           >
             <div className="user-profile-avatar">
-              {getAvatarInitial()}
+              
+              <img src={assetUrl(user.profile_picture)} alt={getUserName()} className="user-avatar-img" />
             </div>
             <div className="user-profile-info">
               <span className="user-profile-name">{getUserName()}</span>
@@ -272,7 +273,7 @@ const UserTopbar = ({ onMenuClick }) => {
             <div className="user-profile-dropdown">
               <div className="user-dropdown-header">
                 <div className="user-dropdown-avatar">
-                  {getAvatarInitial()}
+                  <img src={assetUrl(user.profile_picture)} alt={getUserName()} className="user-avatar-img" />
                 </div>
                 <div>
                   <div className="user-dropdown-name">{getUserName()}</div>

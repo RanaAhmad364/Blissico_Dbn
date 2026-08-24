@@ -278,6 +278,7 @@
   justify-content: center;
   font-weight: 600;
   font-size: 14px;
+  overflow: hidden;
 }
 
 .user-info {
@@ -342,6 +343,7 @@
   font-weight: 600;
   font-size: 18px;
   flex-shrink: 0;
+  overflow: hidden;
 }
 
 .dropdown-user-name {
@@ -454,4 +456,15 @@
     width: calc(100% - 32px);
     max-width: 360px;
   }
+}
+
+
+
+
+
+
+
+.user-avatar-img{
+  border-radius: 50%;
+  object-fit: cover;
 }

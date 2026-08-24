@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { assetUrl } from '../../api/Catalog';
 import './Topbar.css';
 import { 
   FiMenu, 
@@ -145,8 +146,10 @@ const Topbar = ({ onMenuClick }) => {
             onClick={() => setShowUserMenu(!showUserMenu)}
           >
             <div className="user-avatar">
-              {getAvatarInitial()}
+               <img src={assetUrl(user.profile_picture)} alt={getUserName()} className="user-avatar-img" />
             </div>
+
+           
             <div className="user-info">
               <span className="user-name">{getUserName()}</span>
               <span className="user-role">{getUserRole()}</span>
@@ -158,7 +161,7 @@ const Topbar = ({ onMenuClick }) => {
             <div className="user-dropdown">
               <div className="user-dropdown-header">
                 <div className="user-avatar-large">
-                  {getAvatarInitial()}
+                   <img src={assetUrl(user.profile_picture)} alt={getUserName()} className="user-avatar-img" />
                 </div>
                 <div>
                   <div className="dropdown-user-name">{getUserName()}</div>
