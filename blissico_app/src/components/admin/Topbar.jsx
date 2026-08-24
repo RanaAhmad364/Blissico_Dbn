@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { assetUrl } from '../../api/Catalog';
+import { assetUrl } from '../../api/catalog';
 import './Topbar.css';
 import { 
   FiMenu, 

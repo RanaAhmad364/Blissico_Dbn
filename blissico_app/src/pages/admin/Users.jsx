@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import AdminLayout from '../../components/admin/AdminLayout';
 import { getUsers, updateUserStatus, verifyUser, deleteUser } from '../../api/admin';
-import { assetUrl } from '../../api/Catalog';
+import { assetUrl } from '../../api/catalog';
 import '../admin/Categories.css';
 
 const initials = (firstName, lastName) =>

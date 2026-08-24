@@ -7,7 +7,7 @@ import {
   getCategories, getCollections, getOccasions,
   addCardTemplate,
 } from '../../api/admin';
-import { assetUrl } from '../../api/Catalog';
+import { assetUrl } from '../../api/catalog';
 import { FiPlus, FiEdit2, FiTrash2, FiX, FiUpload, FiChevronDown, FiType } from 'react-icons/fi';
 import './Products.css';
 

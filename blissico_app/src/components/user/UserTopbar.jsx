@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useFavorites } from '../../context/FavoritesContext';
-import { assetUrl } from '../../api/Catalog';
+import { assetUrl } from '../../api/catalog';
 import { 
   FiMenu, FiSearch, FiHeart, FiShoppingCart, FiBell, 
   FiChevronDown, FiUser, FiSettings, FiLogOut, FiX

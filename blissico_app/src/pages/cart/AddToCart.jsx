@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaTrashAlt, FaArrowLeft, FaShoppingBag } from 'react-icons/fa';
 import { useCart } from '../../context/CartContext';
-import { assetUrl } from '../../api/Catalog';
+import { assetUrl } from '../../api/catalog';
 import api from '../../api/axiosConfig';
 import './AddToCart.css';
 

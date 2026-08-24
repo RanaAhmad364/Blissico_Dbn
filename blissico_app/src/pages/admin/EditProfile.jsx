@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import AdminLayout from '../../components/admin/AdminLayout';
 import { getMyProfile, updateMyProfile, uploadProfilePicture, removeProfilePicture } from '../../api/profile';
-import { assetUrl } from '../../api/Catalog';
+import { assetUrl } from '../../api/catalog';
 import { FiUser, FiCamera, FiSave, FiX, FiMail, FiEdit2 } from 'react-icons/fi';
 import './EditProfile.css';
 

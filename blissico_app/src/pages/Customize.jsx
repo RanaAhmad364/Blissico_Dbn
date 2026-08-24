@@ -6,7 +6,7 @@ import {
   FaArrowLeft, FaArrowsAlt
 } from 'react-icons/fa';
 import { useAuth } from '../context/AuthContext';
-import { getCard, assetUrl } from '../api/Catalog';
+import { getCard, assetUrl } from '../api/catalog';
 
 import { getCustomization, saveCustomization } from '../api/customization';
 import Marquee from '../components/Marquee';
