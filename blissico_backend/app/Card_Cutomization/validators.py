@@ -35,10 +35,13 @@ class CustomizationValidator:
         if data.get("font_color") and not CustomizationValidator.HEX_COLOR_RE.match(data["font_color"]):
             errors["font_color"] = "Font color must be a valid hex code, e.g. #ff0000."
 
-        for field in ("letter_spacing", "line_height"):
+        for field in ("letter_spacing", "line_height","position_x","position_y"):
             if field in data and data[field] not in (None, ""):
                 try:
                     float(data[field])
+                    value = float(data[field])
+                    if field in ("position_x", "position_y") and not 0 <= value <= 100:
+                        errors[field] = f"{field.replace('_', ' ').capitalize()} must be between 0 and 100."
                 except (TypeError, ValueError):
                     errors[field] = f"{field.replace('_', ' ').capitalize()} must be a number."
 

@@ -1,7 +1,10 @@
-from app.models import Category, Collection, Occasion, Card
+from app.models import Category, Collection, Occasion, Card,CardCustomization
+from app.Card_Cutomization.services import CustomizationService
 
 
 class CatalogService:
+    _NO_BATCH_DEFAULT=object()
+
 
     @staticmethod
     def list_categories():
@@ -98,10 +101,23 @@ class CatalogService:
             per_page=per_page,
             error_out=False
         )
+        card_ids = [card.id for card in pagination.items]
+        defaults = {
+            customization.card_id: CustomizationService._serialize(customization)
+            for customization in CardCustomization.query.filter(
+                CardCustomization.card_id.in_(card_ids),
+                CardCustomization.is_default.is_(True),
+            ).all()
+        }
+        
+
+
+
+        
 
         return {
             "items": [
-                CatalogService._serialize_card_summary(c)
+                CatalogService._serialize_card_summary(c,defaults.get(c.id,None))
                 for c in pagination.items
             ],
             "total": pagination.total,
@@ -123,7 +139,10 @@ class CatalogService:
         )
 
     @staticmethod
-    def _serialize_card_summary(card):
+    def _serialize_card_summary(card, default_design=_NO_BATCH_DEFAULT):
+        if default_design is CatalogService._NO_BATCH_DEFAULT:
+            customization = CardCustomization.query.filter_by(card_id=card.id, is_default=True).first()
+            default_design = CustomizationService._serialize(customization) if customization else None
         return {
             "id": card.id,
             "title": card.title,
@@ -133,6 +152,7 @@ class CatalogService:
             "category": card.category.name if card.category else None,
             "collection": card.collection.name if card.collection else None,
             "occasion": card.occasion.name if card.occasion else None,
+            "default_design":default_design
         }
 
     @staticmethod

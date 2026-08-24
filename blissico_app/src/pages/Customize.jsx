@@ -6,16 +6,23 @@ import {
   FaArrowLeft, FaArrowsAlt
 } from 'react-icons/fa';
 import { useAuth } from '../context/AuthContext';
-import { getCard, assetUrl } from '../api/catalog';
+import { getCard, assetUrl } from '../api/Catalog';
+
 import { getCustomization, saveCustomization } from '../api/customization';
 import Marquee from '../components/Marquee';
 import Navbar from '../components/Navbar';
 import './Customize.css';
 
+// import { useCart } from '../context/CartContext';
+// const { addToCart } = useCart();
+// const navigate = useNavigate(); 
+
+
 const Customize = () => {
   const { cardId } = useParams();
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
+  const { addToCart } = useCart();
 
   const [card, setCard] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -181,8 +188,14 @@ const Customize = () => {
   };
 
   const handleAddToCart = () => {
-    // Orders/Payment module isn't built yet — wire this up once that's ready.
-    alert('Checkout is coming soon — your design has been saved for now.');
+     addToCart({
+    id: card.id,
+    title: card.title,
+    thumbnail: card.thumbnail,
+    price: card.price,
+    is_free: card.is_free,
+  });
+  navigate('/cart');
   };
 
   if (authLoading || loading) {

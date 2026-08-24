@@ -164,6 +164,7 @@ class CardCustomization(BaseModel):
 
     user_id = db.Column(db.Integer,db.ForeignKey("users.id"),nullable=False)
     card_id = db.Column(db.Integer,db.ForeignKey("cards.id"),nullable=False)
+    is_default = db.Column(db.Boolean,default=False,nullable=False)
     greeting_text = db.Column(db.Text,nullable=False)
     font_family = db.Column(db.String(100),default="Poppins",nullable=False)
     font_size = db.Column(db.Integer,default=24,nullable=False)
@@ -174,6 +175,17 @@ class CardCustomization(BaseModel):
     alignment = db.Column(db.String(20),default="center")
     letter_spacing = db.Column(db.Float,default=0)
     line_height = db.Column(db.Float,default=1.2)
+    position_x = db.Column(db.Float,default=50,nullable=False)
+    position_y = db.Column(db.Float,default=50,nullable=False)
+    __table_args__ = (
+        db.Index(
+            "uq_card_customizations_default_card",
+            "card_id",
+            unique=True,
+            sqlite_where=db.text("is_default = 1"),
+            postgresql_where=db.text("is_default = true"),
+        ),
+    )
     user = db.relationship("User",back_populates="customizations")
     card = db.relationship("Card",back_populates="customizations")
     def __repr__(self):

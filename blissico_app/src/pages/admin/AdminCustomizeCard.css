@@ -1,0 +1,425 @@
+/* =========================================================
+   Customize / Card Design Editor Styles
+   ========================================================= */
+
+/* Page Layout */
+.cus-products-page { padding: 24px 32px; }
+.customize-workspace {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 12px;
+  min-height: calc(100vh - 200px);
+}
+
+/* Left Toolbars */
+.left-toolbars {
+  flex: 0 0 320px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.tab-bar {
+  display: flex;
+  background: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 14px;
+  text-align: center;
+  cursor: pointer;
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s;
+}
+
+.tab-btn.active {
+  background: #ffffff;
+  color: #e27c9f;
+  border-bottom: 2px solid #e27c9f;
+}
+
+.tab-icon {
+  font-size: 16px;
+}
+
+/* Tools Panel */
+.tools-panel {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-height: calc(100vh - 250px);
+  overflow-y: auto;
+}
+
+.tool-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tool-group label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #475569;
+}
+
+.tool-group.row-group {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.row-group label {
+  flex: 0 0 90px;
+}
+
+/* Inputs */
+.custom-select {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 13px;
+  background: #f8f9fa;
+  outline: none;
+}
+
+.slider-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+}
+
+.custom-slider {
+  flex: 1;
+  accent-color: #e27c9f;
+}
+
+.small-input {
+  width: 60px;
+  padding: 6px 8px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 13px;
+  text-align: center;
+}
+
+.unit {
+  font-size: 12px;
+  color: #64748b;
+}
+
+/* Formatting Buttons */
+.formatting-group {
+  display: flex;
+  gap: 8px;
+}
+
+.format-btn {
+  width: 36px;
+  height: 36px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #64748b;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.format-btn.active {
+  background: #e27c9f;
+  color: #ffffff;
+  border-color: #e27c9f;
+}
+
+/* Color Input */
+.color-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+}
+
+.color-preview {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+}
+
+.color-text-input {
+  flex: 1;
+  padding: 6px 10px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 13px;
+}
+
+.color-picker-hidden {
+  width: 30px;
+  height: 30px;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+/* Alignment Buttons */
+.align-group {
+  display: flex;
+  gap: 8px;
+}
+
+.align-btn {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #64748b;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.align-btn.active {
+  background: #e27c9f;
+  color: #ffffff;
+  border-color: #e27c9f;
+}
+
+/* Position Tools */
+.position-tools {
+  margin-top: 8px;
+}
+
+/* Canvas Area */
+.canvas-area-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  min-height: 600px;
+}
+
+.canvas-stage {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #f1f5f9;
+  padding: 20px;
+}
+
+.canvas-viewport {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.canvas-card-wrapper {
+  transition: transform 0.2s ease;
+}
+
+.canvas-card {
+  width: 400px;
+  height: 560px;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+/* Text Dragging */
+.text-drag-wrapper {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  cursor: move;
+  z-index: 10;
+  min-width: 100px;
+  text-align: center;
+}
+
+.drag-handle {
+  position: absolute;
+  top: -24px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 28px;
+  height: 28px;
+  background: #e27c9f;
+  color: #ffffff;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: move;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.text-drag-wrapper:hover .drag-handle {
+  opacity: 1;
+}
+
+.editable-text {
+  min-height: 20px;
+  outline: none;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.editable-text:focus {
+  box-shadow: 0 0 0 2px rgba(226, 124, 159, 0.3);
+}
+
+/* Zoom Controls */
+.zoom-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #f8f9fa;
+  padding: 10px 16px;
+  border-radius: 24px;
+  border: 1px solid #e2e8f0;
+}
+
+.zoom-btn {
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: transparent;
+  color: #64748b;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.zoom-slider-container {
+  width: 120px;
+}
+
+.zoom-slider {
+  width: 100%;
+  accent-color: #e27c9f;
+}
+
+/* Save Button */
+.save-btn {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: linear-gradient(135deg, #e27c9f, #cf6f8d);
+  color: #ffffff;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 24px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(226, 124, 159, 0.3);
+  transition: all 0.2s;
+  z-index: 100;
+}
+
+.save-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(226, 124, 159, 0.4);
+}
+
+/* =========================================================
+   Responsive Breakpoints
+   ========================================================= */
+@media (max-width: 1024px) {
+  .customize-workspace {
+    flex-direction: column;
+  }
+
+  .left-toolbars {
+    flex: 0 0 auto;
+    width: 100%;
+  }
+
+  .tools-panel {
+    max-height: none;
+    overflow-y: visible;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .canvas-area-wrapper {
+    min-height: 500px;
+  }
+}
+
+@media (max-width: 768px) {
+  .customize-workspace {
+    padding: 12px;
+  }
+
+  .tools-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .canvas-card {
+    width: 320px;
+    height: 448px;
+  }
+
+  .save-btn {
+    position: static;
+    width: 100%;
+    margin-top: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .customize-workspace {
+    padding: 8px;
+  }
+
+  .canvas-card {
+    width: 280px;
+    height: 392px;
+  }
+
+  .zoom-controls {
+    padding: 8px 12px;
+  }
+
+  .zoom-slider-container {
+    width: 80px;
+  }
+}
+
+
+
+
