@@ -64,7 +64,7 @@ class OrderService:
             "status": order.status,
             "total_amount": float(order.total_amount),
             "items": [
-                {"card_id": item.card_id, "title": item.card.title if item.card else None, "price": float(item.price)}
+                {"card_id": item.card_id, "title": item.card.title if item.card else None, "price": float(item.price),"thumbnail": item.card.thumbnail if item.card else None}
                 for item in order.order_items
             ],
             "payment": {

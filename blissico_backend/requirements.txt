@@ -35,3 +35,4 @@ SQLAlchemy==2.0.51
 typing_extensions==4.16.0
 Werkzeug==3.1.8
 WTForms==3.2.2
+img2pdf==0.5.1

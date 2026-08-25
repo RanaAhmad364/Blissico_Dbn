@@ -27,9 +27,11 @@ import FavoritesPage from './pages/favourites/FavoritesPage';
 // import UserDashboard from './pages/User_dashboard';
 import UserDashboard from './pages/user/UserDashboard';
 import UserEditProfile from './pages/user/UserEditProfile';
-// import MyDownloads from './pages/user/MyDownloads';
 import DashboardFavorites from './pages/user/DashboardFavorites';
 // import AdminDashboard from './pages/admin/Dashboard';
+
+import Purchases from './pages/user/Purchases';
+import MyDownloads from './pages/user/MyDownloads';
 
 // 3. Import the new Auth Pages
   import Login from './pages/auth/Login';
@@ -85,6 +87,8 @@ function App() {
 
               <Route path="/checkout/:orderId" element={<Checkout />} />
               <Route path="/favorites" element={<FavoritesPage />} />
+              <Route path="/user/orders" element={<UserRoute><Purchases /></UserRoute>} />
+              <Route path="/user/downloads" element={<UserRoute><MyDownloads /></UserRoute>} />
 
               {/* NEW AUTH ROUTES (Added here) */}
               <Route path="/login" element={<Login />} />

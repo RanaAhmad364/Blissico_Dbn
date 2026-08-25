@@ -30,6 +30,7 @@ def create_app(config_class=Config):
     mail.init_app(app)
     jwt.init_app(app)
     cor.init_app(app, resources={r"/api/*": {"origins": "*"}})
+    cor.init_app(app, resources={r"/api/*": {"origins": "*"}}, expose_headers=["Content-Disposition"])
     migrate.init_app(app,db)
 
     from app.auth.routes import auth_bp

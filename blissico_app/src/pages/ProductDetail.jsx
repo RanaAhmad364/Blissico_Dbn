@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import { getCard, getCards, assetUrl } from '../api/catalog';
 
 import {
@@ -11,12 +11,21 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import './ProductDetail.css';
 
+
+import { useAuth } from '../context/AuthContext';
+import { downloadCardFile } from '../api/downloads';
+
+
+
 const ProductDetail = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [relatedProducts, setRelatedProducts] = useState([]);
   const scrollRef = useRef(null);
+  const { user } = useAuth();
+  const navigate = useNavigate(); 
+  const [downloadError, setDownloadError] = useState('');
 
   // Fetch the main product whenever the URL id changes
   useEffect(() => {
@@ -96,6 +105,27 @@ const ProductDetail = () => {
     }
   };
 
+
+  
+
+  const handleDownload = async (format) => {
+    setDownloadError('');
+    if (!user) {
+      navigate('/login', { state: { from: `/product/${product.id}` } });
+      return;
+    }
+    try {
+      await downloadCardFile(product.id, format);
+    } catch (err) {
+      setDownloadError(err.response?.data?.message || 'Could not download this card.');
+    }
+  };
+
+
+
+
+
+
   return (
     <div className="product-detail-page">
       <Marquee />
@@ -144,8 +174,8 @@ const ProductDetail = () => {
           </Link>
 
           <div className="detail-share-text">Share Love. Celebrate Life.</div>
-
-          {/* Download & Share Links */}
+{/* 
+          Download & Share Links
           <div className="detail-downloads">
             <a href="#download-gif" className="download-link">
               <FaRegFileImage /> Download Animated Gif
@@ -159,7 +189,32 @@ const ProductDetail = () => {
             <a href="#share" className="download-link">
               <FaShareNodes /> Share
             </a>
+          </div> */}
+
+          <div className="detail-downloads">
+            <a href="#download-gif" className="download-link">
+              <FaRegFileImage /> Download Animated Gif
+            </a>
+            <a href="#" onClick={(e) => { e.preventDefault(); handleDownload('image'); }} className="download-link">
+              <FaRegFileImage /> Download Image
+            </a>
+            <a href="#" onClick={(e) => { e.preventDefault(); handleDownload('pdf'); }} className="download-link">
+              <FaRegFilePdf /> Download PDF
+            </a>
+            <a href="#share" className="download-link">
+              <FaShareNodes /> Share
+            </a>
           </div>
+          {downloadError && (
+            <div style={{ color: '#c0392b', marginTop: 8 }}>
+              {downloadError}{' '}
+              {downloadError.includes('purchase') && <Link to="/cart">Go to Cart →</Link>}
+            </div>
+          )}
+                    
+
+
+
         </div>
       </div>
 
