@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 // 1. Import your Auth Context
 import { AuthProvider } from './context/AuthContext';
 import { FavoritesProvider } from './context/FavoritesContext';
+import { CartProvider } from './context/CartContext';   
 
 // 2. Import your existing Pages
 import Home from './pages/Home';
@@ -59,69 +60,73 @@ function App() {
       {/* Wrap everything in AuthProvider so all pages know if a user is logged in */}
       <AuthProvider>
         <FavoritesProvider>
-          <Routes>
-          {/* Existing Routes */}
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/cards" element={<Cards />} />
-          <Route path="/:category/:slug" element={<CategoryPage />} />
-          <Route path="/occasions" element={<PublicOccasions />} />
-          <Route path="/collections" element={<PublicCollections />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/privacy" element={<Privacy />} />
-          <Route path="/terms" element={<Terms />} />
-          <Route path="/product/:id" element={<ProductDetail />} /> 
-          <Route path="/customize" element={<Customize />} />
-          <Route path="/cart" element={<AddToCart />} />
-          <Route path="/checkout" element={<Checkout />} />
-          <Route path="/payment-success" element={<PaymentSuccess />} />
-          <Route path="/dashboard" element={<UserRoute><UserDashboard /></UserRoute>} />
-          <Route path="/edit-profile" element={<UserEditProfile />} />
-          {/* <Route path="/user/downloads" element={<MyDownloads />} /> */}
-          <Route path="/user/favorites" element={<DashboardFavorites />} />
+          <CartProvider>  
+            
+              <Routes>
+              {/* Existing Routes */}
+              <Route path="/" element={<Home />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/cards" element={<Cards />} />
+              <Route path="/:category/:slug" element={<CategoryPage />} />
+              <Route path="/occasions" element={<PublicOccasions />} />
+              <Route path="/collections" element={<PublicCollections />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/privacy" element={<Privacy />} />
+              <Route path="/terms" element={<Terms />} />
+              <Route path="/product/:id" element={<ProductDetail />} /> 
+              <Route path="/customize" element={<Customize />} />
+              <Route path="/cart" element={<AddToCart />} />
+              <Route path="/checkout" element={<Checkout />} />
+              <Route path="/payment-success" element={<PaymentSuccess />} />
+              <Route path="/dashboard" element={<UserRoute><UserDashboard /></UserRoute>} />
+              <Route path="/edit-profile" element={<UserEditProfile />} />
+              {/* <Route path="/user/downloads" element={<MyDownloads />} /> */}
+              <Route path="/user/favorites" element={<DashboardFavorites />} />
 
-          <Route path="/checkout/:orderId" element={<Checkout />} />
-          <Route path="/favorites" element={<FavoritesPage />} />
+              <Route path="/checkout/:orderId" element={<Checkout />} />
+              <Route path="/favorites" element={<FavoritesPage />} />
 
-          {/* NEW AUTH ROUTES (Added here) */}
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/verify-otp" element={<VerifyOTP />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/customize/:cardId" element={<Customize />} />
-          <Route path="/reset-password" element={<ResetPassword />} />
+              {/* NEW AUTH ROUTES (Added here) */}
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/verify-otp" element={<VerifyOTP />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route path="/customize/:cardId" element={<Customize />} />
+              <Route path="/reset-password" element={<ResetPassword />} />
 
-          <Route path="/admin/categories" element={<AdminRoute><Categories /></AdminRoute>} />
-          <Route path="/admin/products" element={<AdminRoute><Products /></AdminRoute>} />
-          <Route path="/admin/cards/:cardId/customize" element={<AdminRoute><AdminCustomizeCard /></AdminRoute>} />
-          <Route path="/admin/collections" element={<AdminRoute><AdminCollections /></AdminRoute>} />
-          <Route path="/admin/occasions" element={<AdminRoute><AdminOccasions /></AdminRoute>} />
+              <Route path="/admin/categories" element={<AdminRoute><Categories /></AdminRoute>} />
+              <Route path="/admin/products" element={<AdminRoute><Products /></AdminRoute>} />
+              <Route path="/admin/cards/:cardId/customize" element={<AdminRoute><AdminCustomizeCard /></AdminRoute>} />
+              <Route path="/admin/collections" element={<AdminRoute><AdminCollections /></AdminRoute>} />
+              <Route path="/admin/occasions" element={<AdminRoute><AdminOccasions /></AdminRoute>} />
 
-          <Route path="/admin/users" element={<AdminRoute><Users /></AdminRoute>} />
+              <Route path="/admin/users" element={<AdminRoute><Users /></AdminRoute>} />
 
-          <Route path="/admin/dashboard"
+              <Route path="/admin/dashboard"
 
+              
+      element={
+        <AdminRoute>
+          <AdminDashboard />
+        </AdminRoute>
+      }
+    />
+
+                <Route 
+                path="/admin/profile" 
+                element={
+                  <AdminRoute>
+                    <EditProfile />
+                  </AdminRoute>
+                } 
+              />
+              
+              {/* <Route path="/admin/dashboard" element={<AdminDashboard />} /> */}
+              
+              </Routes>
           
-  element={
-    <AdminRoute>
-      <AdminDashboard />
-    </AdminRoute>
-  }
-/>
-
-            <Route 
-            path="/admin/profile" 
-            element={
-              <AdminRoute>
-                <EditProfile />
-              </AdminRoute>
-            } 
-          />
-          
-          {/* <Route path="/admin/dashboard" element={<AdminDashboard />} /> */}
-          
-          </Routes>
-        </FavoritesProvider>
+            </CartProvider>
+          </FavoritesProvider> 
       </AuthProvider>
     </BrowserRouter>
   );

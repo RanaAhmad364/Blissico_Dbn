@@ -12,6 +12,7 @@ import { getCustomization, saveCustomization } from '../api/customization';
 import Marquee from '../components/Marquee';
 import Navbar from '../components/Navbar';
 import './Customize.css';
+import { useCart } from '../context/CartContext';
 
 // import { useCart } from '../context/CartContext';
 // const { addToCart } = useCart();
