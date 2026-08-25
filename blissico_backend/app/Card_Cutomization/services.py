@@ -145,6 +145,25 @@ class CustomizationService:
         customization.position_x = float(data.get("position_x") if data.get("position_x") not in (None, "") else (customization.position_x if customization.position_x is not None else 50))
         customization.position_y = float(data.get("position_y") if data.get("position_y") not in (None, "") else (customization.position_y if customization.position_y is not None else 50))
 
+
+
+    @staticmethod
+    def list_my_customizations(user_id):
+        from app.downloads.service import DownloadService
+        customizations = CardCustomization.query.filter_by(user_id=user_id, is_default=False).all()
+        result = []
+        for c in customizations:
+            if not c.card:
+                continue
+            result.append({
+                "card_id": c.card_id,
+                "title": c.card.title,
+                "thumbnail": c.card.thumbnail,
+                "greeting_text": c.greeting_text,
+                "can_download": c.card.is_free or DownloadService._has_paid_for(user_id, c.card_id),
+            })
+        return result
+
     @staticmethod
     def _serialize(c):
         return {

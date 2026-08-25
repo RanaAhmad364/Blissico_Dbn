@@ -390,18 +390,18 @@ const Products = () => {
                           <Link className="action-pill style" to={`/admin/cards/${card.id}/customize`}>
                             <FiType size={13} /> Customize
                           </Link>
-                          <button
+                          {/* <button
                             className="action-pill style"
                             onClick={() => setExpandedCardId(expandedCardId === card.id ? null : card.id)}
                           >
                             <FiUpload size={13} /> Add Style
                             <FiChevronDown size={13} className={`chevron ${expandedCardId === card.id ? 'open' : ''}`} />
-                          </button>
+                          </button> */}
                         </div>
                       </td>
                     </tr>
 
-                    {expandedCardId === card.id && (
+                    {/* {expandedCardId === card.id && (
                       <tr className="style-panel-row">
                         <td colSpan={6}>
                           <div className="style-panel">
@@ -429,7 +429,7 @@ const Products = () => {
                           </div>
                         </td>
                       </tr>
-                    )}
+                    )} */}
                   </React.Fragment>
                 ))
               )}

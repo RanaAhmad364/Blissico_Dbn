@@ -32,6 +32,7 @@ import DashboardFavorites from './pages/user/DashboardFavorites';
 
 import Purchases from './pages/user/Purchases';
 import MyDownloads from './pages/user/MyDownloads';
+import CustomizedCards from './pages/user/CustomizedCards';
 
 // 3. Import the new Auth Pages
   import Login from './pages/auth/Login';
@@ -41,6 +42,7 @@ import MyDownloads from './pages/user/MyDownloads';
   import ResetPassword from './pages/auth/ResetPassword';
 
   import Users from './pages/admin/Users';
+  
 
   import AdminRoute from './components/AdminRoute';
   import UserRoute from './components/UserRoute';
@@ -89,6 +91,8 @@ function App() {
               <Route path="/favorites" element={<FavoritesPage />} />
               <Route path="/user/orders" element={<UserRoute><Purchases /></UserRoute>} />
               <Route path="/user/downloads" element={<UserRoute><MyDownloads /></UserRoute>} />
+
+              <Route path="/user/customized-cards" element={<UserRoute><CustomizedCards /></UserRoute>} />
 
               {/* NEW AUTH ROUTES (Added here) */}
               <Route path="/login" element={<Login />} />

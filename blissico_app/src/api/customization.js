@@ -6,6 +6,8 @@ export const getCustomization = (cardId) =>
 export const saveCustomization = (cardId, payload) =>
   api.post(`/api/cards/${cardId}/customization`, payload).then(r => r.data.data);
 
+export const getMyCustomizations = () => api.get('/api/customizations').then(r => r.data.data);
+
 
 
 

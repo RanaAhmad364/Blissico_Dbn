@@ -72,6 +72,13 @@ def get_public_default_customization(card_id):
     return jsonify({"success": True, "data": CustomizationService.get_public_default_customization(card_id)}), 200
 
 
+@customization_bp.get("/customizations")
+@jwt_required()
+def list_my_customizations():
+    user_id = int(get_jwt_identity())
+    return jsonify({"success": True, "data": CustomizationService.list_my_customizations(user_id)}), 200
+
+
 
 
 

@@ -5,7 +5,8 @@ import { useAuth } from '../../context/AuthContext';
 import { 
   FiHome, FiShoppingBag, FiDownload, FiRepeat, FiDollarSign, 
   FiHeart, FiTag, FiMapPin, FiCreditCard, FiSettings, FiBell, 
-  FiStar, FiHeadphones, FiLogOut 
+  FiStar, FiHeadphones, FiLogOut, 
+  FiEdit2
 } from 'react-icons/fi';
 import './UserSidebar.css';
 
@@ -28,6 +29,7 @@ const UserSidebar = ({ isOpen, onClose }) => {
   const mainMenu = [
     { label: 'Dashboard', path: '/dashboard', icon: FiHome },
     { label: 'Purchases', path: '/user/orders', icon: FiShoppingBag },
+    { label: 'Customized Cards', path: '/user/customized-cards',icon: FiEdit2},
     { label: 'My Downloads', path: '/user/downloads', icon: FiDownload },
     { label: 'Favorites', path: '/user/favorites', icon: FiHeart },
     // { label: 'Subscriptions', path: '/user/subscriptions', icon: FiRepeat },

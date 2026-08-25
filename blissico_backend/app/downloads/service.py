@@ -2,7 +2,8 @@ from datetime import datetime
 from app import db
 from app.models import Order, OrderItem, Card, Download, CardCustomization
 from flask import current_app
-import os
+import os,io
+from app.utils.render_services import RenderService
 
 class DownloadService:
 
@@ -81,8 +82,18 @@ class DownloadService:
 
         safe_title = "".join(c for c in card.title if c.isalnum() or c in (" ", "-", "_")).strip() or "card"
 
-        with open(disk_path, "rb") as f:
-            raw_bytes = f.read()
+        customization = CardCustomization.query.filter_by(user_id=user_id, card_id=card_id, is_default=False).first()
+
+        # Composite the user's saved design onto the template — this is the real
+        # download now, not just the blank template.
+        if customization:
+            rendered = RenderService.render(disk_path, customization)
+            buf = io.BytesIO()
+            rendered.convert("RGB").save(buf, format="JPEG", quality=92)
+            raw_bytes = buf.getvalue()
+        else:
+            with open(disk_path, "rb") as f:
+                raw_bytes = f.read()
 
         if fmt == "pdf":
             import img2pdf
@@ -93,12 +104,10 @@ class DownloadService:
             filename = f"{safe_title}.pdf"
             mimetype = "application/pdf"
         else:
-            ext = disk_path.rsplit(".", 1)[-1].lower()
             out_bytes = raw_bytes
-            filename = f"{safe_title}.{ext}"
-            mimetype = "image/jpeg" if ext in ("jpg", "jpeg") else f"image/{ext}"
+            filename = f"{safe_title}.jpg"
+            mimetype = "image/jpeg"
 
-        customization = CardCustomization.query.filter_by(user_id=user_id, card_id=card_id).first()
         db.session.add(Download(
             user_id=user_id, card_id=card_id,
             customization_id=customization.id if customization else None,
@@ -107,7 +116,6 @@ class DownloadService:
         db.session.commit()
 
         return out_bytes, filename, mimetype
-
 
 
 
