@@ -95,12 +95,7 @@ class CustomizationService:
         if customization:
             return CustomizationService._serialize(customization), None, 200
 
-        return {
-            **CustomizationService.DEFAULTS,
-            "id": None,
-            "card_id": card_id,
-            "greeting_text": card.title,
-        }, None, 200
+        return None, None, 200
 
     @staticmethod
     def get_public_default_customization(card_id):

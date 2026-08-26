@@ -20,6 +20,7 @@ import { useCart } from '../context/CartContext';
 
 
 const Customize = () => {
+  const PLACEHOLDER_TEXT = 'Click here to add your greeting text';
   const { cardId } = useParams();
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
@@ -71,20 +72,23 @@ const Customize = () => {
 
     Promise.all([getCard(cardId), getCustomization(cardId)])
       .then(([cardData, custom]) => {
+        // The personal customization remains authoritative; otherwise use the
+        // admin design included in the public card response.
+        const savedDesign = custom?.id ? custom : cardData.default_design;
         setCard(cardData);
-        setGreetingText(custom.greeting_text || cardData.title);
-        setFontFamily(custom.font_family);
-        setFontSize(custom.font_size);
-        setIsBold(custom.bold);
-        setIsItalic(custom.italic);
-        setIsUnderline(custom.underline);
-        setTextColor(custom.font_color);
-        setAlignment(custom.alignment);
-        setLetterSpacing(custom.letter_spacing);
-        setLineHeight(custom.line_height);
+        setGreetingText(savedDesign?.greeting_text || '');
+        setFontFamily(savedDesign?.font_family || 'Poppins');
+        setFontSize(savedDesign?.font_size ?? 24);
+        setIsBold(savedDesign?.bold ?? false);
+        setIsItalic(savedDesign?.italic ?? false);
+        setIsUnderline(savedDesign?.underline ?? false);
+        setTextColor(savedDesign?.font_color || '#000000');
+        setAlignment(savedDesign?.alignment || 'center');
+        setLetterSpacing(savedDesign?.letter_spacing ?? 0);
+        setLineHeight(savedDesign?.line_height ?? 1.2);
         // fall back to center if this customization has no saved position yet
-        setPositionX(custom.position_x ?? 50);
-        setPositionY(custom.position_y ?? 50);
+        setPositionX(savedDesign?.position_x ?? 50);
+        setPositionY(savedDesign?.position_y ?? 50);
       })
       .catch(() => setError('Could not load this card. Please go back and try again.'))
       .finally(() => setLoading(false));
@@ -159,7 +163,12 @@ const Customize = () => {
   /* ---------------- Save ---------------- */
 
   const handleSave = async () => {
-    const text = textRef.current ? textRef.current.innerText : greetingText;
+    const enteredText = textRef.current ? textRef.current.innerText : greetingText;
+    const text = enteredText.trim() === PLACEHOLDER_TEXT ? '' : enteredText.trim();
+    if (!text) {
+      setError('Please add greeting text before saving your design.');
+      return;
+    }
     setSaving(true);
     setSaveMessage('');
     setError('');
@@ -371,7 +380,7 @@ const Customize = () => {
 
                     <div
                       ref={textRef}
-                      className="editable-text"
+                      className={`editable-text ${!greetingText ? 'editable-text-placeholder' : ''}`}
                       style={{
                         fontFamily,
                         fontSize: `${fontSize}px`,
@@ -385,6 +394,11 @@ const Customize = () => {
                       }}
                       contentEditable={true}
                       suppressContentEditableWarning={true}
+                      onFocus={(e) => {
+                        if (!greetingText && e.currentTarget.innerText === PLACEHOLDER_TEXT) {
+                          e.currentTarget.innerText = '';
+                        }
+                      }}
                       onInput={(e) => setGreetingText(e.currentTarget.innerText)}
                     />
                   </div>

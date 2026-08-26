@@ -6,6 +6,7 @@ import { useAuth } from '../context/AuthContext';
 import Marquee from '../components/Marquee';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import CardDesignOverlay from '../components/customize/CardDesignOverlay';
 import { getCards, assetUrl } from '../api/catalog';
 import './CategoryPage.css';
 
@@ -243,7 +244,11 @@ const CategoryPage = () => {
                     {/* Image */}
                     <div className="product-image-wrapper">
                       {product.thumbnail ? (
-                        <img src={assetUrl(product.thumbnail)} alt={product.title} className="product-image" />
+                        <CardDesignOverlay
+                          imageUrl={assetUrl(product.thumbnail)}
+                          design={product.default_design}
+                          alt={product.title}
+                        />
                       ) : (
                         <div className="product-image-placeholder"></div>
                       )}

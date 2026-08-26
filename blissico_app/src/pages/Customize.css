@@ -481,10 +481,31 @@
   .canvas-card { width: 350px; height: 480px; }
 }
 @media (max-width: 768px) {
-  .customize-workspace { flex-direction: column; height: auto; padding: 20px; }
+  .customize-top-bar { flex-wrap: wrap; gap: 14px; padding: 16px 20px; }
+  .top-right-actions { width: 100%; }
+  .top-right-actions .save-btn,
+  .top-right-actions .add-cart-btn { flex: 1; min-width: 0; padding: 10px 12px; }
+  .customize-workspace { flex-direction: column; height: auto; min-width: 0; padding: 16px; gap: 18px; }
   .left-toolbars { width: 100%; flex-direction: column; }
   .tab-bar { flex-direction: row; width: 100%; }
-  .canvas-card { width: 100%; height: 350px; }
+  .tools-panel { width: 100%; box-sizing: border-box; padding: 16px; }
+  .canvas-area-wrapper { width: 100%; min-width: 0; padding: 8px 0 20px; }
+  .canvas-stage { min-width: 0; overflow: hidden; }
+  .canvas-card-wrapper { width: 100%; max-width: 100%; display: flex; justify-content: center; }
+  .canvas-card { width: min(100%, 350px); height: auto; aspect-ratio: 3 / 4; padding: 20px; }
+  .zoom-controls { max-width: 100%; padding: 8px 14px; }
+  .zoom-slider-container { width: min(180px, 55vw); }
+}
+
+@media (max-width: 414px) {
+  .customize-top-bar { padding: 14px 12px; }
+  .customize-workspace { padding: 12px; }
+  .top-right-actions { gap: 8px; }
+  .top-right-actions .save-btn,
+  .top-right-actions .add-cart-btn { font-size: 0.82rem; }
+  .tools-panel { padding: 12px; gap: 16px; }
+  .slider-input-wrap { gap: 8px; }
+  .editable-text { padding: 20px; }
 }
 
 
@@ -538,6 +559,9 @@
 
 .editable-text {
   outline: none;
+  width: auto;
+  height: auto;
+  max-width: 100%;
   white-space: pre-wrap;
   word-break: break-word;
   min-width: 20px;
@@ -546,4 +570,20 @@
 
 .editable-text:focus {
   outline: 1px dashed #7c3aed;
+}
+
+.editable-text-placeholder {
+  color: #a7a7a7 !important;
+  font-style: italic;
+}
+
+.editable-text-placeholder:empty::before {
+  content: 'Click here to add your greeting text';
+  color: #a7a7a7;
+  font-style: italic;
+  pointer-events: none;
+}
+
+.editable-text-placeholder:focus::before {
+  content: '';
 }

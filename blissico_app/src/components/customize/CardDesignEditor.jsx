@@ -15,10 +15,15 @@ const CardDesignEditor = ({ card, initialValues, onSave, saving = false }) => {
   const [activeTemplateIndex, setActiveTemplateIndex] = useState(0);
   const [zoomLevel, setZoomLevel] = useState(1);
   const [isDragging, setIsDragging] = useState(false);
+  const [validationError, setValidationError] = useState('');
   const textRef = useRef(null);
   const stageRef = useRef(null);
 
-  useEffect(() => setDesign({ ...defaults, ...(initialValues || {}) }), [initialValues]);
+  useEffect(() => {
+    const nextDesign = { ...defaults, ...(initialValues || {}) };
+    setDesign(nextDesign);
+    if (textRef.current) textRef.current.innerText = nextDesign.greeting_text;
+  }, [initialValues]);
 
   const update = (key, value) => setDesign((current) => ({ ...current, [key]: value }));
   const updatePosition = useCallback((clientX, clientY) => {
@@ -51,11 +56,24 @@ const CardDesignEditor = ({ card, initialValues, onSave, saving = false }) => {
   const templates = card?.templates || [];
   const activeTemplate = templates[activeTemplateIndex];
   const backgroundImage = activeTemplate?.preview_image ? assetUrl(activeTemplate.preview_image) : assetUrl(card?.thumbnail);
+  const isPlaceholder = initialValues == null;
+  const showPlaceholder = isPlaceholder && !design.greeting_text;
   const style = {
     fontFamily: design.font_family, fontSize: `${design.font_size}px`,
     fontWeight: design.bold ? 'bold' : 'normal', fontStyle: design.italic ? 'italic' : 'normal',
     textDecoration: design.underline ? 'underline' : 'none', color: design.font_color,
     textAlign: design.alignment, letterSpacing: `${design.letter_spacing}px`, lineHeight: design.line_height,
+    ...(showPlaceholder ? { color: '#b0b0b0' } : {}),
+  };
+
+  const handleSave = () => {
+    const greetingText = (textRef.current?.innerText ?? design.greeting_text).trim();
+    if (!greetingText) {
+      setValidationError('Please add greeting text before saving the design.');
+      return;
+    }
+    setValidationError('');
+    onSave({ ...design, greeting_text: greetingText });
   };
 
   return (
@@ -78,12 +96,26 @@ const CardDesignEditor = ({ card, initialValues, onSave, saving = false }) => {
         <div className="canvas-stage"><div className="canvas-viewport"><div className="canvas-card-wrapper" style={{ transform: `scale(${zoomLevel})` }}><div ref={stageRef} className="canvas-card" style={backgroundImage ? { backgroundImage: `url(${backgroundImage})`, backgroundSize: 'cover', backgroundPosition: 'center' } : undefined}>
           <div className={`text-drag-wrapper ${isDragging ? 'dragging' : ''}`} style={{ left: `${design.position_x}%`, top: `${design.position_y}%` }}>
             <div className="drag-handle" onMouseDown={(e) => { e.preventDefault(); setIsDragging(true); }} onTouchStart={() => setIsDragging(true)} title="Drag to reposition"><FaArrowsAlt size={12} /></div>
-            <div ref={textRef} className="editable-text" style={style} contentEditable suppressContentEditableWarning onInput={(e) => update('greeting_text', e.currentTarget.innerText)}>{design.greeting_text}</div>
+            <div
+              ref={textRef}
+              className="editable-text"
+              style={style}
+              contentEditable
+              suppressContentEditableWarning
+              onFocus={(e) => {
+                if (showPlaceholder) e.currentTarget.innerText = '';
+              }}
+              onInput={(e) => {
+                update('greeting_text', e.currentTarget.innerText);
+                if (e.currentTarget.innerText.trim()) setValidationError('');
+              }}
+            />
           </div>
         </div></div></div></div>
         <div className="zoom-controls"><button className="zoom-btn" onClick={() => setZoomLevel(Math.max(0.5, zoomLevel - 0.1))}>-</button><div className="zoom-slider-container"><input type="range" min="0.5" max="2" step="0.05" value={zoomLevel} onChange={(e) => setZoomLevel(Number(e.target.value))} className="zoom-slider" /></div><button className="zoom-btn" onClick={() => setZoomLevel(Math.min(2, zoomLevel + 0.1))}>+</button></div>
       </div>
-      <button className="save-btn" onClick={() => onSave({ ...design, greeting_text: textRef.current?.innerText ?? design.greeting_text })} disabled={saving}>{saving ? 'Saving...' : 'Save Design'}</button>
+      {validationError && <div className="products-error" role="alert">{validationError}</div>}
+      <button className="save-btn" onClick={handleSave} disabled={saving}>{saving ? 'Saving...' : 'Save Design'}</button>
     </div>
   );
 };

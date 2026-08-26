@@ -9,6 +9,7 @@ import {
 import Marquee from '../components/Marquee';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import CardDesignOverlay from '../components/customize/CardDesignOverlay';
 import './ProductDetail.css';
 
 
@@ -140,19 +141,13 @@ const ProductDetail = () => {
       <div className="detail-main-area">
         {/* Left: Product Image */}
         <div className="detail-image-placeholder">
-          {product.templates?.[0]?.preview_image ? (
-            <img
-              src={assetUrl(product.templates[0].preview_image)}
+          {(product.templates?.[0]?.preview_image || product.thumbnail) && (
+            <CardDesignOverlay
+              imageUrl={assetUrl(product.templates?.[0]?.preview_image || product.thumbnail)}
+              design={product.default_design}
               alt={product.title}
-              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
             />
-          ) : product.thumbnail ? (
-            <img
-              src={assetUrl(product.thumbnail)}
-              alt={product.title}
-              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-            />
-          ) : null}
+          )}
         </div>
 
         {/* Right: Product Info */}
@@ -240,10 +235,10 @@ const ProductDetail = () => {
                   <div className="related-card">
                     <div className="related-image">
                       {item.thumbnail && (
-                        <img
-                          src={assetUrl(item.thumbnail)}
+                        <CardDesignOverlay
+                          imageUrl={assetUrl(item.thumbnail)}
+                          design={item.default_design}
                           alt={item.title}
-                          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                         />
                       )}
                     </div>
