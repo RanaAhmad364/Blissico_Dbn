@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 from sqlalchemy import func
 from app import db
-from app.models import Order, OrderItem, Payment, Download, Card, User
+from app.models import Order, OrderItem, Payment, Download, Card, User,Favorite
 
 
 class AnalyticsService:
@@ -126,6 +126,18 @@ class AnalyticsService:
             {"date": (start + timedelta(days=i)).date().isoformat(), "downloads": by_day.get(str((start + timedelta(days=i)).date()), 0)}
             for i in range(days)
         ]
+
+    @staticmethod
+    def most_favorited_cards(limit=5):
+        rows = (
+            db.session.query(Card.id, Card.title, Card.thumbnail, func.count(Favorite.id).label("favorite_count"))
+            .join(Favorite, Favorite.card_id == Card.id)
+            .group_by(Card.id)
+            .order_by(func.count(Favorite.id).desc())
+            .limit(limit)
+            .all()
+        )
+        return [{"id": r.id, "title": r.title, "thumbnail": r.thumbnail, "favorites": r.favorite_count} for r in rows]
 
 
 

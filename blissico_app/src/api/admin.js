@@ -25,6 +25,15 @@ export const createOccasion = (data) => api.post('/api/admin/occasions', data).t
 export const updateOccasion = (id, data) => api.put(`/api/admin/occasions/${id}`, data).then(r => r.data);
 export const deleteOccasion = (id) => api.delete(`/api/admin/occasions/${id}`).then(r => r.data);
 
+
+export const getAnalyticsOverview = () => api.get('/api/admin/analytics/overview').then(r => r.data.data);
+export const getMostDownloaded = () => api.get('/api/admin/analytics/most-downloaded').then(r => r.data.data);
+export const getTopSelling = () => api.get('/api/admin/analytics/top-selling').then(r => r.data.data);
+export const getMostFavorited = () => api.get('/api/admin/analytics/most-favorited').then(r => r.data.data);
+export const getRecentPayments = () => api.get('/api/admin/analytics/recent-payments').then(r => r.data.data);
+export const getRevenueChart = (days = 14) => api.get('/api/admin/analytics/revenue-chart', { params: { days } }).then(r => r.data.data);
+export const getDownloadChart = (days = 14) => api.get('/api/admin/analytics/download-chart', { params: { days } }).then(r => r.data.data);
+
 // --- Cards ---
 export const getAdminCards = (page = 1, perPage = 20) =>
   api.get('/api/admin/cards', { params: { page, per_page: perPage } }).then(r => r.data);

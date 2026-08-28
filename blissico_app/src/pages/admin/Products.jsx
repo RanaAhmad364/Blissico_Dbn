@@ -346,11 +346,12 @@ const Products = () => {
           <table className="products-table">
             <thead>
               <tr>
-                <th></th>
+                <th>Thumbnail</th>
                 <th>Title</th>
                 <th>Category</th>
                 <th>Price</th>
-                <th>Styles</th>
+               
+                <th>Status</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -369,9 +370,7 @@ const Products = () => {
                       <td>
                         {card.is_free ? <span className="free-badge">Free</span> : `$${card.price}`}
                       </td>
-                      <td>
-                        <span className="style-count-badge">{card.templates?.length || 0}</span>
-                      </td>
+                     
                       <td>
                         <span className={`status-pill ${card.is_active ? 'active' : 'inactive'}`}>
                           {card.is_active ? 'Active' : 'Inactive'}

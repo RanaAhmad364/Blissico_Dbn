@@ -45,4 +45,9 @@ def analytics_revenue_chart():
 def analytics_download_chart():
     return jsonify({"success": True, "data": AnalyticsService.download_chart(request.args.get("days", 14, type=int))}), 200
 
+@admin_bp.get("/analytics/most-favorited")
+@admin_required
+def analytics_most_favorited():
+    return jsonify({"success": True, "data": AnalyticsService.most_favorited_cards()}), 200
+
 
