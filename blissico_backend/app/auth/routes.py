@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify
 from app.auth.service import AuthService
 from app.auth.validators import AuthValidator,ValidationError
+from flask_jwt_extended import jwt_required, get_jwt_identity, create_access_token
 
 
 auth_bp = Blueprint("auth",__name__,url_prefix="/api/auth")
@@ -219,3 +220,16 @@ def logout():
         "success": True,
         "message": "Logged out successfully."
     }), 200
+
+
+@auth_bp.post("/refresh")
+@jwt_required(refresh=True)
+def refresh():
+    user_id = get_jwt_identity()
+    new_access_token = create_access_token(identity=user_id)
+    return jsonify({
+        "success": True,
+        "message": "Session extended.",
+        "data": {"access_token": new_access_token}
+    }), 200
+

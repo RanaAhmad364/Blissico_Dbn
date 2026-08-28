@@ -3,15 +3,37 @@ import textwrap
 from PIL import Image, ImageDraw, ImageFont
 from flask import current_app
 
+
+
 FONT_FILES = {
-    "Poppins": ("Poppins-Regular.ttf", "Poppins-Bold.ttf"),
-    "Playfair Display": ("PlayfairDisplay-Regular.ttf", "PlayfairDisplay-Bold.ttf"),
-    "Arial": ("DejaVuSans.ttf", "DejaVuSans-Bold.ttf"),
-    "Georgia": ("Gelasio-Regular.ttf", "Gelasio-Bold.ttf"),
+    "Poppins": {
+        "regular": "Poppins-Regular.ttf",
+        "bold": "Poppins-Bold.ttf",
+        "italic": "Poppins-Italic.ttf",
+        "bold_italic": "Poppins-BoldItalic.ttf",
+    },
+    "Playfair Display": {
+        "regular": "PlayfairDisplay-Regular.ttf",
+        "bold": "PlayfairDisplay-Bold.ttf",
+        "italic": "PlayfairDisplay-Italic.ttf",
+        "bold_italic": "PlayfairDisplay-BoldItalic.ttf",
+    },
+    "Arial": {
+        "regular": "DejaVuSans.ttf",
+        "bold": "DejaVuSans-Bold.ttf",
+        "italic": "DejaVuSerif-Italic.ttf",
+        "bold_italic": "DejaVuSerif-BoldItalic.ttf",
+    },
+    "Georgia": {
+        "regular": "Gelasio-Regular.ttf",
+        "bold": "Gelasio-Bold.ttf",
+        "italic": "Gelasio-Italic.ttf",
+        "bold_italic": "Gelasio-BoldItalic.ttf",
+    },
 }
 
 EDITOR_CANVAS_WIDTH = 450
-
+EDITOR_TEXT_MAX_WIDTH = 320
 
 class RenderService:
     """
@@ -27,9 +49,18 @@ class RenderService:
     """
 
     @staticmethod
-    def _font_path(font_family, bold):
-        regular, bold_file = FONT_FILES.get(font_family, FONT_FILES["Poppins"])
-        filename = bold_file if bold else regular
+    def _font_path(font_family, bold=False, italic=False):
+        family = FONT_FILES.get(font_family, FONT_FILES["Poppins"])
+        
+        if bold and italic:
+            filename = family.get("bold_italic", family["bold"])
+        elif bold:
+            filename = family["bold"]
+        elif italic:
+            filename = family.get("italic", family["regular"])
+        else:
+            filename = family["regular"]
+
         path = os.path.join(current_app.root_path, "static", "fonts", filename)
         return path if os.path.exists(path) else None
 
@@ -40,6 +71,26 @@ class RenderService:
             return ImageFont.truetype(path, size) if path else ImageFont.load_default()
         except Exception:
             return ImageFont.load_default()
+
+
+    @staticmethod
+    def _wrap_text(draw, text, font, max_width):
+        lines = []
+        for raw_line in text.split("\n"):
+            words = raw_line.split(" ")
+            if not words:
+                lines.append("")
+                continue
+            current = words[0]
+            for word in words[1:]:
+                candidate = f"{current} {word}"
+                if draw.textlength(candidate, font=font) <= max_width:
+                    current = candidate
+                else:
+                    lines.append(current)
+                    current = word
+            lines.append(current)
+        return lines    
 
     @staticmethod
     def render(template_path, customization):
@@ -56,11 +107,8 @@ class RenderService:
         font = RenderService._load_font(customization.font_family, customization.bold, scaled_font_size)
         text = customization.greeting_text or ""
 
-        avg_char_w = font.getlength("MW") / 2 if hasattr(font, "getlength") else scaled_font_size * 0.6
-        max_chars = max(1, int((img_w * 0.8) / max(avg_char_w, 1)))
-        lines = []
-        for raw_line in text.split("\n"):
-            lines.extend(textwrap.wrap(raw_line, width=max_chars) or [""])
+        max_width = EDITOR_TEXT_MAX_WIDTH * scale
+        lines = RenderService._wrap_text(draw, text, font, max_width)
 
         line_height = int(scaled_font_size * (customization.line_height or 1.2))
         total_height = line_height * len(lines)

@@ -518,7 +518,8 @@
   align-items: center;
   gap: 6px;
   cursor: default;
-  max-width: 90%;
+  /* max-width: 90%; */
+  max-width: 320px;
 }
 
 .text-drag-wrapper.dragging {

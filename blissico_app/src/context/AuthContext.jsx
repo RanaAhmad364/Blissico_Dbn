@@ -1,5 +1,8 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import api from '../api/axiosConfig';
+import axios from 'axios';
+import { BASE_URL, registerSessionExpiredHandler } from '../api/axiosConfig';
+import { useNavigate } from 'react-router-dom';
 
 const AuthContext = createContext();
 
@@ -80,9 +83,8 @@ const resendPasswordResetOTP = async (email) => {
     '/api/auth/resend-password-reset-otp',
     { email }
   );
-
   return response.data;
-};
+  };
 
   const updateUser = (updatedFields) => {
     setUser((prev) => {
@@ -92,11 +94,68 @@ const resendPasswordResetOTP = async (email) => {
     });
   };  
 
+  const [sessionExpired, setSessionExpired] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    registerSessionExpiredHandler(() => setSessionExpired(true));
+  }, []);
+
+  const extendSession = async () => {
+    const refreshToken = localStorage.getItem('blissico_refresh_token');
+    if (!refreshToken) {
+      handleLoginAgain();
+      return;
+    }
+    try {
+      const res = await axios.post(`${BASE_URL}/api/auth/refresh`, {}, {
+        headers: { Authorization: `Bearer ${refreshToken}` },
+      });
+      localStorage.setItem('blissico_token', res.data.data.access_token);
+      setSessionExpired(false);
+    } catch {
+      handleLoginAgain();
+    }
+  };
+
+  const handleLoginAgain = () => {
+    logout();
+    setSessionExpired(false);
+    navigate('/login');
+  };
+
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, verifyOTP, resendOTP, resendPasswordResetOTP, logout, forgotPassword, resetPassword,updateUser }}>
-      {children}
-    </AuthContext.Provider>
+     <AuthContext.Provider value={{ user, loading, login, register, verifyOTP, resendOTP, resendPasswordResetOTP, logout, forgotPassword, resetPassword, updateUser }}>
+    {children}
+    {sessionExpired && (
+      <div style={{
+        position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.55)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999,
+      }}>
+        <div style={{ background: '#fff', borderRadius: 12, padding: '32px 36px', maxWidth: 380, textAlign: 'center' }}>
+          <h3 style={{ margin: '0 0 10px' }}>Your session has timed out</h3>
+          <p style={{ color: '#888', margin: '0 0 24px' }}>
+            For your security, you've been signed out due to inactivity.
+          </p>
+          <div style={{ display: 'flex', gap: 10, justifyContent: 'center' }}>
+            <button
+              onClick={extendSession}
+              style={{ padding: '10px 20px', borderRadius: 8, border: 'none', background: '#7c3aed', color: '#fff', cursor: 'pointer' }}
+            >
+              Extend Session
+            </button>
+            <button
+              onClick={handleLoginAgain}
+              style={{ padding: '10px 20px', borderRadius: 8, border: '1px solid #ddd', background: '#fff', cursor: 'pointer' }}
+            >
+              Login Again
+            </button>
+          </div>
+        </div>
+      </div>
+    )}
+  </AuthContext.Provider>
   );
 };
 
