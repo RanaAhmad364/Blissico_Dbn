@@ -205,7 +205,7 @@ const Customize = () => {
     price: card.price,
     is_free: card.is_free,
   });
-  navigate('/cart');
+  // navigate('/cart');
   };
 
   if (authLoading || loading) {

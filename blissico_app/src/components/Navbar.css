@@ -175,6 +175,22 @@ html, body {
   top: -6px;
 }
 
+.cart-count-badge {
+  align-items: center;
+  background: #e27c9f;
+  border-radius: 999px;
+  color: white;
+  display: flex;
+  font-size: 10px;
+  height: 16px;
+  justify-content: center;
+  min-width: 16px;
+  padding: 0 3px;
+  position: absolute;
+  right: -7px;
+  top: -6px;
+}
+
 /* ---------------- Search expand ---------------- */
 .search-wrapper {
   display: flex;

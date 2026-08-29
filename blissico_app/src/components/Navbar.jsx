@@ -5,6 +5,7 @@ import logo from '../assets/images/Website main logo.png';
 import { getCategories, getCollections, getOccasions } from '../api/catalog';
 import { useAuth } from '../context/AuthContext';
 import { useFavorites } from '../context/FavoritesContext';
+import { useCart } from '../context/CartContext';
 import './Navbar.css';
 
 
@@ -65,6 +66,8 @@ const Navbar = () => {
   const location = useLocation();
   const { user, loading: authLoading } = useAuth();
   const { favoritesCount } = useFavorites();
+  const { items: cartItems } = useCart();
+  const cartCount = cartItems.length;
   const [cardCategories, setCardCategories] = useState([]);
   const [occasionCategories, setOccasionCategories] = useState([]);  
   const [collectionCategories, setCollectionCategories] = useState([]); 
@@ -342,6 +345,7 @@ const Navbar = () => {
           <Link to="/cart" style={{ display: 'flex', alignItems: 'center', color: 'inherit' }}>
             <button className="icon-btn" aria-label="Shopping cart">
               <FaShoppingCart className="icon" />
+              {cartCount > 0 && <span className="cart-count-badge">{cartCount}</span>}
             </button>
           </Link>
         </div>
@@ -436,9 +440,12 @@ const Navbar = () => {
               {favoritesCount > 0 && <span className="favorites-count-badge">{favoritesCount}</span>}
             </button>
           </Link>
+            <Link to="/cart" style={{ display: 'flex', alignItems: 'center', color: 'inherit' }}>
             <button className="icon-btn" aria-label="Shopping cart">
               <FaShoppingCart className="icon" />
+              {cartCount > 0 && <span className="cart-count-badge">{cartCount}</span>}
             </button>
+            </Link>
           </div>
         </div>
       </aside>
