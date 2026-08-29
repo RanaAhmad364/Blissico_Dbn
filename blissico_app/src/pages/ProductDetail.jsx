@@ -14,6 +14,7 @@ import './ProductDetail.css';
 
 
 import { useAuth } from '../context/AuthContext';
+import { useCart } from '../context/CartContext';
 import { downloadCardFile } from '../api/downloads';
 
 
@@ -25,6 +26,7 @@ const ProductDetail = () => {
   const [relatedProducts, setRelatedProducts] = useState([]);
   const scrollRef = useRef(null);
   const { user } = useAuth();
+  const { addToCart } = useCart();
   const navigate = useNavigate(); 
   const [downloadError, setDownloadError] = useState('');
 
@@ -93,6 +95,16 @@ const ProductDetail = () => {
 
   if (loading) return <div style={{ padding: 80, textAlign: 'center' }}>Loading...</div>;
   if (!product) return <div style={{ padding: 80, textAlign: 'center' }}>Card not found.</div>;
+
+  const handleAddToCart = () => {
+    addToCart({
+      id: product.id,
+      title: product.title,
+      thumbnail: product.thumbnail,
+      price: product.price,
+      is_free: product.is_free,
+    });
+  };
 
   const scrollLeft = () => {
     if (scrollRef.current) {
@@ -164,9 +176,16 @@ const ProductDetail = () => {
             </div>
           )}
 
-          <Link to={`/customize/${product.id}`} className="detail-customize-btn">
-            Customize
-          </Link>
+          {/* ✅ Dono buttons ek hi div mein wrap kiye */}
+<div className="detail-action-buttons">
+  <Link to={`/customize/${product.id}`} className="detail-customize-btn">
+    Customize
+  </Link>
+
+  <button type="button" className="detail-addcart-btn" onClick={handleAddToCart}>
+    Add to Cart
+  </button>
+</div>
 
           <div className="detail-share-text">Share Love. Celebrate Life.</div>
 {/* 

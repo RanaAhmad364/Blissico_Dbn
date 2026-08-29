@@ -102,6 +102,23 @@
 .product-info { display: flex; flex-direction: column; gap: 4px; }
 .product-name { font-size: 0.9rem; color: #1a1a1a; }
 .product-price { font-size: 0.85rem; color: #555; }
+.add-to-cart-card-btn {
+  margin-top: 10px;
+  width: 100%;
+  border: none;
+  border-radius: 999px;
+  background: #f7edf1;
+  color: #1a1a1a;
+  padding: 10px 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.add-to-cart-card-btn:hover {
+  background: #f0dce3;
+  transform: translateY(-1px);
+}
 .no-products { text-align: center; padding: 40px 0; color: #888; }
 
 /* Pagination (1 2 3 >) */

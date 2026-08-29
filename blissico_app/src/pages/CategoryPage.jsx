@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { FaHeart, FaRegHeart } from 'react-icons/fa'; // ✅ Heart icons import kiya
 import { useFavorites } from '../context/FavoritesContext';
+import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import Marquee from '../components/Marquee';
 import Navbar from '../components/Navbar';
@@ -17,6 +18,7 @@ const CategoryPage = () => {
   const { category, slug } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { addToCart } = useCart();
   const { isFavorite, toggleFavorite, pendingIds } = useFavorites();
   const [currentPage, setCurrentPage] = useState(1);
   const [sortBy, setSortBy] = useState('featured');
@@ -74,6 +76,18 @@ const CategoryPage = () => {
       return;
     }
     await toggleFavorite(productId);
+  };
+
+  const handleAddToCart = (e, product) => {
+    e.preventDefault();
+    e.stopPropagation();
+    addToCart({
+      id: product.id,
+      title: product.title,
+      thumbnail: product.thumbnail,
+      price: product.price,
+      is_free: product.is_free,
+    });
   };
 
   const formatTitle = (str) => {
@@ -259,6 +273,13 @@ const CategoryPage = () => {
                       <span className="product-price">
                         {product.is_free ? 'Free' : `$${product.price.toFixed(2)}`}
                       </span>
+                      <button
+                        type="button"
+                        className="add-to-cart-card-btn"
+                        onClick={(e) => handleAddToCart(e, product)}
+                      >
+                        Add to Cart
+                      </button>
                     </div>
                   </div>
                 </Link>

@@ -87,6 +87,32 @@
 .detail-customize-btn:hover {
   background: #c86a89;
 }
+.detail-action-buttons {
+  display: flex; /* ✅ Dono buttons ek line mein */
+  gap: 10px;     /* ✅ Dono ke beech space */
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.detail-addcart-btn {
+  background: #f7f7f7;
+  color: #1a1a1a;
+  border: 1px solid #e4b7c5;
+  text-align: center;
+  padding: 12px 18px;
+  width: 100%;
+  max-width: 350px;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 25px;
+}
+.detail-addcart-btn:hover {
+  background: #f3e7eb;
+  border-color: #d98ea5;
+}
 
 .detail-share-text {
   font-weight: 500;
