@@ -27,6 +27,7 @@ const UserSidebar = ({ isOpen, onClose }) => {
   const { logout } = useAuth();
 
   const mainMenu = [
+    { label: 'Home', path: '/', icon: FiHome },
     { label: 'Dashboard', path: '/dashboard', icon: FiHome },
     { label: 'Purchases', path: '/user/orders', icon: FiShoppingBag },
     { label: 'Customized Cards', path: '/user/customized-cards',icon: FiEdit2},

@@ -33,7 +33,7 @@
 
 .user-stats-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 20px;
   margin-bottom: 24px;
 }
@@ -52,6 +52,29 @@
 .user-stat-card:hover {
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
   transform: translateY(-2px);
+}
+
+.user-stat-card.user-stat-loading {
+  padding: 20px 24px;
+  justify-content: center;
+}
+
+.user-stat-skeleton {
+  width: 100%;
+  height: 80px;
+  background: linear-gradient(90deg, #e8ecf4 25%, #f5f7fc 50%, #e8ecf4 75%);
+  background-size: 200% 100%;
+  border-radius: 8px;
+  animation: userSkeletonLoading 1.5s infinite;
+}
+
+@keyframes userSkeletonLoading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
 }
 
 .user-stat-icon {
@@ -83,13 +106,25 @@
   margin: 0;
 }
 
+@media (max-width: 1024px) {
+  .user-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 @media (max-width: 768px) {
   .user-stats-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
     gap: 12px;
   }
   
   .user-stat-card {
     padding: 16px 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .user-stats-grid {
+    grid-template-columns: 1fr;
   }
 }
