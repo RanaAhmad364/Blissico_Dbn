@@ -139,6 +139,58 @@ class AnalyticsService:
         )
         return [{"id": r.id, "title": r.title, "thumbnail": r.thumbnail, "favorites": r.favorite_count} for r in rows]
 
+    @staticmethod
+    def _series(model, timestamp_field, amount_field, period):
+        now = datetime.utcnow()
+        if period == "today":
+            buckets, delta = 24, timedelta(hours=1)
+            current_start = now.replace(hour=0, minute=0, second=0, microsecond=0)
+            label = lambda i: f"{i:02d}:00"
+        elif period == "month":
+            buckets, delta = 30, timedelta(days=1)
+            current_start = (now - timedelta(days=29)).replace(hour=0, minute=0, second=0, microsecond=0)
+            label = lambda i: (current_start + timedelta(days=i)).strftime("%b %d")
+        else:  # week
+            buckets, delta = 7, timedelta(days=1)
+            current_start = (now - timedelta(days=6)).replace(hour=0, minute=0, second=0, microsecond=0)
+            label = lambda i: (current_start + timedelta(days=i)).strftime("%b %d")
+
+        previous_start = current_start - (delta * buckets)
+        rows = model.query.filter(model.status == "successful" if amount_field else True, getattr(model, timestamp_field) >= previous_start).all() \
+            if amount_field else model.query.filter(getattr(model, timestamp_field) >= previous_start).all()
+
+        current_vals = [0.0] * buckets
+        previous_vals = [0.0] * buckets
+
+        for row in rows:
+            ts = getattr(row, timestamp_field)
+            if not ts:
+                continue
+            value = float(getattr(row, amount_field)) if amount_field else 1
+            if ts >= current_start:
+                idx = int((ts - current_start) / delta)
+                if 0 <= idx < buckets:
+                    current_vals[idx] += value
+            elif ts >= previous_start:
+                idx = int((ts - previous_start) / delta)
+                if 0 <= idx < buckets:
+                    previous_vals[idx] += value
+
+        return [
+            {"label": label(i), "current": round(current_vals[i], 2), "previous": round(previous_vals[i], 2)}
+            for i in range(buckets)
+        ]
+
+    @staticmethod
+    def get_revenue_series(period="week"):
+        return AnalyticsService._series(Payment, "paid_at", "amount", period)
+
+    @staticmethod
+    def get_download_series(period="week"):
+        return AnalyticsService._series(Download, "downloaded_at", None, period)
+
+    
+
 
 
 

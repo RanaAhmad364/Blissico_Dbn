@@ -1,6 +1,6 @@
 from datetime import datetime
 from app import db
-from app.models import Order, OrderItem, Card, Download, CardCustomization
+from app.models import Order, OrderItem, Card, Download, CardCustomization,User
 from flask import current_app
 import os,io
 from app.utils.render_services import RenderService
@@ -116,6 +116,26 @@ class DownloadService:
         db.session.commit()
 
         return out_bytes, filename, mimetype
+
+    @staticmethod
+    def list_all_downloads():
+        rows = (
+            db.session.query(Download, Card, User)
+            .join(Card, Download.card_id == Card.id)
+            .join(User, Download.user_id == User.id)
+            .order_by(Download.downloaded_at.desc())
+            .all()
+        )
+        return [
+            {
+                "card_title": card.title,
+                "thumbnail": card.thumbnail,
+                "username": f"{user.first_name} {user.last_name}",
+                "email": user.email,
+                "downloaded_at": d.downloaded_at.isoformat() if d.downloaded_at else None,
+            }
+            for d, card, user in rows
+        ]
 
 
 

@@ -16,7 +16,11 @@ const QuickActions = ({ actions }) => {
             key={index}
             className="action-btn"
             disabled={!action.path}
-            onClick={() => action.path && navigate(action.path)}
+            onClick={() => {
+              if (!action.path) return;
+              if (action.newTab) window.open(action.path, '_blank');
+              else navigate(action.path);
+            }}
             title={!action.path ? 'Coming soon' : undefined}
           >
             <span className="action-icon">{action.icon}</span>

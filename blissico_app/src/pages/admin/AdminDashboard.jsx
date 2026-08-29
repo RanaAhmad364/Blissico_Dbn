@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import AdminLayout from '../../components/admin/AdminLayout';
 import StatCard from '../../components/dashboard/StatCard';
+import QuickActions from '../../components/dashboard/QuickActions';
+import TrendChart from '../../components/dashboard/TrendChart';
 import {
   getUsers, getAdminCards, getCategories, getCollections, getOccasions,
   getAnalyticsOverview, getMostDownloaded, getTopSelling, getMostFavorited,
-  getRevenueChart, getDownloadChart,
+  getRevenueSeries, getDownloadSeries,
 } from '../../api/admin';
 import { assetUrl } from '../../api/catalog';
 import './AdminDashboard.css';
 
 const RankedCardList = ({ title, items, metricLabel, metricKey }) => (
-  <div style={{ background: '#fff', borderRadius: 10, padding: 20 }}>
+  <div style={{ background: '#fff', borderRadius: 12, padding: 20, boxShadow: '0 1px 3px rgba(0,0,0,0.06)' }}>
     <h3 style={{ marginTop: 0 }}>{title}</h3>
     {items.length === 0 ? (
       <p style={{ color: '#888' }}>No data yet.</p>
@@ -19,8 +21,8 @@ const RankedCardList = ({ title, items, metricLabel, metricKey }) => (
         <div key={item.id} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 0', borderBottom: i < items.length - 1 ? '1px solid #f2f2f2' : 'none' }}>
           <span style={{ width: 20, color: '#aaa', fontWeight: 600 }}>{i + 1}</span>
           <img src={assetUrl(item.thumbnail)} alt={item.title} style={{ width: 36, height: 36, borderRadius: 6, objectFit: 'cover' }} />
-          <span style={{ flex: 1 }}>{item.title}</span>
-          <span style={{ fontWeight: 600, color: '#7c3aed' }}>{item[metricKey]} {metricLabel}</span>
+          <span style={{ flex: 1, fontSize: 14 }}>{item.title}</span>
+          <span style={{ fontWeight: 600, color: '#7c3aed', fontSize: 13 }}>{item[metricKey]} {metricLabel}</span>
         </div>
       ))
     )}
@@ -36,14 +38,9 @@ const AdminDashboard = () => {
     Promise.all([
       getUsers(), getAdminCards(1, 1), getCategories(), getCollections(), getOccasions(),
       getAnalyticsOverview(), getMostDownloaded(), getTopSelling(), getMostFavorited(),
-      getRevenueChart(14), getDownloadChart(14),
     ])
-      .then(([users, cardsRes, categories, collections, occasions, overview, mostDownloaded, topSelling, mostFavorited, revenueChart, downloadChart]) => {
-        setData({
-          totalUsers: users.length, totalCards: cardsRes.total,
-          categories, collections, occasions, overview,
-          mostDownloaded, topSelling, mostFavorited, revenueChart, downloadChart,
-        });
+      .then(([users, cardsRes, categories, collections, occasions, overview, mostDownloaded, topSelling, mostFavorited]) => {
+        setData({ totalUsers: users.length, totalCards: cardsRes.total, categories, collections, occasions, overview, mostDownloaded, topSelling, mostFavorited });
       })
       .catch(() => setError('Could not load live dashboard data.'))
       .finally(() => setLoading(false));
@@ -53,7 +50,6 @@ const AdminDashboard = () => {
   if (error) return <AdminLayout><div style={{ padding: 40, color: '#c0392b' }}>{error}</div></AdminLayout>;
 
   const { overview } = data;
-  const totalCategories = data.categories.reduce((sum, c) => sum + 1 + (c.subcategories?.length || 0), 0);
 
   const mainStats = [
     { id: 1, title: 'Total Revenue', value: `$${overview.revenue.total.toFixed(2)}`, icon: 'FiDollarSign', color: '#059669', bgColor: '#d1fae5' },
@@ -76,15 +72,25 @@ const AdminDashboard = () => {
     { label: 'Failed', value: overview.orders.failed },
   ];
 
+  const quickActions = [
+    { icon: '➕', label: 'Add New Card', path: '/admin/products' },
+    { icon: '📁', label: 'Add Collection', path: '/admin/collections' },
+    { icon: '🎉', label: 'Create Occasion', path: '/admin/occasions' },
+    { icon: '🏠', label: 'Manage Homepage',  path: '/', newTab: true },
+  ];
+
   return (
     <AdminLayout>
-      <div className="dashboard-container">
+      <div className="dashboard-container" style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
         <div className="stats-grid">
           {mainStats.map((stat) => <StatCard key={stat.id} {...stat} />)}
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, marginTop: 20 }}>
-          <div style={{ background: '#fff', borderRadius: 10, padding: 20 }}>
+        <TrendChart title="Sales Overview" subtitle="Revenue trends over time" fetcher={getRevenueSeries} color="#7c3aed" valuePrefix="$" />
+        <TrendChart title="Downloads Overview" subtitle="Download activity over time" fetcher={getDownloadSeries} color="#059669" />
+
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
+          <div style={{ background: '#fff', borderRadius: 12, padding: 20, boxShadow: '0 1px 3px rgba(0,0,0,0.06)' }}>
             <h3 style={{ marginTop: 0 }}>Revenue Breakdown</h3>
             {revenueBreakdown.map((r) => (
               <div key={r.label} style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid #f2f2f2' }}>
@@ -93,7 +99,7 @@ const AdminDashboard = () => {
               </div>
             ))}
           </div>
-          <div style={{ background: '#fff', borderRadius: 10, padding: 20 }}>
+          <div style={{ background: '#fff', borderRadius: 12, padding: 20, boxShadow: '0 1px 3px rgba(0,0,0,0.06)' }}>
             <h3 style={{ marginTop: 0 }}>Orders Breakdown</h3>
             {orderBreakdown.map((o) => (
               <div key={o.label} style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid #f2f2f2' }}>
@@ -104,38 +110,13 @@ const AdminDashboard = () => {
           </div>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 20, marginTop: 20 }}>
-          <RankedCardList title="Top Selling Cards" items={data.topSelling} metricLabel="sales" metricKey="sales" />
-          <RankedCardList title="Most Downloaded Cards" items={data.mostDownloaded} metricLabel="downloads" metricKey="downloads" />
-          <RankedCardList title="Most Favorited Cards" items={data.mostFavorited} metricLabel="favorites" metricKey="favorites" />
-        </div>
-
-        <div style={{ marginTop: 20, background: '#fff', borderRadius: 10, padding: 20 }}>
-          <h3 style={{ marginTop: 0 }}>Revenue — Last 14 Days</h3>
-          <div style={{ display: 'flex', alignItems: 'flex-end', gap: 6, height: 140 }}>
-            {data.revenueChart.map((d) => {
-              const max = Math.max(...data.revenueChart.map((x) => x.revenue), 1);
-              return (
-                <div key={d.date} title={`${d.date}: $${d.revenue.toFixed(2)}`} style={{ flex: 1, textAlign: 'center' }}>
-                  <div style={{ height: `${(d.revenue / max) * 120}px`, background: '#7c3aed', borderRadius: '3px 3px 0 0' }} />
-                </div>
-              );
-            })}
+        <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 20 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 20 }}>
+            <RankedCardList title="Top Selling" items={data.topSelling} metricLabel="sales" metricKey="sales" />
+            <RankedCardList title="Most Downloaded" items={data.mostDownloaded} metricLabel="downloads" metricKey="downloads" />
+            <RankedCardList title="Most Favorited" items={data.mostFavorited} metricLabel="favorites" metricKey="favorites" />
           </div>
-        </div>
-
-        <div style={{ marginTop: 20, background: '#fff', borderRadius: 10, padding: 20 }}>
-          <h3 style={{ marginTop: 0 }}>Downloads — Last 14 Days</h3>
-          <div style={{ display: 'flex', alignItems: 'flex-end', gap: 6, height: 140 }}>
-            {data.downloadChart.map((d) => {
-              const max = Math.max(...data.downloadChart.map((x) => x.downloads), 1);
-              return (
-                <div key={d.date} title={`${d.date}: ${d.downloads}`} style={{ flex: 1, textAlign: 'center' }}>
-                  <div style={{ height: `${(d.downloads / max) * 120}px`, background: '#059669', borderRadius: '3px 3px 0 0' }} />
-                </div>
-              );
-            })}
-          </div>
+          <QuickActions actions={quickActions} />
         </div>
       </div>
     </AdminLayout>

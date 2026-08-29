@@ -1,7 +1,7 @@
 import uuid
 from datetime import datetime
 from app import db
-from app.models import Order, OrderItem, Card
+from app.models import Order, OrderItem, Card,User,Payment
 from app.payment.service import PaymentService
 
 
@@ -55,6 +55,34 @@ class OrderService:
     def get_order(order_id, user_id):
         order = Order.query.filter_by(id=order_id, user_id=user_id).first()
         return OrderService._serialize_order(order) if order else None
+
+    @staticmethod
+    def list_all_purchases():  # Admin side Purchases page
+        rows = (
+            db.session.query(OrderItem, Order, Card, User, Payment)
+            .join(Order, OrderItem.order_id == Order.id)
+            .join(Card, OrderItem.card_id == Card.id)
+            .join(User, Order.user_id == User.id)
+            .outerjoin(Payment, Payment.order_id == Order.id)
+            .filter(Order.status == "paid")
+            .order_by(Order.id.desc())
+            .all()
+        )
+        return [
+            {
+                "card_title": card.title,
+                "thumbnail": card.thumbnail,
+                "username": f"{user.first_name} {user.last_name}",
+                "email": user.email,"price": float(item.price),
+                "purchased_at": payment.paid_at.isoformat() if payment and payment.paid_at else None,
+            }
+            for item, order, card, user, payment in rows
+        ]
+
+
+
+
+    
 
     @staticmethod
     def _serialize_order(order):

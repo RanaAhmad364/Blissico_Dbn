@@ -33,6 +33,10 @@ export const getMostFavorited = () => api.get('/api/admin/analytics/most-favorit
 export const getRecentPayments = () => api.get('/api/admin/analytics/recent-payments').then(r => r.data.data);
 export const getRevenueChart = (days = 14) => api.get('/api/admin/analytics/revenue-chart', { params: { days } }).then(r => r.data.data);
 export const getDownloadChart = (days = 14) => api.get('/api/admin/analytics/download-chart', { params: { days } }).then(r => r.data.data);
+export const getRevenueSeries = (period = 'week') => api.get('/api/admin/analytics/revenue-series', { params: { period } }).then(r => r.data.data);
+export const getDownloadSeries = (period = 'week') => api.get('/api/admin/analytics/download-series', { params: { period } }).then(r => r.data.data);
+export const getAllPurchases = () => api.get('/api/admin/purchases').then(r => r.data.data);
+export const getAllDownloads = () => api.get('/api/admin/downloads').then(r => r.data.data);
 
 // --- Cards ---
 export const getAdminCards = (page = 1, perPage = 20) =>

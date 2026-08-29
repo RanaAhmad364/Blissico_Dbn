@@ -34,7 +34,7 @@ const UserSidebar = ({ isOpen, onClose }) => {
     { label: 'Favorites', path: '/user/favorites', icon: FiHeart },
     // { label: 'Subscriptions', path: '/user/subscriptions', icon: FiRepeat },
     // { label: 'Pricing Plans', path: '/user/pricing-plans', icon: FiDollarSign },
-    { label: 'Saved Items', path: '/user/saved-items', icon: FiHeart },
+    
     // { label: 'Coupons', path: '/user/coupons', icon: FiTag },
   ];
 

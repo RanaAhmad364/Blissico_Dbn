@@ -54,6 +54,8 @@ import CustomizedCards from './pages/user/CustomizedCards';
   import AdminCollections from './components/admin/Collection';
   import AdminOccasions from './components/admin/Occasion';
   import AdminCustomizeCard from './pages/admin/AdminCustomizeCard';
+  import AdminPurchases from './pages/admin/AdminPurchases';
+  import AdminDownloads from './pages/admin/AdminDownloads';
 
 
 import './App.css';
@@ -107,6 +109,8 @@ function App() {
               <Route path="/admin/cards/:cardId/customize" element={<AdminRoute><AdminCustomizeCard /></AdminRoute>} />
               <Route path="/admin/collections" element={<AdminRoute><AdminCollections /></AdminRoute>} />
               <Route path="/admin/occasions" element={<AdminRoute><AdminOccasions /></AdminRoute>} />
+              <Route path="/admin/purchases" element={<AdminRoute><AdminPurchases /></AdminRoute>} />
+              <Route path="/admin/downloads" element={<AdminRoute><AdminDownloads /></AdminRoute>} />
 
               <Route path="/admin/users" element={<AdminRoute><Users /></AdminRoute>} />
 

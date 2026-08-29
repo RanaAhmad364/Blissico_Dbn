@@ -20,6 +20,7 @@ import {
   FiBell,
   FiHeadphones,
   FiSettings,
+  FiDownload,
   FiActivity
 } from 'react-icons/fi';
 
@@ -30,12 +31,14 @@ const Sidebar = ({ isOpen, onClose }) => {
 
   const mainNav = [
     { label: 'Dashboard', path: '/admin/dashboard', icon: FiHome },
-    { label: 'Purchase', path: '/admin/orders', icon: FiShoppingBag },
+    { label: 'Purchases', path: '/admin/purchases', icon: FiShoppingBag },
+    { label: 'Downloads', path: '/admin/downloads', icon: FiDownload },
     // { label: 'Customers', path: '/admin/customers', icon: FiUsers },
     { label: 'Products', path: '/admin/products', icon: FiPackage },
     { label: 'Categories', path: '/admin/categories', icon: FiGrid },
     { label: 'Collections', path: '/admin/collections', icon: FiTag },  
     { label: 'Occasions', path: '/admin/occasions', icon: FiStar },
+    
     // { label: 'Pricing Plans', path: '/admin/pricing', icon: FiDollarSign },
     // { label: 'Coupons', path: '/admin/coupons', icon: FiTag },
     // { label: 'Reviews', path: '/admin/reviews', icon: FiStar },

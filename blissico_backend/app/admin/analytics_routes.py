@@ -50,4 +50,17 @@ def analytics_download_chart():
 def analytics_most_favorited():
     return jsonify({"success": True, "data": AnalyticsService.most_favorited_cards()}), 200
 
+@admin_bp.get("/analytics/revenue-series")
+@admin_required
+def analytics_revenue_series():
+    period = request.args.get("period", "week")
+    return jsonify({"success": True, "data": AnalyticsService.get_revenue_series(period)}), 200
+
+
+@admin_bp.get("/analytics/download-series")
+@admin_required
+def analytics_download_series():
+    period = request.args.get("period", "week")
+    return jsonify({"success": True, "data": AnalyticsService.get_download_series(period)}), 200
+
 
