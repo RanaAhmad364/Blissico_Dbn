@@ -110,14 +110,14 @@ const AdminDashboard = () => {
           </div>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 20 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 20 }}>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 20 }}>
             <RankedCardList title="Top Selling" items={data.topSelling} metricLabel="sales" metricKey="sales" />
             <RankedCardList title="Most Downloaded" items={data.mostDownloaded} metricLabel="downloads" metricKey="downloads" />
             <RankedCardList title="Most Favorited" items={data.mostFavorited} metricLabel="favorites" metricKey="favorites" />
           </div>
-          <QuickActions actions={quickActions} />
         </div>
+          <QuickActions actions={quickActions} />
       </div>
     </AdminLayout>
   );
