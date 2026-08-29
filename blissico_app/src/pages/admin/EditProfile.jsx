@@ -136,7 +136,7 @@ const EditProfile = () => {
 
               <div className="form-group">
                 <label><FiMail className="input-icon" /> Email Address</label>
-                <input type="email" name="email" value={formData.email} onChange={handleChange} required />
+                <input type="email" name="email" value={formData.email} disabled title="Email cannot be changed" />
               </div>
 
               <div className="form-actions">

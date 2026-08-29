@@ -19,14 +19,14 @@ class ProfileService:
         if not user:
             return {"success": False, "message": "User not found."}, 404
 
-        email = data["email"].strip().lower()
-        existing = User.query.filter(User.email == email, User.id != user_id).first()
-        if existing:
-            return {"success": False, "message": "That email is already in use by another account."}, 409
+        # email = data["email"].strip().lower()
+        # existing = User.query.filter(User.email == email, User.id != user_id).first()
+        # if existing:
+        #     return {"success": False, "message": "That email is already in use by another account."}, 409
 
         user.first_name = data["first_name"].strip()
         user.last_name = data["last_name"].strip()
-        user.email = email
+        # user.email = email
         db.session.commit()
 
         return {"success": True, "message": "Profile updated.", "data": ProfileService._serialize(user)}, 200

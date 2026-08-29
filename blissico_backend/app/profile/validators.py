@@ -17,8 +17,8 @@ class ProfileValidator:
             errors["first_name"] = "First name is required."
         if not data.get("last_name") or not data["last_name"].strip():
             errors["last_name"] = "Last name is required."
-        if not data.get("email") or not ProfileValidator.EMAIL_RE.match(data["email"]):
-            errors["email"] = "A valid email is required."
+        # if not data.get("email") or not ProfileValidator.EMAIL_RE.match(data["email"]):
+        #     errors["email"] = "A valid email is required."
         if errors:
             raise ProfileValidationError(errors)
 
