@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useFavorites } from '../../context/FavoritesContext';
 import { useCart } from '../../context/CartContext';
 import { assetUrl } from '../../api/catalog';
+import { getNotifications, getUnreadNotificationCount, markAllNotificationsRead } from '../../api/notifications';
 import { 
   FiMenu, FiSearch, FiHeart, FiShoppingCart, FiBell, 
   FiChevronDown, FiUser, FiSettings, FiLogOut, FiX
@@ -13,14 +14,48 @@ import './UserTopbar.css';
 const UserTopbar = ({ onMenuClick }) => {
   const { user, logout } = useAuth();
   const { favorites, favoritesCount, loading: favoritesLoading } = useFavorites();
-  const { items: cartItems } = useCart(); // ✅ Real Cart Data
+  const { items: cartItems } = useCart();
   const navigate = useNavigate();
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showFavorites, setShowFavorites] = useState(false);
   const [showCart, setShowCart] = useState(false);
+  const [notifications, setNotifications] = useState([]);
+  const [unreadCount, setUnreadCount] = useState(0);
 
   const cartCount = cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0);
+
+  const fetchNotifications = async () => {
+    if (!user) return;
+    try {
+      const [items, count] = await Promise.all([
+        getNotifications({ limit: 6 }),
+        getUnreadNotificationCount(),
+      ]);
+      setNotifications(items);
+      setUnreadCount(count);
+    } catch (error) {
+      console.error('Failed to load notifications:', error);
+      setNotifications([]);
+      setUnreadCount(0);
+    }
+  };
+
+  useEffect(() => {
+    if (user) {
+      fetchNotifications();
+    }
+  }, [user]);
+
+  const handleMarkAllRead = async () => {
+    try {
+      await markAllNotificationsRead();
+      setNotifications(prev => prev.map(item => ({ ...item, is_read: true })));
+      setUnreadCount(0);
+    } catch (error) {
+      console.error('Failed to mark all notifications as read:', error);
+    }
+  };
 
   const handleLogout = async () => {
     try {
@@ -226,6 +261,7 @@ const UserTopbar = ({ onMenuClick }) => {
             }}
           >
             <FiBell size={20} />
+            {unreadCount > 0 && <span className="user-badge">{unreadCount}</span>}
           </button>
 
           {showNotifications && (
@@ -237,11 +273,30 @@ const UserTopbar = ({ onMenuClick }) => {
                 </button>
               </div>
               <div className="user-dropdown-list">
-                <div className="user-favorites-dropdown-message">
-                  <span>No new notifications</span>
-                </div>
+                {notifications.length === 0 ? (
+                  <div className="user-favorites-dropdown-message">
+                    <span>No new notifications</span>
+                  </div>
+                ) : (
+                  notifications.map((item) => (
+                    <Link
+                      key={item.id}
+                      to={item.redirect_url || '/dashboard'}
+                      className="user-dropdown-item-card user-notif-item"
+                      onClick={closeAllDropdowns}
+                    >
+                      <span className="user-notif-dot" />
+                      <div className="user-notif-content">
+                        <p className="user-notif-message">{item.title}</p>
+                        <p className="user-notif-message" style={{ fontSize: '12px', color: '#64748b' }}>{item.message}</p>
+                        <span className="user-notif-time">{new Date(item.created_at).toLocaleString()}</span>
+                      </div>
+                    </Link>
+                  ))
+                )}
               </div>
               <div className="user-dropdown-footer">
+                <button className="user-mark-all-read" onClick={handleMarkAllRead}>Mark all read</button>
                 <Link to="/user/notifications" onClick={closeAllDropdowns}>View All Notifications</Link>
               </div>
             </div>

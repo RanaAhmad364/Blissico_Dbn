@@ -42,6 +42,27 @@ class EmailService:
 
         mail.send(message)
 
+    @staticmethod
+    def send_contact_reply(email: str, subject: str, original_message: str, admin_reply: str) -> None:
+        """Send a contact-form reply using the existing Flask-Mail setup."""
+        message = Message(
+            subject=f"Reply to your query — {subject or 'Contact Us'}",
+            recipients=[email],
+        )
+
+        message.body = (
+            "Hello,\n\n"
+            "This is a reply to your recent message to Blissico.\n\n"
+            "Original message:\n"
+            f"{original_message}\n\n"
+            "Our reply:\n"
+            f"{admin_reply}\n\n"
+            "Thank you,\n"
+            "Blissico Team"
+        )
+
+        mail.send(message)
+
 
 
 

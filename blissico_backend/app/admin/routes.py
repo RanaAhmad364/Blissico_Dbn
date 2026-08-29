@@ -1,10 +1,16 @@
-from flask import Blueprint, request, jsonify
+from datetime import datetime
 
+from flask import Blueprint, current_app, request, jsonify
+
+from app import db
 from app.admin.decorators import admin_required
 from app.admin.service import AdminService
 from app.admin.validators import AdminValidator,AdminValidationError
 from app.admin.catalog_service import AdminCatalogService
 from app.admin.catalog_validator import CatalogValidator, CatalogValidationError
+from app.models import ContactMessage, User
+from app.notifications.service import create_notification
+from app.utils.email_services import EmailService
 
 
 admin_bp = Blueprint("admin",__name__,url_prefix="/api/admin")
@@ -215,12 +221,150 @@ def delete_user(user_id):
 
     return jsonify(response), status_code
 
+def _serialize_contact_message(message):
+    admin_reply = message.admin_reply if message.admin_reply is not None else message.reply
+    is_replied = bool(message.is_replied or admin_reply or message.status in {"replied", "resolved"})
+    return {
+        "id": message.id,
+        "user_id": message.user_id,
+        "name": message.name,
+        "email": message.email,
+        "subject": message.subject,
+        "message": message.message,
+        "reply": message.reply,
+        "admin_reply": admin_reply,
+        "status": "replied" if is_replied else (message.status or "new"),
+        "is_replied": is_replied,
+        "created_at": message.created_at.isoformat() if message.created_at else None,
+        "replied_at": message.replied_at.isoformat() if message.replied_at else None,
+    }
+
+
 def _handle_validation(fn, *args):
     try:
         fn(*args)
         return None
     except CatalogValidationError as error:
         return jsonify({"success": False, "message": "Validation failed.", "errors": error.errors}), 400
+
+
+# =========================================================
+# CONTACT MESSAGES
+# =========================================================
+
+@admin_bp.get("/contact-messages")
+@admin_required
+def get_contact_messages():
+    messages = ContactMessage.query.order_by(ContactMessage.created_at.desc()).all()
+    return jsonify({
+        "success": True,
+        "data": [_serialize_contact_message(item) for item in messages],
+    }), 200
+
+
+@admin_bp.get("/contact-messages/<int:message_id>")
+@admin_required
+def get_contact_message(message_id):
+    message = ContactMessage.query.get(message_id)
+    if not message:
+        return jsonify({"success": False, "message": "Message not found."}), 404
+
+    return jsonify({
+        "success": True,
+        "data": _serialize_contact_message(message),
+    }), 200
+
+
+@admin_bp.post("/contact-messages/<int:message_id>/reply")
+@admin_required
+def reply_to_contact_message(message_id):
+    data = request.get_json(silent=True) or {}
+    reply = (data.get("reply") or "").strip()
+
+    if not reply:
+        return jsonify({
+            "success": False,
+            "message": "A reply message is required."
+        }), 400
+
+    message = ContactMessage.query.get(message_id)
+    if not message:
+        return jsonify({"success": False, "message": "Message not found."}), 404
+
+    email_to_send = (message.email or "").strip()
+    normalized_email = email_to_send.lower()
+    matched_user = None
+
+    if normalized_email:
+        matched_user = User.query.filter(db.func.lower(User.email) == normalized_email).first()
+        if matched_user:
+            message.user_id = matched_user.id
+
+    message.reply = reply
+    message.admin_reply = reply
+    message.is_replied = True
+    message.status = "replied"
+    message.replied_at = datetime.utcnow()
+
+    email_sent = False
+    delivery_method = "email_only"
+    recipient_is_registered_user = bool(matched_user)
+
+    if email_to_send:
+        try:
+            EmailService.send_contact_reply(
+                email=email_to_send,
+                subject=message.subject or "General inquiry",
+                original_message=message.message,
+                admin_reply=reply,
+            )
+            email_sent = True
+        except Exception:
+            current_app.logger.exception(
+                "Failed to send contact reply email for contact message %s to %s",
+                message.id,
+                email_to_send,
+            )
+            email_sent = False
+
+    if matched_user:
+        delivery_method = "email_and_notification" if email_sent else "notification_only"
+        try:
+            create_notification(
+                matched_user.id,
+                "Admin replied to your query",
+                reply,
+                notification_type="contact_reply",
+                related_id=message.id,
+                redirect_url="/user/notifications",
+            )
+        except Exception:
+            current_app.logger.exception(
+                "Failed to create contact reply notification for user %s from contact message %s",
+                matched_user.id,
+                message.id,
+            )
+
+    db.session.commit()
+
+    if not email_sent and not matched_user:
+        return jsonify({
+            "success": False,
+            "message": "Reply saved, but the email could not be delivered to the guest sender.",
+            "email_sent": False,
+            "delivery_method": "email_only",
+            "recipient_is_registered_user": False,
+            "data": _serialize_contact_message(message),
+        }), 200
+
+    return jsonify({
+        "success": email_sent or bool(matched_user),
+        "message": "Reply sent successfully." if email_sent else "Reply saved successfully.",
+        "email_sent": email_sent,
+        "delivery_method": delivery_method,
+        "recipient_is_registered_user": recipient_is_registered_user,
+        "data": _serialize_contact_message(message),
+    }), 200
 
 
 # =========================================================

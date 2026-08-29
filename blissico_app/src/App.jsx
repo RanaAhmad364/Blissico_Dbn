@@ -28,6 +28,7 @@ import FavoritesPage from './pages/favourites/FavoritesPage';
 import UserDashboard from './pages/user/UserDashboard';
 import UserEditProfile from './pages/user/UserEditProfile';
 import DashboardFavorites from './pages/user/DashboardFavorites';
+import UserNotificationsPage from './pages/user/UserNotificationsPage';
 // import AdminDashboard from './pages/admin/Dashboard';
 
 import Purchases from './pages/user/Purchases';
@@ -48,6 +49,8 @@ import CustomizedCards from './pages/user/CustomizedCards';
   import UserRoute from './components/UserRoute';
   import AdminDashboard from './pages/admin/AdminDashboard';
   import EditProfile from './pages/admin/EditProfile';
+  import AdminNotificationsPage from './pages/admin/AdminNotificationsPage';
+  import ContactMessages from './pages/admin/ContactMessages';
 
   import Categories from './pages/admin/Categories';
   import Products from './pages/admin/Products';
@@ -88,6 +91,7 @@ function App() {
               <Route path="/edit-profile" element={<UserEditProfile />} />
               {/* <Route path="/user/downloads" element={<MyDownloads />} /> */}
               <Route path="/user/favorites" element={<DashboardFavorites />} />
+              <Route path="/user/notifications" element={<UserRoute><UserNotificationsPage /></UserRoute>} />
 
               <Route path="/checkout/:orderId" element={<Checkout />} />
               <Route path="/favorites" element={<FavoritesPage />} />
@@ -113,6 +117,8 @@ function App() {
               <Route path="/admin/downloads" element={<AdminRoute><AdminDownloads /></AdminRoute>} />
 
               <Route path="/admin/users" element={<AdminRoute><Users /></AdminRoute>} />
+              <Route path="/admin/notifications" element={<AdminRoute><AdminNotificationsPage /></AdminRoute>} />
+              <Route path="/admin/contact-messages" element={<AdminRoute><ContactMessages /></AdminRoute>} />
 
               <Route path="/admin/dashboard"
 

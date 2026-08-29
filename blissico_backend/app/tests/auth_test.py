@@ -1,12 +1,15 @@
 import pytest
 from config import Config
 
+from flask_jwt_extended import create_access_token
+
 from app import create_app
 from app import db
 
 from app.models import Role
 from app.models import User
-from app.models import EmailOTP
+from app.models import EmailOTP, Notification, ContactMessage
+from app.notifications.service import create_notification, notify_all_admins
 from app.utils import OTPService
 
 
@@ -184,6 +187,276 @@ def test_register_user(client, app, monkeypatch):
 
         # Plain OTP must never be stored
         assert otp.otp_hash != captured_otp["value"]
+
+
+def test_notification_helpers_create_records(app):
+    with app.app_context():
+        role = Role.query.filter_by(name="User").first()
+        user = User(
+            first_name="Ayesha",
+            last_name="Khan",
+            email="notify@example.com",
+            password_hash="hash",
+            role_id=role.id,
+            is_verified=True,
+        )
+        db.session.add(user)
+        db.session.commit()
+
+        create_notification(
+            user.id,
+            "Welcome",
+            "Your account is ready.",
+            notification_type="welcome",
+            redirect_url="/dashboard",
+        )
+
+        admin_role = Role(name="Admin", description="Store administrator")
+        db.session.add(admin_role)
+        db.session.commit()
+
+        admin = User(
+            first_name="Admin",
+            last_name="User",
+            email="adminnotify@example.com",
+            password_hash="hash",
+            role_id=admin_role.id,
+            is_verified=True,
+        )
+        db.session.add(admin)
+        db.session.commit()
+
+        notify_all_admins(
+            "New sign-up",
+            "A new user joined.",
+            notification_type="registration",
+            related_id=user.id,
+            redirect_url="/admin/users",
+        )
+
+        assert Notification.query.filter_by(user_id=user.id).count() == 1
+        assert Notification.query.filter_by(user_id=admin.id).count() == 1
+
+
+def test_notifications_api_returns_user_notifications(client, app):
+    with app.app_context():
+        role = Role.query.filter_by(name="User").first()
+        user = User(
+            first_name="Api",
+            last_name="User",
+            email="api_notify@example.com",
+            password_hash="hash",
+            role_id=role.id,
+            is_verified=True,
+        )
+        db.session.add(user)
+        db.session.commit()
+        create_notification(
+            user.id,
+            "API check",
+            "Notification returned through API",
+            notification_type="api_test",
+            redirect_url="/dashboard",
+        )
+        token = create_access_token(identity=str(user.id))
+
+        response = client.get('/api/notifications', headers={'Authorization': f'Bearer {token}'})
+
+        assert response.status_code == 200
+        payload = response.get_json()
+        assert payload['success'] is True
+        assert any(item['title'] == 'API check' for item in payload['data'])
+
+
+def test_admin_contact_messages_list_and_reply(client, app):
+    with app.app_context():
+        user_role = Role.query.filter_by(name="User").first()
+        admin_role = Role.query.filter_by(name="Admin").first()
+        if not admin_role:
+            admin_role = Role(name="Admin", description="Store administrator")
+            db.session.add(admin_role)
+            db.session.commit()
+
+        user = User(
+            first_name="Customer",
+            last_name="One",
+            email="customer@example.com",
+            password_hash="hash",
+            role_id=user_role.id,
+            is_verified=True,
+        )
+        admin = User(
+            first_name="Admin",
+            last_name="User",
+            email="admin@example.com",
+            password_hash="hash",
+            role_id=admin_role.id,
+            is_verified=True,
+            is_active=True,
+        )
+        db.session.add_all([user, admin])
+        db.session.commit()
+
+        message = ContactMessage(
+            user_id=user.id,
+            name="Customer One",
+            email=user.email,
+            subject="Support request",
+            message="I need help with my order.",
+            status="new",
+        )
+        db.session.add(message)
+        db.session.commit()
+
+        token = create_access_token(identity=str(admin.id))
+
+        list_response = client.get('/api/admin/contact-messages', headers={'Authorization': f'Bearer {token}'})
+        assert list_response.status_code == 200
+        list_payload = list_response.get_json()
+        assert list_payload['success'] is True
+        assert any(item['id'] == message.id for item in list_payload['data'])
+
+        reply_response = client.post(
+            f'/api/admin/contact-messages/{message.id}/reply',
+            json={'reply': 'Thanks for reaching out.'},
+            headers={'Authorization': f'Bearer {token}'},
+        )
+        assert reply_response.status_code == 200
+        reply_payload = reply_response.get_json()
+        assert reply_payload['success'] is True
+        assert reply_payload['data']['is_replied'] is True
+
+        updated_message = ContactMessage.query.get(message.id)
+        assert updated_message.reply == 'Thanks for reaching out.'
+        assert updated_message.is_replied is True
+        assert Notification.query.filter_by(user_id=user.id, notification_type='contact_reply').count() == 1
+
+
+def test_admin_contact_reply_registered_user_uses_email_and_notification(client, app, monkeypatch):
+    with app.app_context():
+        user_role = Role.query.filter_by(name="User").first()
+        admin_role = Role.query.filter_by(name="Admin").first()
+        if not admin_role:
+            admin_role = Role(name="Admin", description="Store administrator")
+            db.session.add(admin_role)
+            db.session.commit()
+
+        user = User(
+            first_name="Guest",
+            last_name="User",
+            email="reply.user@example.com",
+            password_hash="hash",
+            role_id=user_role.id,
+            is_verified=True,
+        )
+        admin = User(
+            first_name="Admin",
+            last_name="User",
+            email="admin@example.com",
+            password_hash="hash",
+            role_id=admin_role.id,
+            is_verified=True,
+            is_active=True,
+        )
+        db.session.add_all([user, admin])
+        db.session.commit()
+
+        message = ContactMessage(
+            user_id=None,
+            name="Guest User",
+            email="reply.user@example.com",
+            subject="Order status",
+            message="Where is my order?",
+            status="new",
+        )
+        db.session.add(message)
+        db.session.commit()
+
+        captured = {}
+
+        def fake_send(email, subject, original_message, admin_reply):
+            captured['email'] = email
+            captured['subject'] = subject
+            captured['original_message'] = original_message
+            captured['admin_reply'] = admin_reply
+            return True
+
+        monkeypatch.setattr('app.utils.email_services.EmailService.send_contact_reply', fake_send)
+
+        token = create_access_token(identity=str(admin.id))
+        response = client.post(
+            f'/api/admin/contact-messages/{message.id}/reply',
+            json={'reply': 'Your order is on the way.'},
+            headers={'Authorization': f'Bearer {token}'},
+        )
+
+        assert response.status_code == 200
+        payload = response.get_json()
+        assert payload['success'] is True
+        assert payload['email_sent'] is True
+        assert payload['delivery_method'] == 'email_and_notification'
+        assert payload['recipient_is_registered_user'] is True
+        assert captured['email'] == 'reply.user@example.com'
+        assert Notification.query.filter_by(user_id=user.id, notification_type='contact_reply').count() == 1
+
+
+def test_admin_contact_reply_guest_user_sends_email_only(client, app, monkeypatch):
+    with app.app_context():
+        admin_role = Role.query.filter_by(name="Admin").first()
+        if not admin_role:
+            admin_role = Role(name="Admin", description="Store administrator")
+            db.session.add(admin_role)
+            db.session.commit()
+
+        admin = User(
+            first_name="Admin",
+            last_name="User",
+            email="admin@example.com",
+            password_hash="hash",
+            role_id=admin_role.id,
+            is_verified=True,
+            is_active=True,
+        )
+        db.session.add(admin)
+        db.session.commit()
+
+        message = ContactMessage(
+            user_id=None,
+            name="Guest Visitor",
+            email="guest@example.com",
+            subject="General inquiry",
+            message="I want to ask something.",
+            status="new",
+        )
+        db.session.add(message)
+        db.session.commit()
+
+        captured = {}
+
+        def fake_send(email, subject, original_message, admin_reply):
+            captured['email'] = email
+            captured['subject'] = subject
+            captured['original_message'] = original_message
+            captured['admin_reply'] = admin_reply
+            return True
+
+        monkeypatch.setattr('app.utils.email_services.EmailService.send_contact_reply', fake_send)
+
+        token = create_access_token(identity=str(admin.id))
+        response = client.post(
+            f'/api/admin/contact-messages/{message.id}/reply',
+            json={'reply': 'Thanks for your message.'},
+            headers={'Authorization': f'Bearer {token}'},
+        )
+
+        assert response.status_code == 200
+        payload = response.get_json()
+        assert payload['success'] is True
+        assert payload['email_sent'] is True
+        assert payload['delivery_method'] == 'email_only'
+        assert payload['recipient_is_registered_user'] is False
+        assert captured['email'] == 'guest@example.com'
+        assert Notification.query.filter_by(notification_type='contact_reply').count() == 0
 
 
 # ============================================================

@@ -1,6 +1,7 @@
 from app import db
 from app.models import Category, Collection, Occasion, Card, CardTemplate
 from app.utils.file_services import FileService
+from app.notifications.service import notify_all_admins
 from flask import current_app
 
 
@@ -295,6 +296,14 @@ class AdminCatalogService:
         )
         db.session.add(card)
         db.session.commit()
+
+        notify_all_admins(
+            "New card added",
+            f"A new card '{card.title}' has been added to the catalog.",
+            notification_type="new_card",
+            related_id=card.id,
+            redirect_url=f"/admin/products",
+        )
 
         return {"success": True, "message": "Card created.", "data": AdminCatalogService._serialize_card(card)}, 201
 

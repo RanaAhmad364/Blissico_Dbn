@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { assetUrl } from '../../api/catalog';
+import { getNotifications, getUnreadNotificationCount, markAllNotificationsRead } from '../../api/notifications';
 import './Topbar.css';
 import { 
   FiMenu, 
@@ -20,6 +21,9 @@ const Topbar = ({ onMenuClick }) => {
   const navigate = useNavigate();
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
+  const [notifications, setNotifications] = useState([]);
+  const [unreadCount, setUnreadCount] = useState(0);
+  const [loadingNotifications, setLoadingNotifications] = useState(false);
 
   // Get greeting based on time
   const getGreeting = () => {
@@ -39,12 +43,37 @@ const Topbar = ({ onMenuClick }) => {
     }
   };
 
-  // Notifications data
-  const notifications = [
-    { id: 1, message: 'New order #BLIS-1251 placed', time: '5 min ago', type: 'order' },
-    { id: 2, message: 'Ayesha Khan completed payment', time: '1 hour ago', type: 'payment' },
-    { id: 3, message: 'New customer registered', time: '3 hours ago', type: 'user' },
-  ];
+  const fetchNotifications = async () => {
+    if (!user) return;
+    try {
+      const [items, count] = await Promise.all([
+        getNotifications({ limit: 8 }),
+        getUnreadNotificationCount(),
+      ]);
+      setNotifications(items);
+      setUnreadCount(count);
+    } catch (error) {
+      console.error('Failed to load notifications:', error);
+      setNotifications([]);
+      setUnreadCount(0);
+    }
+  };
+
+  useEffect(() => {
+    if (user) {
+      fetchNotifications();
+    }
+  }, [user]);
+
+  const handleMarkAllRead = async () => {
+    try {
+      await markAllNotificationsRead();
+      setNotifications(prev => prev.map(item => ({ ...item, is_read: true })));
+      setUnreadCount(0);
+    } catch (error) {
+      console.error('Failed to mark all notifications as read:', error);
+    }
+  };
 
   // Get user display name
   const getUserName = () => {
@@ -113,28 +142,33 @@ const Topbar = ({ onMenuClick }) => {
             onClick={() => setShowNotifications(!showNotifications)}
           >
             <FiBell className="notification-icon" />
-            <span className="notification-badge">3</span>
+            {unreadCount > 0 && <span className="notification-badge">{unreadCount}</span>}
           </button>
 
           {showNotifications && (
             <div className="notification-dropdown">
               <div className="notification-header">
                 <h4>Notifications</h4>
-                <button className="mark-all-read">Mark all read</button>
+                <button className="mark-all-read" onClick={handleMarkAllRead}>Mark all read</button>
               </div>
               <div className="notification-list">
-                {notifications.map(notif => (
-                  <div key={notif.id} className="notification-item">
-                    <div className={`notification-dot ${notif.type}`}></div>
-                    <div>
-                      <p className="notification-message">{notif.message}</p>
-                      <span className="notification-time">{notif.time}</span>
+                {notifications.length === 0 ? (
+                  <div className="notification-empty">No notifications yet.</div>
+                ) : (
+                  notifications.map(notif => (
+                    <div key={notif.id} className={`notification-item ${notif.is_read ? 'read' : 'unread'}`}>
+                      <div className={`notification-dot ${notif.notification_type || 'order'}`}></div>
+                      <div>
+                        <p className="notification-message">{notif.title}</p>
+                        <p className="notification-detail">{notif.message}</p>
+                        <span className="notification-time">{new Date(notif.created_at).toLocaleString()}</span>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))
+                )}
               </div>
               <div className="notification-footer">
-                <button className="view-all-btn">View all notifications</button>
+                <Link to="/admin/notifications" className="view-all-btn">View all notifications</Link>
               </div>
             </div>
           )}

@@ -3,6 +3,7 @@ from app import db
 from app.models import Order, OrderItem, Card, Download, CardCustomization,User
 from flask import current_app
 import os,io
+from app.notifications.service import create_notification, notify_all_admins
 from app.utils.render_services import RenderService
 
 class DownloadService:
@@ -42,6 +43,23 @@ class DownloadService:
         )
         db.session.add(download)
         db.session.commit()
+
+        if card.is_free:
+            create_notification(
+                user_id,
+                "Free card downloaded",
+                f"You downloaded the free card '{card.title}'.",
+                notification_type="free_download",
+                related_id=card.id,
+                redirect_url=f"/product/{card.id}",
+            )
+            notify_all_admins(
+                "Free card downloaded",
+                f"User downloaded the free card '{card.title}'.",
+                notification_type="free_download",
+                related_id=card.id,
+                redirect_url=f"/admin/downloads",
+            )
 
         return {"success": True, "message": "Download ready.", "data": {"file_url": file_path, "downloaded_at": download.downloaded_at.isoformat()}}, 200
 

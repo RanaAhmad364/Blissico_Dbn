@@ -19,6 +19,7 @@ import {
   FiBarChart2,
   FiBell,
   FiHeadphones,
+  FiMail,
   FiSettings,
   FiDownload,
   FiActivity
@@ -47,6 +48,7 @@ const Sidebar = ({ isOpen, onClose }) => {
   const managementNav = [
     { label: 'Users', path: '/admin/users', icon: FiUsers },
     { label: 'Notifications', path: '/admin/notifications', icon: FiBell },
+    { label: 'Contact Messages', path: '/admin/contact-messages', icon: FiMail },
     { label: 'Support', path: '/admin/support', icon: FiHeadphones },
   ];
 

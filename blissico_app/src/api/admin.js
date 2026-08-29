@@ -53,3 +53,9 @@ export const addCardTemplate = (cardId, formData) =>
 export const deleteCardTemplate = (templateId) =>
   api.delete(`/api/admin/card-templates/${templateId}`).then(r => r.data);
 
+// --- Contact Messages ---
+export const getContactMessages = () => api.get('/api/admin/contact-messages').then(r => r.data.data || []);
+export const getContactMessage = (id) => api.get(`/api/admin/contact-messages/${id}`).then(r => r.data.data);
+export const replyContactMessage = (id, reply) =>
+  api.post(`/api/admin/contact-messages/${id}/reply`, { reply }).then(r => r.data);
+

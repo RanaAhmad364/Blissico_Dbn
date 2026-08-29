@@ -2,6 +2,7 @@ import uuid
 from datetime import datetime
 from app import db
 from app.models import Order, Payment, Invoice
+from app.notifications.service import create_notification, notify_all_admins
 
 
 class PaymentService:
@@ -35,6 +36,22 @@ class PaymentService:
         db.session.add(invoice)
         db.session.commit()
 
+        create_notification(
+            user_id,
+            "Payment successful",
+            f"Your payment for order #{order.order_number} was successful.",
+            notification_type="payment_success",
+            related_id=order.id,
+            redirect_url=f"/orders/{order.id}",
+        )
+        notify_all_admins(
+            "User payment received",
+            f"User order #{order.order_number} was successfully paid.",
+            notification_type="payment_success",
+            related_id=order.id,
+            redirect_url=f"/admin/purchases",
+        )
+
         return {
             "success": True,
             "message": "Payment successful.",
@@ -62,4 +79,20 @@ class PaymentService:
         ))
         order.status = "failed"
         db.session.commit()
+
+        create_notification(
+            user_id,
+            "Payment failed",
+            f"Your payment for order #{order.order_number} did not complete. Please try again.",
+            notification_type="payment_failed",
+            related_id=order.id,
+            redirect_url=f"/checkout/{order.id}",
+        )
+        notify_all_admins(
+            "Payment issue",
+            f"Payment failed for order #{order.order_number}.",
+            notification_type="payment_failed",
+            related_id=order.id,
+            redirect_url=f"/admin/purchases",
+        )
         return {"success": True, "message": "Payment marked as failed.", "data": {"order_id": order.id, "status": order.status}}, 200

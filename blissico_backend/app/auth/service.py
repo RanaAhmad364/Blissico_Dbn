@@ -1,4 +1,5 @@
 from app.models import User, EmailOTP, Role
+from app.notifications.service import create_notification, notify_all_admins
 from app.utils.password_services import PasswordService
 from app.utils.otp_services import OTPService
 from app.utils.email_services import EmailService
@@ -87,6 +88,21 @@ class AuthService:
 
         db.session.add(email_otp)
         db.session.commit()
+
+        create_notification(
+            user.id,
+            "Welcome to Blissico",
+            "Your account has been created successfully. Please verify your email to get started.",
+            notification_type="user_registration",
+            redirect_url="/dashboard",
+        )
+        notify_all_admins(
+            "New user registered",
+            f"{user.first_name} {user.last_name} joined Blissico.",
+            notification_type="user_registration",
+            related_id=user.id,
+            redirect_url="/admin/users",
+        )
 
         # Send OTP email
         try:
