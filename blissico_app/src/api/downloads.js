@@ -24,5 +24,7 @@ export const downloadCardFile = async (cardId, format = 'image') => {
   window.URL.revokeObjectURL(url);
 };
 
+export const checkOwnership = (cardId) => api.get(`/api/cards/${cardId}/ownership`).then(r => r.data.data);
+
 
 

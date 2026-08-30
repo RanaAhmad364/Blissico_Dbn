@@ -505,7 +505,8 @@ def create_card():
         return error_response
 
     thumbnail_file = request.files.get("thumbnail")
-    response, status_code = AdminCatalogService.create_card(data, thumbnail_file)
+    animated_gif_file = request.files.get("animated_gif")
+    response, status_code = AdminCatalogService.create_card(data, thumbnail_file,animated_gif_file)
     return jsonify(response), status_code
 
 
@@ -518,7 +519,8 @@ def update_card(card_id):
         return error_response
 
     thumbnail_file = request.files.get("thumbnail")
-    response, status_code = AdminCatalogService.update_card(card_id, data, thumbnail_file)
+    animated_gif_file = request.files.get("animated_gif")
+    response, status_code = AdminCatalogService.update_card(card_id, data, thumbnail_file,animated_gif_file)
     return jsonify(response), status_code
 
 
@@ -543,7 +545,8 @@ def add_template(card_id):
 
     template_file = request.files.get("template_file")
     preview_image_file = request.files.get("preview_image")
-    response, status_code = AdminCatalogService.add_template(card_id, data, template_file, preview_image_file)
+    animated_file = request.files.get("animated_file")
+    response, status_code = AdminCatalogService.add_template(card_id, data, template_file, preview_image_file,animated_file)
     return jsonify(response), status_code
 
 

@@ -120,20 +120,28 @@ class DownloadService:
             except Exception:
                 return {"success": False, "message": "Could not generate a PDF for this card."}, 500
             filename = f"{safe_title}.pdf"
-            mimetype = "application/pdf"
+            mimetype = "application/pdf"    
         else:
             out_bytes = raw_bytes
             filename = f"{safe_title}.jpg"
             mimetype = "image/jpeg"
 
-        db.session.add(Download(
-            user_id=user_id, card_id=card_id,
-            customization_id=customization.id if customization else None,
-            downloaded_at=datetime.utcnow(), file_path=file_path,
-        ))
-        db.session.commit()
+        if fmt == "gif":
+            if not card.animated_gif:
+                return {"success": False, "message": "No animated version exists for this card yet."}, 404
+            relative = card.animated_gif.replace("/static/", "", 1)
+            disk_path = os.path.join(current_app.root_path, "static", relative)
+            if not os.path.exists(disk_path):
+                return {"success": False, "message": "The animated file is missing on the server."}, 404
+            with open(disk_path, "rb") as f:
+                out_bytes = f.read()
+            filename = f"{safe_title}.gif"
+            mimetype = "image/gif"
 
-        return out_bytes, filename, mimetype
+        db.session.add(Download(user_id=user_id, card_id=card_id, downloaded_at=datetime.utcnow(), file_path=card.animated_gif))
+        db.session.commit()
+        return out_bytes, filename, mimetype    
+
 
     @staticmethod
     def list_all_downloads():

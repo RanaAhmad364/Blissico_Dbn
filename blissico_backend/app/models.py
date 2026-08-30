@@ -128,6 +128,7 @@ class Card(BaseModel):
     description = db.Column(db.Text)
 
     thumbnail = db.Column(db.String(255),nullable=False)
+    animated_gif = db.Column(db.String(255), nullable=True)
     price = db.Column(db.Numeric(10, 2),default=0.00,nullable=False)
     is_free = db.Column(db.Boolean,default=False,nullable=False)
     is_active = db.Column(db.Boolean,default=True,nullable=False)
@@ -152,6 +153,7 @@ class CardTemplate(BaseModel):
     card_id = db.Column(db.Integer,db.ForeignKey("cards.id"),nullable=False)
     template_file = db.Column(db.String(255),nullable=False)
     preview_image = db.Column(db.String(255),nullable=False)
+    animated_file = db.Column(db.String(255),nullable=True)
     width = db.Column(db.Integer,nullable=False)
     height = db.Column(db.Integer,nullable=False)
     card = db.relationship("Card",back_populates="templates")

@@ -166,9 +166,10 @@ class CatalogService:
                 "id": t.id,
                 "preview_image": t.preview_image,
                 "width": t.width,
-                "height": t.height
+                "height": t.height, "has_animated": bool(t.animated_file)
             }
             for t in card.templates
         ]
+        data["has_animated"] = bool(card.animated_gif)
 
         return data

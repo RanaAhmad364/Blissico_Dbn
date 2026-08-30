@@ -188,27 +188,14 @@ const ProductDetail = () => {
 </div>
 
           <div className="detail-share-text">Share Love. Celebrate Life.</div>
-{/* 
-          Download & Share Links
-          <div className="detail-downloads">
-            <a href="#download-gif" className="download-link">
-              <FaRegFileImage /> Download Animated Gif
-            </a>
-            <a href="#download-image" className="download-link">
-              <FaRegFileImage /> Download Image
-            </a>
-            <a href="#download-pdf" className="download-link">
-              <FaRegFilePdf /> Download PDF
-            </a>
-            <a href="#share" className="download-link">
-              <FaShareNodes /> Share
-            </a>
-          </div> */}
+
 
           <div className="detail-downloads">
-            <a href="#download-gif" className="download-link">
-              <FaRegFileImage /> Download Animated Gif
-            </a>
+            {product.has_animated && (
+              <a href="#" onClick={(e) => { e.preventDefault(); handleDownload('gif'); }} className="download-link">
+                <FaRegFileImage /> Download Animated Gif
+              </a>
+            )}
             <a href="#" onClick={(e) => { e.preventDefault(); handleDownload('image'); }} className="download-link">
               <FaRegFileImage /> Download Image
             </a>

@@ -257,7 +257,7 @@ class AdminCatalogService:
         return AdminCatalogService._serialize_card(card) if card else None
 
     @staticmethod
-    def create_card(data, thumbnail_file):
+    def create_card(data, thumbnail_file,animated_gif_file=None):
 
         category_id = data.get("category_id") or None
         if category_id and not Category.query.get(category_id):
@@ -280,6 +280,12 @@ class AdminCatalogService:
 
         if not thumbnail_url:
             return {"success": False, "message": "A thumbnail image is required."}, 400
+        animated_url = None
+        if animated_gif_file and animated_gif_file.filename:
+            try:
+                animated_url = FileService.save_file(animated_gif_file, "cards-gif", current_app.config["ALLOWED_ANIMATED_EXTENSIONS"])
+            except ValueError as e:
+                return {"success": False, "message": str(e)}, 400
 
         is_free = str(data.get("is_free", "false")).lower() == "true"
 
@@ -289,7 +295,7 @@ class AdminCatalogService:
             occasion_id=occasion_id,
             title=data["title"].strip(),
             description=data.get("description"),
-            thumbnail=thumbnail_url,
+            thumbnail=thumbnail_url,animated_gif=animated_url,
             price=0.00 if is_free else float(data.get("price") or 0),
             is_free=is_free,
             is_active=str(data.get("is_active", "true")).lower() == "true",
@@ -308,7 +314,7 @@ class AdminCatalogService:
         return {"success": True, "message": "Card created.", "data": AdminCatalogService._serialize_card(card)}, 201
 
     @staticmethod
-    def update_card(card_id, data, thumbnail_file=None):
+    def update_card(card_id, data, thumbnail_file=None,animated_gif_file=None):
         card = Card.query.get(card_id)
         if not card:
             return {"success": False, "message": "Card not found."}, 404
@@ -347,6 +353,14 @@ class AdminCatalogService:
             old_thumbnail = card.thumbnail
             card.thumbnail = new_url
             FileService.delete_file(old_thumbnail)
+        if animated_gif_file and animated_gif_file.filename:
+            try:
+                new_animated_url = FileService.save_file(animated_gif_file, "cards-gif", current_app.config["ALLOWED_ANIMATED_EXTENSIONS"])
+            except ValueError as e:
+                return {"success": False, "message": str(e)}, 400
+            old_animated = card.animated_gif
+            card.animated_gif = new_animated_url
+            FileService.delete_file(old_animated)    
 
         db.session.commit()
         return {"success": True, "message": "Card updated.", "data": AdminCatalogService._serialize_card(card)}, 200
@@ -375,18 +389,17 @@ class AdminCatalogService:
     # =====================================================
 
     @staticmethod
-    def add_template(card_id, data, template_file, preview_image_file):
+    def add_template(card_id, data, template_file, preview_image_file, animated_file=None):
         card = Card.query.get(card_id)
         if not card:
             return {"success": False, "message": "Card not found."}, 404
 
         try:
-            template_url = FileService.save_file(
-                template_file, "templates", current_app.config["ALLOWED_TEMPLATE_EXTENSIONS"]
-            )
-            preview_url = FileService.save_file(
-                preview_image_file, "template-previews", current_app.config["ALLOWED_IMAGE_EXTENSIONS"]
-            )
+            template_url = FileService.save_file(template_file, "templates", current_app.config["ALLOWED_TEMPLATE_EXTENSIONS"])
+            preview_url = FileService.save_file(preview_image_file, "template-previews", current_app.config["ALLOWED_IMAGE_EXTENSIONS"])
+            animated_url = None
+            if animated_file and animated_file.filename:
+                animated_url = FileService.save_file(animated_file, "template-animated", current_app.config["ALLOWED_ANIMATED_EXTENSIONS"])
         except ValueError as e:
             return {"success": False, "message": str(e)}, 400
 
@@ -394,15 +407,11 @@ class AdminCatalogService:
             return {"success": False, "message": "Both a template file and a preview image are required."}, 400
 
         template = CardTemplate(
-            card_id=card_id,
-            template_file=template_url,
-            preview_image=preview_url,
-            width=int(data["width"]),
-            height=int(data["height"]),
+            card_id=card_id, template_file=template_url, preview_image=preview_url,
+            animated_file=animated_url, width=int(data["width"]), height=int(data["height"]),
         )
         db.session.add(template)
         db.session.commit()
-
         return {"success": True, "message": "Template added.", "data": AdminCatalogService._serialize_template(template)}, 201
 
     @staticmethod

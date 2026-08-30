@@ -60,6 +60,7 @@ class Config:
         "json",
         "pdf"
     }
+    ALLOWED_ANIMATED_EXTENSIONS = {"gif"}
 
 
     # =========================

@@ -13,6 +13,7 @@ import Marquee from '../components/Marquee';
 import Navbar from '../components/Navbar';
 import './Customize.css';
 import { useCart } from '../context/CartContext';
+import { checkOwnership } from '../api/downloads';
 
 // import { useCart } from '../context/CartContext';
 // const { addToCart } = useCart();
@@ -56,6 +57,7 @@ const Customize = () => {
   const cardStageRef = useRef(null); // the .canvas-card element — drag bounds
   const dragWrapperRef = useRef(null);
   const dragStateRef = useRef({ startX: 0, startY: 0, moved: false });
+  const [isPurchased, setIsPurchased] = useState(false);
 
   // Redirect guests — only registered users may customize (per spec)
   useEffect(() => {
@@ -64,18 +66,20 @@ const Customize = () => {
     }
   }, [authLoading, user, cardId, navigate]);
 
-  // Load the card + this user's existing customization (or defaults)
+  // 
+  
+
+  
+//  Load the card + this user's existing customization (or defaults) + This useEffect used for ownership of the card for the user
   useEffect(() => {
     if (!user) return;
     setLoading(true);
     setError('');
 
-    Promise.all([getCard(cardId), getCustomization(cardId)])
-      .then(([cardData, custom]) => {
-        // The personal customization remains authoritative; otherwise use the
-        // admin design included in the public card response.
-        const savedDesign = custom?.id ? custom : cardData.default_design;
+    Promise.all([getCard(cardId), getCustomization(cardId), checkOwnership(cardId)])
+      .then(([cardData, custom, ownership]) => {
         setCard(cardData);
+        setIsPurchased(ownership.is_purchased);
         setGreetingText(savedDesign?.greeting_text || '');
         setFontFamily(savedDesign?.font_family || 'Poppins');
         setFontSize(savedDesign?.font_size ?? 24);
@@ -93,6 +97,9 @@ const Customize = () => {
       .catch(() => setError('Could not load this card. Please go back and try again.'))
       .finally(() => setLoading(false));
   }, [cardId, user]);
+
+
+
 
   // Sync loaded text into the contentEditable div without fighting React re-renders
   useEffect(() => {
@@ -238,7 +245,14 @@ const Customize = () => {
           <button className="save-btn" onClick={handleSave} disabled={saving}>
             {saving ? 'Saving...' : 'Save'}
           </button>
-          <button className="add-cart-btn" onClick={handleAddToCart}>Add to Cart</button>
+          {/* <button className="add-cart-btn" onClick={handleAddToCart}>Add to Cart</button> */}
+          {isPurchased ? (
+            <span className="add-cart-btn" style={{ background: '#e5e0f7', color: '#6d28d9', cursor: 'default' }}>
+              ✓ Already Purchased
+            </span>
+          ) : (
+            <button className="add-cart-btn" onClick={handleAddToCart}>Add to Cart</button>
+          )}
         </div>
       </div>
 

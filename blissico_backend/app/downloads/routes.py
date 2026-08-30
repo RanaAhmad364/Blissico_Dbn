@@ -34,3 +34,10 @@ def download_file(card_id):
     file_bytes, filename, mimetype = result
     return send_file(io.BytesIO(file_bytes), as_attachment=True, download_name=filename, mimetype=mimetype)
 
+@downloads_bp.get("/cards/<int:card_id>/ownership")
+@jwt_required()
+def check_ownership(card_id):
+    user_id = int(get_jwt_identity())
+    owns_it = DownloadService._has_paid_for(user_id, card_id)
+    return jsonify({"success": True, "data": {"is_purchased": owns_it}}), 200
+
