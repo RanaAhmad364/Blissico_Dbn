@@ -192,7 +192,7 @@ const ProductDetail = () => {
               Customize
             </Link>
 
-            {isPurchased ? (
+            {/* {isPurchased ? (
               <span className="detail-addcart-btn" style={{ background: '#e5e0f7', color: '#6d28d9', cursor: 'default' }}>
                 ✓ Already Purchased
               </span>
@@ -200,7 +200,7 @@ const ProductDetail = () => {
               <button type="button" className="detail-addcart-btn" onClick={handleAddToCart}>
                 Add to Cart
               </button>
-            )}
+            )} */}
           </div>
 
           <div className="detail-share-text">Share Love. Celebrate Life.</div>

@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<script src="https://cmp.gatekeeperconsent.com/min.js" data-cfasync="false"></script>
+<script src="https://the.gatekeeperconsent.com/cmp.min.js" data-cfasync="false"></script>
+
+<script async src="//www.ezojs.com/ezoic/sa.min.js"></script>
+<script>
+    window.ezstandalone = window.ezstandalone || {};
+    ezstandalone.cmd = ezstandalone.cmd || [];
+</script>
+
+
+<style>
+body {  visibility: hidden;background-color: black; }
+</style>
+
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script defer src="https://www.googletagmanager.com/gtag/js?id=UA-143678464-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-143678464-1');
+</script>
+
+
+
+<!-- download popup -->
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+	const anchors = document.querySelectorAll("a");
+	anchors.forEach((userItem) => {
+		if (userItem.hasAttribute('download'))
+			userItem.addEventListener( 'click', () => {
+				gtag( "event", "download", { 'event_label': 'gif' } );
+				DTF.Popup.OpenModalPopup('popup-ad');
+			});
+	});
+})
+</script>
+
+
+<title>char-back-spinner, char-back-spinner</title>
+
+
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes">
+<meta name="description" content="Make and customize GIFs easily using our existing GIF templates (char-back-spinner) for birthday gifs, good morning gifs, special occasion gifs and more." >
+
+
+<link rel="canonical" href="https://editablegifs.com/make/char-back-spinner" >
+
+
+<script>
+var loggedIn=false;
+var g_timeout = 3600;
+</script>
+ 
+ 
+ 
+<style>
+@font-face {
+  font-family: 'Creepster';
+  font-display: swap;
+  src: url(/fonts/Creepster-Regular.woff2) format('woff2');
+}
+@font-face {
+  font-family: 'Dancing Script';
+  font-display: swap;
+  src: url(/fonts/DancingScript-VariableFont_wght.woff2) format('woff2');
+}
+@font-face {
+  font-family: 'Passion One';
+  font-display: swap;
+  src: url(/fonts/PassionOne-Regular.woff2) format('woff2');
+}
+</style>
+
+
+
+
+
+<link rel="preload" href="/css/make.css?egv=3440v5" as="style" onload="this.rel='stylesheet'"> 
+<link media="screen and (max-width: 768px)" rel="preload" href="/css/make-max768x.css?egv=3440v5" as="style" onload="this.rel='stylesheet'"> 
+
+
+<!--
+<link rel="stylesheet" 
+	media="screen and (min-width: 360px) and (max-width: 550px)" 
+	href="large-screen.css">
+-->
+
+
+</head>
+<body>
+
+<div class="screenModal"></div>
+<div class="screenModalBox" id="popup-ad">
+	<div class="screenModalCloseBox">&times;</div>
+	<div class="row">
+		<div class="content">
+			<div class="col col-100" style="color: white;margin-top:20px;margin-bottom:20px;font-size: 22px;font-weight:bold;text-align:left;">
+				What would you like to do next?
+			</div>
+			<div class="col col-100" style="vertical-align: middle;border: 0px solid white;height: 390px;max-height: 390px;line-height:390px;">
+				<div style="vertical-align: middle;display:inline-block;border: 0px solid yellow;">
+										
+
+
+<iframe width="390" height="390" src="https://www.youtube.com/embed/69d7H87LW2k?si=Cf8Sc_zPCNlutdOm" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>									</div>
+			</div>
+			<button class="col col-100 text-align-center dogButtons" style="margin-top:50px;height:auto;" onclick="DTF.Popup.CloseModalPopup('popup-ad');">
+				Stay on this page, or ...
+			</button>
+			<div>
+				<h3>Follow Editable GIFs</h3>
+				<!--
+				<div class="col" style="margin-right: 15px;">
+					<a data-pin-do="buttonFollow" href="https://www.pinterest.com/editablegifs/">Editable&nbsp;GIFs</a>
+				</div><div class="col">
+					<a href="https://facebook.com/EditableGIFs" target="_blank"><img src="/images/facebook-find-us-white-bk.png" alt="follow us on facebook"></a>
+				</div><div class="col" style="margin-left: 15px;">
+				<a href="https://giphy.com/channel/deditable" target="_blank"><img src="/images/giphy.png" alt="follow us on Giphy"></a>
+				</div>
+				-->
+				<a href="https://www.facebook.com/EditableGIFs" class="" target="eg_facebook"><img src="/images/facebook-icon.png" style="margin-top:19px;margin-right: 5px;" width="32" height="32" alt="Open our Facebook page"></a>
+				<a href="https://www.instagram.com/editableg/" class="" target="eg_instagram"><img src="/images/instagram-icon-color.png" style="margin-top:19px;margin-right: 5px;" width="32" height="32" alt="Open our Instagram"></a>
+				<a href="https://twitter.com/EditableGIFs" class="" target="eg_x"><img src="/images/x-icon.png" style="margin-top:19px;margin-right: 5px;" width="32" height="32" alt="Follow us on X"></a>
+				<a href="https://www.pinterest.ca/editablegifs/" class="" target="eg_pinterest"><img src="/images/pinterest-icon.png" style="margin-top:19px" width="32" height="32" alt="Follow our Pinterest"></a>
+			</div>
+			<p class="text-align-center" style="margin-bottom:0">
+				<a href="/happy-birthday-gifs" class="blockButton">Birthday GIFs &#127874;</a>
+				<a href="/good-morning-gifs" class="blockButton">Morning GIFs &#127749;</a>
+				<a href="/thank-you-gifs" class="blockButton">Thank You GIFs &#128591;</a>
+				<a href="/love-gifs" class="blockButton">Love GIFs &#128149;</a>
+				<a href="/beer-gifs" class="blockButton">Beer GIFs &#127866;</a>
+			</p>
+		</div>
+	</div>
+</div>
+<div class="screenModalBox" id="genWait">
+	<div class="row">
+		<div class="content">
+			<div class="col col-100">
+				<div id="gifGenSizeWarning" style="display: none">
+					<h2>Warning - Large GIF.</h2>
+					<p>
+					This gif will take a long time to generate. It could
+					take <b>several minutes</b> to complete. Close this
+					box to download a video instead.
+					<div class="text-align-center">
+						<button class="dogButtons" onclick="DTF.Popup.CloseModalPopup('genWait')">
+							Close
+						</button>
+						<button class="dogButtons" id="btnGenMakeGif">
+							Make GIF
+						</button>
+					</div>
+				</div>
+				<div id="gifGenSizeContinue" style="display: block">
+					Hold on, we're making it...<br><br>
+					<br><br>
+					<div class="col col-50" id="genwaitProgressBarContainer">
+						<div id="genwaitProgressBarGrey">
+							<div id="genwaitProgressBarGreen">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="screenModalBox" id="waitModal">
+	<div class="row">
+		<div class="content">
+			<div class="col col-100 text-align-center">
+				<h2 class="modalHeader text-align-center">Please hold... processing</h2>
+			</div>
+			<div class="col col-100 text-align-center">
+				<img data-src="/images/spinner.webp" alt="Please wait...">
+			</div>
+			<div class="col col-100 text-align-center" id="waitModalMain"></div>
+		</div>
+	</div>
+</div>
+<div class="screenModalBox imageSizingModal" id="imageSizingModal">
+	<div class="row">
+		<div class="content">
+			<div class="col col-100">
+				<h2 class="modalHeader">Drag/Pinch Image</h2>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="content">
+			<div class="col col-100">
+				<canvas id="sizingCanvas"></canvas>
+			</div>
+			<div class="col col-100">
+				<button class="egIEOrientButton egIEflipButton" id="egIEflipH" style="">
+					<img alt="Flip image horizontally" src="/images/icon-hflip.png?egv=3364">
+				</button>
+				<button class="egIEOrientButton egIEflipButton" id="egIEflipV" style="">
+					<img alt="Flip image vertical" src="/images/icon-vflip.png?egv=3364" style="transform: scaleX(-1);">
+				</button>
+				<button class="egIEOrientButton egIErotateButton" id="egIERotateCW" style="">
+					<img alt="Rotate image clockwise 90 degrees" src="/images/icon-rotate.png?egv=3364">
+				</button>
+				<button class="egIEOrientButton egIErotateButton" id="egIERotateCCW" style="">
+					<img alt="Rotate image counter-clockwise 90 degrees" src="/images/icon-rotate.png?egv=3364" style="transform: scaleX(-1);">
+				</button>
+				<div class="text-align-right" style="padding-top: 10px;margin-right: 35px;">
+					<button class="egIEOrientButton" id="egIEReset" style="">Reset</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row imageSizingOptRow">
+		<div class="content">
+			<div class="col col-33 text-align-right">
+				Auto-size to sprite
+			</div><div class="col col-10 text-align-center">
+				<input type="radio" value="auto" checked name="egIESizingRadio" id="egIEAutoSize" class="egIESizingButton" style="">
+			</div><div class="col text-align-left">
+			</div>
+		</div>
+	</div>
+	<div class="row imageSizingOptRow">
+		<div class="content">
+			<div class="col col-33 text-align-right">
+				Don't resize
+			</div><div class="col col-10 text-align-center">
+				<input type="radio" value="dont" name="egIESizingRadio" id="egIEDontSize" class="egIESizingButton" style="">
+			</div><div class="col text-align-left">
+				
+			</div>
+		</div>
+	</div>
+	<div class="row imageSizingOptRow">
+		<div class="content">
+			<div class="col col-33 text-align-right">
+				<b>Fit</b> canvas
+			</div><div class="col col-10 text-align-center">
+				<input type="radio" value="fit" name="egIESizingRadio" id="egIEFitSize" class="egIESizingButton" style="">
+			</div><div class="col text-align-left">
+				
+			</div>
+		</div>
+	</div>
+	<div class="row imageSizingOptRow">
+		<div class="content">
+			<div class="col col-33 text-align-right">
+				<b>Fill</b> canvas
+			</div><div class="col col-10 text-align-center">
+				<input type="radio" value="fill" name="egIESizingRadio" id="egIEFillSize" class="egIESizingButton" style="">
+			</div><div class="col text-align-left">
+				
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="content">
+			<div class="col col-100">
+				<div class="text-align-center">
+					<div style="display: inline-block; width: 100%;margin-top: 10px;">
+						<button id="egIEdoneButton" style="">
+							<img alt="Choose this image ft" src="/images/icon-check.png?egv=3364">
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<br>
+	<br>&nbsp;</div>
+<div class="screenModalBox" id="shareModal">
+	<div class="screenModalCloseBox">&times;</div>
+	<div class="row">
+		<div class="content">
+			<div class="col col-100">
+				<h2 class="modalHeader modalInfoTitle">Share</h2>
+				<p>
+				Your animation will be:
+				</p>
+				<ul>
+					<li>uploaded and processed</li>
+					<li>given a unique web address</li>
+					<li>available to download or share for a limited time</li>
+				</ul>
+				<p>
+					After sharing you will be automatically taken to your new gif page.
+				</p>
+				<p class="text-align-center" style="margin-bottom: 0">
+					<button id="btnUploadShare" class="dogButtons">Upload to share...</button><br>
+				</p>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="screenModalBox" id="shareModalMP4">
+	<div class="screenModalCloseBox">&times;</div>
+	<div class="row">
+		<div class="content">
+			<div class="col col-100">
+				<h2 class="modalHeader modalInfoTitle">For Apps... &nbsp;&nbsp;&nbsp;<img alt="Instagram icon" loading="lazy" width="60" height="29" src='/images/instagram-icon-29x29.png' class="vertical-align-middle"></h2>
+				<p>
+				Your animation will be:
+				</p>
+				<ul>
+					<li>uploaded for processing</li>
+					<li>made ready for App upload (mp4)</li>
+					<li>you will be taken to the video page</li>
+					<li>video will only be available for a limited time</li>
+				</ul>
+				<p>
+					Save the video to your device for posting to your preferred app.
+				</p>
+				<p class="text-align-center" style="margin-bottom: 0">
+					<button id="btnProcessInstagram" class="dogButtons">Proceed &nbsp;<img alt="Instagram icon" loading="lazy" width="60" height="29" src='/images/instagram-icon-29x29.png' class="vertical-align-middle"></button><br>
+				</p>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="screenModalBox" id="progressModalDiv">
+	<div class="row">
+		<div class="content">
+			<div class="col col-100">
+				<h2 class="modalHeader">Upload in progress...</h2>
+				<br><br>
+				<div class="col col-50" id="uploadProgressBarContainer"><div id="uploadProgressBarGrey"><div id="uploadProgressBarGreen"></div></div></div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="content">
+			<div class="col col-100">
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="errorMsgBoxContainer"><div id="errorMsgBox"></div></div>
+<div class="row headerRow">
+	<div class="content no-top-padding">
+		<div class="col col-100 no-top-padding" style="padding-left: 1em; padding-right: 1em;">
+			<nav>
+			<div class="text-align-center">
+				<a href="/gifs">
+					<img src="/images/logo-1-small.png" width="50" height="50" alt="Editable GIFs logo" class="float-left">
+				</a>
+					<img src="/images/hamburger.png" width="50" height="50" alt="Open Menu" id="dtf-hamburger" class="float-right">
+				</div>
+			<a class="goSearch" href="/search">
+				<input type="text" width="10" value="Search..." style="width: 150px;height:50px;vertical-align:middle;margin-bottom:20px;">
+				<img src="/images/mag-glass.png" width="50" height="50" style="vertical-align:middle;margin-bottom: 20px;" alt="Search link">
+			</a>
+			</nav>
+		</div>
+	</div>
+</div>
+ 
+
+ 
+
+
+<div class="row" id="blockButtonRow">
+	<div class="content text-align-left no-vertical-padding">
+		<div class="col col-100">
+			<nav id="dtf-non-mobileMenu">
+
+				<div onClick="return true" class="dropDiv no-select">
+					<span class="blockButton dropButton">Social GIFs</span>
+					<div class="dropContentsContainer dropContents">
+						<a href="/workplace-gifs" class="blockButton">GIFs for Work</a><br>
+						<a href="/gifs/emojis" class="blockButton">Emojis &#128515;</a><br>
+						<a href="/footers" class="blockButton">Post Footers</a><br>
+						<a href="/gifs/stickers" class="blockButton">Stickers</a>
+					</div>
+				</div>
+
+				<div onClick="return true" class="dropDiv no-select">
+					<span class="blockButton dropButton">Customize GIFs</span>
+					<div class="dropContentsContainer dropContents dropCMain left0">
+						<h2>
+							These GIFs can be customized
+						</h2>
+						<div class="col col-33">
+						<h3 class="blockButtonH bbcolor1">Daily GIFs</h3><br>
+						<a href="/happy-birthday-gifs" class="blockButton bbcolor1">Happy Birthday &#127874;</a>
+						<a href="/happy-cake-day-gif" class="blockButton bbcolor1">Happy Cake Day &#127874;</a>
+						<a href="/good-night-gifs" class="blockButton bbcolor1">Good Night &#128564;</a>
+						<a href="/good-morning-gifs" class="blockButton bbcolor1">Good Morning &#127749;</a>
+						<a href="/thank-you-gifs" class="blockButton bbcolor1">Thank You &#128591;</a>
+						<a href="/summer-gifs" class="blockButton bbcolor1">Summer &#9728;&#65039;</a>
+						<a href="/twitch-gifs" class="blockButton bbcolor1">Twitch GIFs
+						</a>
+						</div>
+						<div class="col col-33">
+						<h3 class="blockButtonH bbcolor2">Holiday GIFs</h3><br>
+												<a href="/valentines-gifs" class="blockButton bbcolor2">Valentine&#39;s &#10084;&#65039;</a>
+						<a href="/stpatricks-day-gifs" class="blockButton bbcolor2">St Patrick&#39;s Day &#127808;</a>
+						<a href="/halloween-gifs" class="blockButton bbcolor2">Halloween &#127875;</a>
+						<a href="/thanksgiving-gifs" class="blockButton bbcolor2">Thanksgiving &#129411;</a>
+						<a href="/christmas-gifs" class="blockButton bbcolor2">Christmas &#127876;</a>
+						<a href="/happy-holidays-gif" class="blockButton bbcolor2">Happy Holidays &#10052;</a>
+						<a href="/happy-new-year-gifs" class="blockButton bbcolor2">Happy New Year &#127878;</a>
+						</div>
+						<div class="col col-33">
+						<h3 class="blockButtonH bbcolor3">More GIFs</h3><br>
+						<a href="/anniversary-gif" class="blockButton bbcolor3">Happy Anniversary &#129346;</a>
+						<a href="/beer-gifs" class="blockButton bbcolor3">Beer &#127866;</a>
+						<a href="/fireworks-gif" class="blockButton bbcolor3">Fireworks &#127878;</a>
+						<a href="/flower-gif" class="blockButton bbcolor3">Flowers &#128144;</a>
+						<a href="/love-gifs" class="blockButton bbcolor3">Love &#128149;</a>
+						<a href="/loading-gif" class="blockButton bbcolor3">Loading GIFs</a>
+						<a href="/workplace-gifs" class="blockButton bbcolor3">GIFs for Work</a>
+						<a href="/gifs/assets" class="blockButton bbcolor3">Web/Game Assets</a>
+						<a href="/gifs" class="blockButton bbcolor3">All GIFs</a>
+						</div>
+					</div>
+				</div>
+
+
+				<a href="/gif" class="blockButton">Download GIFs</a>
+				<a href="/gifs/activities" class="blockButton">Interactive</a>
+
+			</nav>
+			<nav class="text-align-center" id="dtf-mobileMenu">
+				<br>
+				<a href="/happy-birthday-gifs" class="blockButton bbcolor2" style="font-size: 2em;padding:0.25em;margin:0.5em;height:auto;">Birthday GIFs &#127874;</a><br>
+				<a href="/good-night-gifs" class="blockButton bbcolor1" style="font-size: 2em;padding:0.25em;margin:0.5em;height:auto;">Good Night &#128564;</a><br>
+				<a href="/good-morning-gifs" class="blockButton bbcolor3" style="font-size: 2em;padding:0.25em;margin:0.5em;height:auto;">Morning GIFs &#127749;</a><br>
+				<a href="/thank-you-gifs" class="blockButton bbcolor2" style="font-size: 2em;padding:0.25em;margin:0.5em;height:auto;">Thank You GIFs &#128591;</a><br>
+
+				<h3 class="blockButtonH bbcolor2">Holiday GIFs</h3><br>
+								<a href="/valentines-gifs" class="blockButton">Valentine GIFs &#128149;</a>
+				<a href="/stpatricks-day-gifs" class="blockButton">St Patrick&#39;s Day &#127808;</a>
+				<a href="/love-gifs" class="blockButton">Love &#10084;&#65039;</a>
+				<a href="/anniversary-gif" class="blockButton">Anniversary GIFs &#129346;</a>
+				<a href="/happy-cake-day-gif" class="blockButton">Cake Day GIFs &#127874;</a>
+				<a href="/halloween-gifs" class="blockButton">Halloween GIFs &#127875;</a>
+				<a href="/thanksgiving-gifs" class="blockButton">Thanksgiving &#129411;</a>
+				<a href="/christmas-gifs" class="blockButton">Christmas GIFs &#127876;</a>
+				<a href="/happy-new-year-gifs" class="blockButton">Happy New Year &#127878;</a>
+
+				<br><br>
+				<h3 class="blockButtonH bbcolor3">More GIFs</h3><br>
+				<a href="/gifs/assets" class="blockButton">Assets</a>
+				<a href="/loading-gif" class="blockButton">Loading GIFs</a>
+				<a href="/gifs/activities" class="blockButton">Interactive</a>
+				<a href="/beer-gifs" class="blockButton">Beer GIFs &#127866;</a>
+				<a href="/workplace-gifs" class="blockButton">GIFs for Work</a>
+				<a href="/gifs/emojis" class="blockButton">Emojis &#128515;</a>
+				<a href="/fireworks-gif" class="blockButton">Fireworks GIFs &#127878;</a>
+				<a href="/flower-gif" class="blockButton">Flowers &#128144;</a>
+				<a href="/footers" class="blockButton">Footers</a>
+				<a href="/workplace-gifs" class="blockButton">GIFs for Work</a>
+				<a href="/popcorn-gifs" class="blockButton">Popcorn GIFs</a>
+				<a href="/gifs/stickers" class="blockButton">Stickers</a>
+				<br>
+				<a href="/gif" class="blockButton">Non-Customized GIFs</a><br>
+
+				<br><br>
+				<a id="dtf-closeMobileMenu"><b>Close</b></a><br>&nbsp;
+			</nav>
+		</div>
+	</div>
+</div>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4114353288586210"
+     crossorigin="anonymous"></script>
+<!-- Library Horizontal 728x90 -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-4114353288586210"
+     data-ad-slot="9256342997"></ins>
+
+<!--
+<div class="row" id="pageRow">
+	<div class="content" id="pageRowContent">
+-->
+
+<div id="" class="row">
+	<div class="content">
+		<div class="col col-100">
+<div class='snapshotMakeRow' id='snapshotMakeRow1'></div>
+		</div>
+	</div>
+</div>
+
+<div id="" class="row">
+	<div class="content">
+		<div class="col col-75 text-align-center" style="max-width: 620px;font-size: 12px">
+<h1 class='title'>char-back-spinner, char-back-spinner</h1><h2 class="subtitle">Character sprite rainbow fill</h2><p>Animated rainbow fill applied to a single character. Suitable as a game asset. Set the letter and font.</p>		<div style="width: 320px;margin:auto;">
+			<h3>How to Customize your GIF</h3>
+			<ol style="text-align: left">
+				<li>Personalize settings under your animation</li>
+				<li>Press the play <img alt="Run animation" src="/images/icon-play-green.svg" width="16" height="16" style="vertical-align:middle"> to test your animation</li>
+				<li>When perfect, select:
+					<ul>
+						<li>Video</li>
+						<li>Generate a GIF</li>
+					</ul>
+				</li>
+				<li>Use image icon to changes images</li>
+				<li>Use code icon to tweak your animation</li>
+			</ol>
+		</div>
+
+		</div>
+	</div>
+</div>
+
+		<div class="col col-menu">
+	<div class="text-align-center" id="mobileStudioRunButton">
+		<button class="btnRunSCL" id="btnStudioMenuRun">RUN!</button>
+	</div>
+	<div class="col col-100">
+		<button class="btnMenu" id="menuMoreGIFs" data-root-name="MoreGIFs">
+			<img src="/images/icon-more-gifs.svg" alt="Open GIF library" width="50" height="50"><br>
+			Library
+		</button>
+	</div>
+	<div class="col col-100" id="menuVideoContainer">
+		<button class="btnMenu" id="menuVideo" data-root-name="Video">
+			<img src="/images/icon-video.svg" alt="Video Menu Item" width="50" height="50"><br>
+			Video
+		</button>
+	</div>
+	<div class="col col-100">
+		<button class="btnMenu" id="menuImages" data-root-name="Images">
+			<img src="/images/icon-images.svg" alt="Images Menu Item" width="50" height="50"><br>
+			Images
+		</button>
+	</div>
+	<div class="col col-100">
+		<button class="btnMenu" id="menuCode" data-root-name="Code">
+			<img src="/images/icon-code.svg" alt="Open Animation Source Code" width="50" height="50"><br>
+			Code
+		</button>
+	</div>
+	<div class="col col-100">
+		<button class="btnMenu" id="menuOptions" data-root-name="Options">
+			<img src="/images/icon-options.svg" alt="Options Menu Item" width="50" height="50"><br>
+			Options
+		</button>
+	</div>
+
+
+</div>
+
+
+<div class="col col-33 sidePop" id="popupVideo">
+	<div class="closeX">&times;</div>
+	<h2>Video Upload</h2>
+	<div class="row">
+		<div class="col col-100 text-align-left">
+			<p>
+			If you are creating a template, you video will not be saved with it.
+			You can upload it only as an example as you work.
+			</p>
+			<p>
+			If you are going to generate or download a gif or video, then the
+			video you upload will be part of it.
+			</p>
+			<p>
+			Upload a video to play in the <b>background</b> of your GIF.<br>
+			We recommend videos/gifs to not be longer than 10 seconds.
+			</p>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col col-100 text-align-center">
+			<button id="btnUploadNewVideo" class="buttonRect buttonWide buttonPrimary">Upload a video</button>
+		</div>
+	</div>
+	
+	<div class="row">
+		<div class="content text-align-center">
+			<div class="col col-75 dropVideoArea">
+				Drag Video to Here
+		 	</div>
+		</div>
+	</div>
+</div><div class="col col-33 sidePop" id="popupImages">
+	<div class="closeX">&times;</div>
+
+
+	<p>
+	Touch to replace an image:
+	</p>
+	<div id="studioImageList">
+		<div class="row">
+			<div class="col col-100 text-align-left">
+				<div id="imageListItemCloneable" class="imageListItem cloneable">
+					<div class="col col-33 imageListItemName"></div>
+					<div class="col text-align-center imageListItemDims"></div>
+					<div class="col col-33 imageListThumbnailContainer text-align-center">
+						<img alt="gif part">
+					</div>
+				</div>
+				<div id="imageList" style="padding-top: 10px">
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="text-align-center">
+		<button class="btnRunSCL menuButton"><img alt="Run animation" loading="lazy" src="/images/icon-play-green.svg" width="50" height="50"></button>
+	</div>
+</div><div class="col col-50 sidePop" id="popupImageSelect">
+	<div class="closeX">&times;</div>
+	<h2>Image Select</h2>
+	<div id="studioImageSelector">
+		<div class="row">
+			<div class="col col-100 text-align-center">
+				Replace this image <img id="imageReplaceThis" alt="Replace this image">
+			</div>
+		</div>
+		<div class="row">
+			<div class="col col-100 text-align-center">
+				<button id="btnUploadNewImage" class="buttonRect buttonWide">Upload a new image</button>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col col-100 text-align-center">
+				OR, choose from the list...
+			</div>
+		</div>
+		<div class="row">
+			<div class="col col-100 text-align-center">
+				<div id="fullImageList"></div>	
+			</div>
+		</div>	
+		<div class="row">
+			<div class="content">
+				<div class="col col-100 text-align-center">
+					<div id="fullCreditList" class="text-align-left creditList"></div>	
+				</div>
+			</div>
+		</div>	
+	</div>
+</div><div class="col col-50 sidePop" id="popupCode">
+	<div class="closeX">&times;</div>
+	<h2>SCL Code</h2>
+	<textarea id="s"></textarea>
+	<button class="btnRunSCL menuButton"><img alt="Run animation" loading="lazy" src="/images/icon-play-green.svg" width="50" height="50"></button>
+</div><div class="col col-25 sidePop" id="popupOptions">
+	<div class="closeX">&times;</div>
+	<h2>Options</h2>
+
+	<div class="row">
+	<div class="col col-100 text-align-left">
+		Repeat?&nbsp;&nbsp;&nbsp;
+		<select id="selRepeat">
+			<option value="-1">No repeat</option>
+			<option value="0">Forever</option>
+			<option value="1">Play throughs:</option>
+		</select>
+		<input type="number" min="1" max="65535" id="playThroughs" value="1" style="width:100px">
+	</div>
+	</div>
+
+	<div class="row">
+	<div class="col col-50 text-align-right">
+		Duration each frame (ms):
+	</div><div class="col col-50 text-align-left">
+		<input type="number" min="20" max="60000" id="nFrameDuration" value="">
+	</div>
+	</div>
+
+	<div class="row">
+	<div class="col col-50 text-align-right">
+		Timer interval before repeating (ms):
+	</div><div class="col col-50 text-align-left">
+		<input type="number" min="1" max="65535" id="nLastFrameRow" value="">
+	</div>
+	</div>
+
+	<div class="row">
+	<div class="col col-50 text-align-right">
+		Start gif on which frame:
+	</div><div class="col col-50 text-align-left">
+		<input type="number" min="1" id="nStartFrame" value="1">
+	</div>
+	</div>
+
+	<div class="row">
+	<div class="col col-50 text-align-right">
+		Use transparency?
+	</div><div class="col col-50 text-align-left">
+		<input type="checkbox" id="transparency">
+		<span id="alphaCutoffControl">|||
+			Alpha cutoff (0, 255) <input id="alphaCutoff" type="number" min="0" max="255" value="128">
+		</span>
+	</div>
+	</div>
+
+	<div class="row">
+	<div class="col col-50 text-align-right">
+		Background color?
+	</div><div class="col col-50 text-align-left">
+		<input type="color" id="bkcolor" value="">
+	</div>
+	</div>
+
+	<div class="row">
+	<div class="col col-50 text-align-right">
+		Width:
+		<input type="number" min="1" max="1000" id="optWidth" value="">
+		</div><div class="col col-50 text-align-left">
+		Height:
+		<input type="number" min="1" max="1000" id="optHeight" value="">
+	</div>
+	</div>
+	<div class="text-align-center">
+		<button class="btnRunSCL menuButton"><img alt="Run animation" loading="lazy" src="/images/icon-play-green.svg" width="50" height="50"></button>
+	</div>
+
+</div><div class="col col-75" id="mainTabContent">
+		<div class="row" id="tabRow">
+		<div class="col tab active-tab" data-content-tab="canvasContainer" id="tabCanvas">Canvas</div>
+		<div class="col tab" data-content-tab="downloadContainer" id="tabDownload">Ready!</div>
+		<div class="col tab" data-content-tab="videoContainer" id="tabVideo">Video</div>
+		<div class="col tab" data-content-tab="GIFContainer" id="tabGIF">GIF</div>
+		</div>
+	<div class="col col-75 dark-bk tabContent" id="canvasContainer">
+	<div class="row">
+		<div id="vidCanOvContainer">
+			<div id="canvasInstructions">
+				Press the <b style="font-size: large; color: #00cc00">Play</b> button below to start
+			</div>
+			<canvas id="c" width="50" height="50" title="Animated GIF canvas" style="background-image:url('/gifs/gifs/char-back-spinner/snapshot.webp')">
+				Unfortunately, your browser doesn't support GIF customization.<br>
+			</canvas>
+			<div id="studioButtonsRecord" style="position:relative;">
+				<div style="width: 70px; display: inline-block;">
+					<button class="btnImages menuButton" data-root-name="Images"><img src="/images/icon-images-square.svg" alt="Images Menu Item" width="50" height="50"></button>
+				</div>
+				<div style="width: 70px; display: inline-block;">
+					<button id="mainPlayButton" class="btnRunSCL menuButton"><img alt="Run animation" src="/images/icon-play-green.svg" width="50" height="50"></button>
+				</div>
+				<div style="width: 70px; display: inline-block;">
+					<button class="btnStop menuButton"><img alt="Stop animation" src="/images/icon-stop.png"></button>
+				</div>
+		</div>
+			<div id="varsContainer"></div>
+		</div>
+<div id="relatedGIFsDIV" style="display: inline-block;vertical-align:top;">
+<div class="row">
+	<div class="content">
+		<div class="col col-100 relatedList">
+			<ul>
+			<li><h3>More GIFs</h3></li>
+			<li><a href="/gifs/assets">GIF Assets</a></li>
+			<li><a href="/make/text-spin-rainbow">Rainbow Letters</a></li>
+			<li><a href="/make/text-spin-sunburst">Sunburst Letters</a></li>
+			<li><a href="/make/text-neon">Neon Letters</a></li>
+			</ul>
+		</div>
+	</div>
+</div>
+<!-- Ezoic - studio-under-related-gifs - mid_content -->
+<div id="ezoic-pub-ad-placeholder-131"> </div>
+<!-- End Ezoic - studio-under-related-gifs - mid_content -->
+</div>
+	</div>
+	<div id="logRow" class="row">
+		<div class="content text-align-left">
+			<div id="log" class="col col-100 text-align-left">
+				Errors will appear here.
+			</div>
+		</div>
+	</div>
+</div>
+<div class="col col-75 dark-bk tabContent" id="videoContainer">
+	<div class="row">
+		<video id="gifVideo" width="400" height="300" controls></video>
+	</div>
+	<div class="row">
+		<div class="text-align-center" style="margin-bottom: 20px;margin-top:30px">
+
+			<button id="rdDownloadWebm" data-type="webm" class="dogButtons" style="">Download Video<br>as <b style="color:#dac727">Webm</b>
+			<img alt="Download icon" src="/images/icon-download-gif-green.png" width="40" height="40" loading="lazy" class="vertical-align-middle" style=""></button>
+			
+			<button id="rdDownloadMP4" data-type="mp4" data-modal-id="shareModalMP4" class="dogButtons btnScreenModalOpen" style="">Convert to <b style="color:#dac727">MP4</b><br><img alt="Instagram icon" src="/images/instagram-icon-29x29.png" loading="lazy" width="60" height="29" class="vertical-align-middle" style=""></button>
+		</div>
+	</div>
+
+	<div class="row" id="MP4ExplanationRow">
+		<div class="content text-align-center">
+			<div class="col col-100 text-align-left" style="max-width: 410px">
+				<h3 style="font-size:larger">Explanation</h3>
+				<p>
+				<img alt="Instagram icon" src="/images/instagram-icon-29x29.png" loading="lazy" width="60" height="29" class="vertical-align-middle" style="">
+				uses <b style="color:#dac727">MP4</b> videos. In order to upload
+				to Instagram, we need to convert the video to MP4 first.
+				</p>
+				
+			</div>
+		</div>
+	</div>
+
+</div><div class="col col-75 dark-bk tabContent" id="downloadContainer">
+<div id="MakeButtons" style="display: inline-block;">
+	
+	<button class="dogButtons btnScreenModalOpen" id="btnOpenVideoTab">
+		View Video <img alt="view video button" loading="lazy" src="/images/icon-video-play.svg" width="60" height="40" style="vertical-align: middle;">
+	</button>
+	
+	<button id="btnCreateGIFShare" class="dogButtons" style="">Create GIF
+		<picture style="vertical-align: middle;">
+		<source srcset="/images/spinner-make-gif.webp" type="image/webp">
+		<img alt="create gif button" loading="lazy" src="/images/spinner-make-gif.gif" width="40" height="40">
+		</picture>
+	</button>
+	
+	<button id="btnRunAgain" class="btnRunSCL dogButtons" style="">Run again <img alt="run animation button" loading="lazy" src="/images/icon-play-green.svg" width="40" height="40" style="vertical-align: middle;"></button>
+
+</div>
+</div><div class="col col-75 dark-bk tabContent" id="GIFContainer">
+	<div class="row">
+<div style="padding-top: 20px; padding-bottom: 20px" id="emojiResizer">
+Size for:<br>
+<input id="rResizeSlack" name="rResize" type="radio" value="slack"><label for="rResizeSlack"> Slack</label>
+<input id="rResizeDiscord" name="rResize" type="radio" value="discord"><label for="rResizeDiscord"> Discord</label>
+<input id="rResizeZoom" name="rResize" type="radio" value="zoom"><label for="rResizeZoom"> Zoom</label>
+<input id="rResizeDont" name="rResize" type="radio" value="dont" checked><label for="rResizeDont"> 100x100</label>
+</div>
+		<div style="margin-bottom: 20px">
+			<div id="testGifContainer"><img></div>
+		</div>
+		<div class="text-align-center" style="margin-bottom: 20px">
+			<button class="btnCreateGIF dogButtons" style="">Create GIF
+				<picture style="vertical-align: middle;">
+					<source srcset="/images/spinner-make-gif.webp" type="image/webp">
+					<img alt="create gif button" loading="lazy" src="/images/spinner-make-gif.gif" width="40" height="40">
+				</picture>
+			</button>
+		</div>
+		<div class="text-align-center" style="margin-bottom: 20px">
+			<button class="btnDownload dogButtons" style="">Download GIF
+			<img alt="Download icon" src="/images/icon-download-gif-green.png" width="40" height="40" loading="lazy" class="vertical-align-middle" style="">
+			</button>
+		</div>
+			<div class="text-align-center" id="shareButtonContainer" style="margin-bottom: 20px"><button class="btnShare btnScreenModalOpen dogButtons bold" data-modal-id="shareModal">Share <span>GIF...</span><img alt="Share gif" loading="lazy" id="img_shareGIF" src="/images/share.gif" style="margin-top: -4px;"></button>
+			</div>
+		<div class="content" id="testGifStatsDiv">
+			<span id="emptyGifContainerText">Run and create your own GIF</span>
+			<div class="col col-33 text-align-right">Width:&nbsp;</div><div class="col col-33 text-align-left" id="gifWidth"></div><br>
+			<div class="col col-33 text-align-right">Height:&nbsp;</div><div class="col col-33 text-align-left" id="gifHeight"></div><br>
+			<div class="col col-33 text-align-right">Size:&nbsp;</div><div class="col col-33 text-align-left" id="gifFSize"></div><br>
+			<div class="col col-33 text-align-right">Frames:&nbsp;</div><div class="col col-33 text-align-left" id="gifFrameCount"></div><br>
+		</div>
+	</div>
+</div><div style="text-align: center;padding:0;margin:0; min-height: 569px;">
+<!-- Ezoic - studio-bottom - bottom_of_page -->
+<div id="ezoic-pub-ad-placeholder-108"> </div>
+<!-- End Ezoic - studio-bottom - bottom_of_page --></div>
+</div>		<br><br><hr>
+
+
+<div class="row" id="footerRow" style="background-color: rgb(183 0 0 / 20%);">
+	<div class="content">
+		<div class="col col-100 text-align-center" style="padding-top: 10px;padding-bottom: 10px;">
+			<a href="/contact">Contact / Feedback</a> |
+<a
+href="https://www.editablegifs.com/direct-sales.html"
+target="_blank"
+rel="noopener"
+title="Open Ezoic's direct sales page for editablegifs.com"
+>
+Advertise on editablegifs.com
+</a> |
+			<a href="/privacy">Privacy Policy</a> |
+			<a href="/terms">Terms</a>
+		</div>
+	</div>
+</div>
+
+<script>
+let startupTemplate = "char-back-spinner";
+let startupFilter = 'all';
+let stealthLoadTemplate = false;
+let makeVisitCount = 0; let isOwner = false;
+let openCode = false;
+</script>
+<script defer src='/js/gif/gif.js'></script><script defer src='/js/SCLCore.js?egv=1759356806'></script><script defer src='/js/bundle-make.js?egv=1757867883'></script></body>
+</html>

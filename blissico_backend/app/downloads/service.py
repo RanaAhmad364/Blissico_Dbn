@@ -81,72 +81,79 @@ class DownloadService:
 
     @staticmethod
     def get_downloadable_file(user_id, card_id, fmt="image"):
-            card = Card.query.filter_by(id=card_id, is_active=True).first()
-            if not card:
-                return {"success": False, "message": "Card not found."}, 404
-    
-            if not card.is_free and not DownloadService._has_paid_for(user_id, card_id):
-                return {"success": False, "message": "You need to purchase this card before downloading it."}, 403
-    
-            safe_title = "".join(c for c in card.title if c.isalnum() or c in (" ", "-", "_")).strip() or "card"
-            customization = CardCustomization.query.filter_by(user_id=user_id, card_id=card_id, is_default=False).first()
-    
-                # --- GIF: a fully separate path — no compositing, no fallthrough ---
-            if fmt == "gif":
-                if not card.animated_gif:
-                    return {"success": False, "message": "No animated version exists for this card yet."}, 404
-                gif_relative = card.animated_gif.replace("/static/", "", 1)
-                gif_disk_path = os.path.join(current_app.root_path, "static", gif_relative)
-                if not os.path.exists(gif_disk_path):
-                    return {"success": False, "message": "The animated file is missing on the server."}, 404
-    
-                with open(gif_disk_path, "rb") as f:
-                    out_bytes = f.read()
-                filename = f"{safe_title}.gif"
-                mimetype = "image/gif"
-    
-                db.session.add(Download(user_id=user_id, card_id=card_id, downloaded_at=datetime.utcnow(), file_path=card.animated_gif))
-                db.session.commit()
-                return out_bytes, filename, mimetype   # ← the missing piece
-    
-                # --- Image / PDF path (unchanged logic, just now unreachable for fmt="gif") ---
-                file_path = card.thumbnail
-            if card.templates:
-                    file_path = card.templates[0].preview_image
-            if not file_path:
-                    return {"success": False, "message": "No downloadable file exists for this card yet."}, 404
-    
-            relative = file_path.replace("/static/", "", 1)
-            disk_path = os.path.join(current_app.root_path, "static", relative)
-            if not os.path.exists(disk_path):
-                return {"success": False, "message": "The file for this card is missing on the server."}, 404
-    
-            if customization:
-                rendered = RenderService.render(disk_path, customization)
-                buf = io.BytesIO()
-                rendered.convert("RGB").save(buf, format="JPEG", quality=92)
-                raw_bytes = buf.getvalue()
+        card = Card.query.filter_by(id=card_id, is_active=True).first()
+        if not card:
+            return {"success": False, "message": "Card not found."}, 404
+
+        if not card.is_free and not DownloadService._has_paid_for(user_id, card_id):
+            return {"success": False, "message": "You need to purchase this card before downloading it."}, 403
+
+        safe_title = "".join(c for c in card.title if c.isalnum() or c in (" ", "-", "_")).strip() or "card"
+        customization = CardCustomization.query.filter_by(user_id=user_id, card_id=card_id, is_default=False).first()
+
+        # --- GIF: a fully separate path — no compositing, no fallthrough ---
+        if fmt == "gif":
+            if not card.animated_gif:
+                return {"success": False, "message": "No animated version exists for this card yet."}, 404
+            clean_path = card.animated_gif.lstrip("/")
+            if clean_path.startswith("static/"):
+                gif_relative = clean_path.replace("static/", "", 1)
             else:
-                with open(disk_path, "rb") as f:
-                    raw_bytes = f.read()
-    
-            if fmt == "pdf":
-                import img2pdf
-                try:
-                    out_bytes = img2pdf.convert(raw_bytes)
-                except Exception:
-                    return {"success": False, "message": "Could not generate a PDF for this card."}, 500
-                filename = f"{safe_title}.pdf"
-                mimetype = "application/pdf"
-            else:
-                out_bytes = raw_bytes
-                filename = f"{safe_title}.jpg"
-                mimetype = "image/jpeg"
-    
-            db.session.add(Download(user_id=user_id, card_id=card_id, downloaded_at=datetime.utcnow(), file_path=file_path))
+                gif_relative = clean_path
+
+            gif_disk_path = os.path.join(current_app.root_path, "static", gif_relative)
+           
+            if not os.path.exists(gif_disk_path):
+                return {"success": False, "message": "The animated file is missing on the server."}, 404
+
+            with open(gif_disk_path, "rb") as f:
+                out_bytes = f.read()
+            filename = f"{safe_title}.gif"
+            mimetype = "image/gif"
+
+            db.session.add(Download(user_id=user_id, card_id=card_id, downloaded_at=datetime.utcnow(), file_path=card.animated_gif))
             db.session.commit()
-            return out_bytes, filename, mimetype
-          
+            return out_bytes, filename, mimetype 
+
+        # --- Image / PDF path ---
+        # Un-indented below so it actually runs when fmt is not "gif"
+        file_path = card.thumbnail
+        if card.templates:
+            file_path = card.templates[0].preview_image
+            
+        if not file_path:
+            return {"success": False, "message": "No downloadable file exists for this card yet."}, 404
+
+        relative = file_path.replace("/static/", "", 1)
+        disk_path = os.path.join(current_app.root_path, "static", relative)
+        if not os.path.exists(disk_path):
+            return {"success": False, "message": "The file for this card is missing on the server."}, 404
+
+        if customization:
+            rendered = RenderService.render(disk_path, customization)
+            buf = io.BytesIO()
+            rendered.convert("RGB").save(buf, format="JPEG", quality=92)
+            raw_bytes = buf.getvalue()
+        else:
+            with open(disk_path, "rb") as f:
+                raw_bytes = f.read()
+
+        if fmt == "pdf":
+            import img2pdf
+            try:
+                out_bytes = img2pdf.convert(raw_bytes)
+            except Exception:
+                return {"success": False, "message": "Could not generate a PDF for this card."}, 500
+            filename = f"{safe_title}.pdf"
+            mimetype = "application/pdf"
+        else:
+            out_bytes = raw_bytes
+            filename = f"{safe_title}.jpg"
+            mimetype = "image/jpeg"
+
+        db.session.add(Download(user_id=user_id, card_id=card_id, downloaded_at=datetime.utcnow(), file_path=file_path))
+        db.session.commit()
+        return out_bytes, filename, mimetype
 
 
     @staticmethod
