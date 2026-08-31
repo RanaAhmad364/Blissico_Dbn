@@ -66,7 +66,7 @@ class RenderService:
         return path if os.path.exists(path) else None
 
     @staticmethod
-    def _load_font(font_family, bold, size):
+    def _load_font(font_family, bold=False,italic=False, size=16):
         path = RenderService._font_path(font_family, bold)
         try:
             return ImageFont.truetype(path, size) if path else ImageFont.load_default()
@@ -139,7 +139,6 @@ class RenderService:
     #             draw.line([(x, underline_y), (x + line_w, underline_y)], fill=color, width=max(1, scaled_font_size // 20))
 
     #     return base
-
     @staticmethod
     def _draw_text_on_frame(base, customization):
         """Composites the saved customization onto ONE already-open Pillow image (a single frame)."""
@@ -147,12 +146,16 @@ class RenderService:
         draw = ImageDraw.Draw(base)
         img_w, img_h = base.size
 
-        scale = img_w / RenderService.EDITOR_CANVAS_WIDTH
+        # Fallback to 800 if EDITOR_CANVAS_WIDTH isn't set on the class
+        canvas_width = getattr(RenderService, "EDITOR_CANVAS_WIDTH", 800)
+        text_max_width = getattr(RenderService, "EDITOR_TEXT_MAX_WIDTH", canvas_width * 0.8)
+
+        scale = img_w / canvas_width
         scaled_font_size = max(1, round(customization.font_size * scale))
         font = RenderService._load_font(customization.font_family, customization.bold, customization.italic, scaled_font_size)
 
         text = customization.greeting_text or ""
-        max_width = RenderService.EDITOR_TEXT_MAX_WIDTH * scale
+        max_width = text_max_width * scale
         lines = RenderService._wrap_text(draw, text, font, max_width)
 
         line_height = int(scaled_font_size * (customization.line_height or 1.2))
