@@ -165,7 +165,7 @@ class CardTemplate(BaseModel):
 class CardCustomization(BaseModel):
     __tablename__ = "card_customizations"
 
-    user_id = db.Column(db.Integer,db.ForeignKey("users.id"),nullable=False)
+    user_id = db.Column(db.Integer,db.ForeignKey("users.id"),nullable=True)
     card_id = db.Column(db.Integer,db.ForeignKey("cards.id"),nullable=False)
     is_default = db.Column(db.Boolean,default=False,nullable=False)
     greeting_text = db.Column(db.Text,nullable=False)

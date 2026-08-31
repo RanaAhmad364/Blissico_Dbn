@@ -10,12 +10,13 @@ import Marquee from '../components/Marquee';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import CardDesignOverlay from '../components/customize/CardDesignOverlay';
+import { downloadCardFile, checkOwnership } from '../api/downloads';
 import './ProductDetail.css';
 
 
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
-import { downloadCardFile } from '../api/downloads';
+
 
 
 
@@ -29,6 +30,7 @@ const ProductDetail = () => {
   const { addToCart } = useCart();
   const navigate = useNavigate(); 
   const [downloadError, setDownloadError] = useState('');
+  const [isPurchased, setIsPurchased] = useState(false);
 
   // Fetch the main product whenever the URL id changes
   useEffect(() => {
@@ -39,6 +41,13 @@ const ProductDetail = () => {
       .catch(() => setProduct(null))
       .finally(() => setLoading(false));
   }, [id]);
+  useEffect(() => {
+    if (!user || !product) {
+      setIsPurchased(false);
+      return;
+    }
+    checkOwnership(product.id).then((r) => setIsPurchased(r.is_purchased)).catch(() => {});
+  }, [user, product]);
 
   // Fetch "You May Also Like" products once we have the main product
   useEffect(() => {
@@ -46,6 +55,7 @@ const ProductDetail = () => {
       setRelatedProducts([]);
       return;
     }
+  
 
     let cancelled = false;
 
@@ -177,15 +187,21 @@ const ProductDetail = () => {
           )}
 
           {/* ✅ Dono buttons ek hi div mein wrap kiye */}
-<div className="detail-action-buttons">
-  <Link to={`/customize/${product.id}`} className="detail-customize-btn">
-    Customize
-  </Link>
+          <div className="detail-action-buttons">
+            <Link to={`/customize/${product.id}`} className="detail-customize-btn">
+              Customize
+            </Link>
 
-  <button type="button" className="detail-addcart-btn" onClick={handleAddToCart}>
-    Add to Cart
-  </button>
-</div>
+            {isPurchased ? (
+              <span className="detail-addcart-btn" style={{ background: '#e5e0f7', color: '#6d28d9', cursor: 'default' }}>
+                ✓ Already Purchased
+              </span>
+            ) : (
+              <button type="button" className="detail-addcart-btn" onClick={handleAddToCart}>
+                Add to Cart
+              </button>
+            )}
+          </div>
 
           <div className="detail-share-text">Share Love. Celebrate Life.</div>
 

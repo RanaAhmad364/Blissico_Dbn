@@ -124,6 +124,12 @@ const resendPasswordResetOTP = async (email) => {
     navigate('/login');
   };
 
+// Delete Account 
+  const deleteAccount = async () => {
+  await api.delete('/api/auth/account');
+  logout();
+};
+
 
   return (
      <AuthContext.Provider value={{ user, loading, login, register, verifyOTP, resendOTP, resendPasswordResetOTP, logout, forgotPassword, resetPassword, updateUser }}>

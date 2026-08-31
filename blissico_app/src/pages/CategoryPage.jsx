@@ -9,6 +9,7 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import CardDesignOverlay from '../components/customize/CardDesignOverlay';
 import { getCards, assetUrl } from '../api/catalog';
+import { checkOwnership } from '../api/downloads';
 import './CategoryPage.css';
 
 // Maps the URL's first segment to the query param the backend expects
@@ -29,6 +30,7 @@ const CategoryPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const itemsPerPage = 12; // ✅ 12 items per page (4 rows of 3)
+  const [purchasedIds, setPurchasedIds] = useState(new Set());
 
   const sortParam = useMemo(() => {
     if (sortBy === 'priceLowHigh') return 'price_low_high';
@@ -54,6 +56,8 @@ const CategoryPage = () => {
     setLoading(true);
     setError('');
 
+ 
+
     const params = { [filterKey]: slug, sort: sortParam, page: currentPage, per_page: itemsPerPage };
     if (filterBy !== 'all') {
       params.style = filterBy;
@@ -67,6 +71,20 @@ const CategoryPage = () => {
       .catch(() => setError('Could not load cards. Please try again.'))
       .finally(() => setLoading(false));
   }, [category, slug, sortParam, currentPage, filterBy]);
+
+     useEffect(() => {
+    if (!user || cards.length === 0) {
+      setPurchasedIds(new Set());
+      return;
+    }
+    Promise.all(
+      cards.map((c) =>
+        checkOwnership(c.id)
+          .then((r) => (r.is_purchased ? c.id : null))
+          .catch(() => null)
+      )
+    ).then((results) => setPurchasedIds(new Set(results.filter((id) => id !== null))));
+  }, [cards, user]);
 
   const toggleFavourite = async (e, productId) => {
     e.preventDefault();
@@ -273,13 +291,22 @@ const CategoryPage = () => {
                       <span className="product-price">
                         {product.is_free ? 'Free' : `$${product.price.toFixed(2)}`}
                       </span>
-                      <button
-                        type="button"
-                        className="add-to-cart-card-btn"
-                        onClick={(e) => handleAddToCart(e, product)}
-                      >
-                        Add to Cart
-                      </button>
+                      {purchasedIds.has(product.id) ? (
+                        <span
+                          className="add-to-cart-card-btn"
+                          style={{ background: '#e5e0f7', color: '#6d28d9', cursor: 'default', display: 'inline-block', textAlign: 'center' }}
+                        >
+                          ✓ Already Purchased
+                        </span>
+                      ) : (
+                        <button
+                          type="button"
+                          className="add-to-cart-card-btn"
+                          onClick={(e) => handleAddToCart(e, product)}
+                        >
+                          Add to Cart
+                        </button>
+                      )}
                     </div>
                   </div>
                 </Link>

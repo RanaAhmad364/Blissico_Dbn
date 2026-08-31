@@ -78,6 +78,7 @@ const Customize = () => {
 
     Promise.all([getCard(cardId), getCustomization(cardId), checkOwnership(cardId)])
       .then(([cardData, custom, ownership]) => {
+        const savedDesign = custom?.id ? custom : cardData.default_design; 
         setCard(cardData);
         setIsPurchased(ownership.is_purchased);
         setGreetingText(savedDesign?.greeting_text || '');

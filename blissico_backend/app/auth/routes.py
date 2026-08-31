@@ -4,6 +4,7 @@ from app.auth.validators import AuthValidator,ValidationError
 from flask_jwt_extended import jwt_required, get_jwt_identity, create_access_token
 
 
+
 auth_bp = Blueprint("auth",__name__,url_prefix="/api/auth")
 
 
@@ -232,4 +233,14 @@ def refresh():
         "message": "Session extended.",
         "data": {"access_token": new_access_token}
     }), 200
+
+
+
+
+@auth_bp.delete("/account")
+@jwt_required()
+def delete_account():
+    user_id = int(get_jwt_identity())
+    response, status = AuthService.delete_account(user_id)
+    return jsonify(response), status
 

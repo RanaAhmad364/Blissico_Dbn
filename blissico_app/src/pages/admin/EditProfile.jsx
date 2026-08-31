@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 import AdminLayout from '../../components/admin/AdminLayout';
 import { getMyProfile, updateMyProfile, uploadProfilePicture, removeProfilePicture } from '../../api/profile';
 import { assetUrl } from '../../api/catalog';
@@ -9,6 +10,8 @@ import './EditProfile.css';
 const EditProfile = () => {
   const { updateUser } = useAuth();
   const fileInputRef = useRef(null);
+  const { deleteAccount } = useAuth();
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({ first_name: '', last_name: '', email: '' });
   const [picture, setPicture] = useState(null);
@@ -72,6 +75,16 @@ const EditProfile = () => {
     }
   };
 
+
+  const handleDeleteAccount = async () => {
+  if (!window.confirm('Are you sure you want to delete your account? This cannot be undone.')) return;
+  try {
+    await deleteAccount();
+    navigate('/');
+  } catch (err) {
+    setMessage({ type: 'error', text: err.response?.data?.message || 'Could not delete account.' });
+  }
+};
   if (fetching) {
     return (
       <AdminLayout>
@@ -142,6 +155,11 @@ const EditProfile = () => {
               <div className="form-actions">
                 <button type="submit" className="save-btn" disabled={loading}>
                   {loading ? <><span className="spinner"></span> Saving...</> : <><FiSave size={18} /> Save Changes</>}
+                </button>
+              </div>
+              <div className="form-actions">
+                <button type="button" onClick={handleDeleteAccount} style={{ marginTop: 20, color: '#c0392b', background: 'none', border: '1px solid #c0392b', borderRadius: 6, padding: '8px 16px', cursor: 'pointer' }}>
+                  Delete My Account
                 </button>
               </div>
             </div>

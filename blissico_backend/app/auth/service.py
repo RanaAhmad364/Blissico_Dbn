@@ -628,3 +628,20 @@ class AuthService:
                 "Verification OTP sent successfully."
             )
         }, 200
+
+ # Delete Account
+
+    @staticmethod
+    def delete_account(user_id):
+        user = User.query.get(user_id)
+        if not user:
+            return {"success": False, "message": "User not found."}, 404
+
+        user.is_active = False
+        user.email = f"deleted_user_{user.id}@blissico.deleted"
+        user.first_name = "Deleted"
+        user.last_name = "User"
+        user.profile_picture = None
+        db.session.commit()
+
+        return {"success": True, "message": "Your account has been deleted."}, 200
