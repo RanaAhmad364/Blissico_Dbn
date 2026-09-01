@@ -7,8 +7,8 @@ blissico_backend/logs/
 blissico_backend/.pytest_cache/
 
 # React
-blissico_app/node_modules/
-blissico_app/dist/
+# blissico_app/node_modules/
+# blissico_app/dist/
 blissico_app/.env
 
 # VS Code
