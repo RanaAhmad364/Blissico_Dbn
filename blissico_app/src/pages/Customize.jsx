@@ -55,6 +55,7 @@ const Customize = () => {
 
   const textRef = useRef(null);
   const cardStageRef = useRef(null); // the .canvas-card element — drag bounds
+  const colorInputRef = useRef(null);
   const dragWrapperRef = useRef(null);
   const dragStateRef = useRef({ startX: 0, startY: 0, moved: false });
   const [isPurchased, setIsPurchased] = useState(false);
@@ -299,9 +300,30 @@ const Customize = () => {
             <div className="tool-group row-group">
               <label>Text Color</label>
               <div className="color-input-wrap">
-                <div className="color-preview" style={{ backgroundColor: textColor }}></div>
-                <input type="text" value={textColor} onChange={(e) => setTextColor(e.target.value)} className="color-text-input" />
-                <input type="color" value={textColor} onChange={(e) => setTextColor(e.target.value)} className="color-picker-hidden" />
+                <div
+                  className="color-preview"
+                  style={{ backgroundColor: textColor, cursor: 'pointer' }}
+                  onClick={() => {
+                    try {
+                      colorInputRef.current?.showPicker();
+                    } catch {
+                      colorInputRef.current?.click();
+                    }
+                  }}
+                ></div>
+                <input
+                  type="text"
+                  value={textColor}
+                  onChange={(e) => setTextColor(e.target.value)}
+                  className="color-text-input"
+                />
+                <input
+                  ref={colorInputRef}
+                  type="color"
+                  value={textColor}
+                  onChange={(e) => setTextColor(e.target.value)}
+                  className="color-picker-hidden"
+                />
               </div>
             </div>
 

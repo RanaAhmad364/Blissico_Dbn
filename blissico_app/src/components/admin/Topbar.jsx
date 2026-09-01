@@ -131,10 +131,10 @@ const Topbar = ({ onMenuClick }) => {
       </div>
 
       <div className="topbar-right">
-        <div className="search-wrapper">
+        {/* <div className="search-wrapper">
           <FiSearch className="search-icon" />
           <input type="text" placeholder="Search anything..." className="search-input" />
-        </div>
+        </div> */}
 
         <div className="notification-wrapper">
           <button 

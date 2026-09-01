@@ -42,10 +42,10 @@ const UserSidebar = ({ isOpen, onClose }) => {
   const settingsMenu = [
     // { label: 'Addresses', path: '/user/addresses', icon: FiMapPin },
     // { label: 'Payment Methods', path: '/user/payments', icon: FiCreditCard },
-    { label: 'Account Settings', path: '/user/account-settings', icon: FiSettings },
+    // { label: 'Account Settings', path: '/user/account-settings', icon: FiSettings },
     { label: 'Notifications', path: '/user/notifications', icon: FiBell },
     // { label: 'Reviews', path: '/user/reviews', icon: FiStar },
-    { label: 'Support', path: '/user/support', icon: FiHeadphones },
+    // { label: 'Support', path: '/user/support', icon: FiHeadphones },
   ];
 
   const handleLogout = async () => {

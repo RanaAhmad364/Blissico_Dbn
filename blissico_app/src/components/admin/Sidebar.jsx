@@ -49,11 +49,11 @@ const Sidebar = ({ isOpen, onClose }) => {
     { label: 'Users', path: '/admin/users', icon: FiUsers },
     { label: 'Notifications', path: '/admin/notifications', icon: FiBell },
     { label: 'Contact Messages', path: '/admin/contact-messages', icon: FiMail },
-    { label: 'Support', path: '/admin/support', icon: FiHeadphones },
+    // { label: 'Support', path: '/admin/support', icon: FiHeadphones },
   ];
 
   const systemNav = [
-    { label: 'Settings', path: '/admin/settings', icon: FiSettings },
+    // { label: 'Settings', path: '/admin/settings', icon: FiSettings },
     // { label: 'Appearance', path: '/admin/appearance', icon: FiLayers },
     // { label: 'Activity Logs', path: '/admin/activity-logs', icon: FiActivity },
   ];
@@ -86,7 +86,7 @@ const Sidebar = ({ isOpen, onClose }) => {
     <>
       <aside className={`admin-sidebar ${isOpen ? 'open' : ''}`}>
         <div className="sidebar-brand">
-          <div className="brand-icon">✨</div>
+          <div className="brand-icon">B</div>
           <div className="brand-text">
             <span className="brand-name">blissico</span>
             <span className="brand-sub">Admin Dashboard</span>
@@ -108,12 +108,12 @@ const Sidebar = ({ isOpen, onClose }) => {
             ))}
           </div>
 
-          <div className="nav-section">
+          {/* <div className="nav-section">
             <span className="nav-section-title">System</span>
             {systemNav.map((item) => (
               <NavLink key={item.path} item={item} />
             ))}
-          </div>
+          </div> */}
         </nav>
 
         <div className="sidebar-footer">

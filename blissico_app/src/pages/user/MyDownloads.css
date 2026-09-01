@@ -1,0 +1,97 @@
+/* --- Downloads Page --- */
+.downloads-page {
+  padding: 24px 32px;
+}
+
+.downloads-page h1 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1e1b2e;
+  margin: 0 0 16px 0;
+}
+
+/* Loading & Empty States */
+.loading-state,
+.empty-state {
+  text-align: center;
+  padding: 40px;
+  color: #94a3b8;
+}
+
+/* Table Card */
+.downloads-table-card {
+  background: #fff;
+  border: 1px solid #f1f0f6;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+/* Table */
+.downloads-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.downloads-table thead tr {
+  background: #faf9fd;
+  border-bottom: 1px solid #f1f0f6;
+}
+
+.downloads-table th {
+  text-align: left;
+  font-size: 12px;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+  padding: 14px 20px;
+}
+
+.downloads-table td {
+  padding: 14px 20px;
+  font-size: 14px;
+  color: #1e1b2e;
+  border-bottom: 1px solid #f6f5fa;
+}
+
+.downloads-table tbody tr:hover {
+  background: #fdfaff;
+}
+
+/* Thumbnail */
+.thumb-cell {
+  width: 80px;
+}
+
+.download-thumb {
+  width: 56px;
+  height: 56px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* Card Title */
+.card-title-cell {
+  font-weight: 600;
+}
+
+/* Date */
+.date-cell {
+  color: #64748b;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .downloads-page {
+    padding: 16px;
+  }
+
+  .downloads-table th,
+  .downloads-table td {
+    padding: 10px 12px;
+  }
+
+  .download-thumb {
+    width: 44px;
+    height: 44px;
+  }
+}

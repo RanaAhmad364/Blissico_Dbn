@@ -18,6 +18,7 @@ const CardDesignEditor = ({ card, initialValues, onSave, saving = false }) => {
   const [validationError, setValidationError] = useState('');
   const textRef = useRef(null);
   const stageRef = useRef(null);
+  const colorInputRef = useRef(null); // NEW: lets the visible swatch open the native color picker
 
   useEffect(() => {
     const nextDesign = { ...defaults, ...(initialValues || {}) };
@@ -84,7 +85,35 @@ const CardDesignEditor = ({ card, initialValues, onSave, saving = false }) => {
           <div className="tool-group"><label>Font Style</label><select value={design.font_family} onChange={(e) => update('font_family', e.target.value)} className="custom-select"><option>Playfair Display</option><option>Poppins</option><option>Arial</option><option>Georgia</option></select></div>
           <div className="tool-group row-group"><label>Font Size</label><div className="slider-input-wrap"><input type="range" min="12" max="120" value={design.font_size} onChange={(e) => update('font_size', Number(e.target.value))} className="custom-slider" /><input type="number" value={design.font_size} onChange={(e) => update('font_size', Number(e.target.value))} className="small-input" /><span className="unit">px</span></div></div>
           <div className="tool-group formatting-group"><button className={`format-btn ${design.bold ? 'active' : ''}`} onClick={() => update('bold', !design.bold)}><FaBold /></button><button className={`format-btn ${design.italic ? 'active' : ''}`} onClick={() => update('italic', !design.italic)}><FaItalic /></button><button className={`format-btn ${design.underline ? 'active' : ''}`} onClick={() => update('underline', !design.underline)}><FaUnderline /></button></div>
-          <div className="tool-group row-group"><label>Text Color</label><div className="color-input-wrap"><div className="color-preview" style={{ backgroundColor: design.font_color }} /><input type="text" value={design.font_color} onChange={(e) => update('font_color', e.target.value)} className="color-text-input" /><input type="color" value={design.font_color} onChange={(e) => update('font_color', e.target.value)} className="color-picker-hidden" /></div></div>
+          <div className="tool-group row-group">
+            <label>Text Color</label>
+            <div className="color-input-wrap">
+              <div
+                className="color-preview"
+                style={{ backgroundColor: design.font_color, cursor: 'pointer' }}
+                onClick={() => {
+                  try {
+                    colorInputRef.current?.showPicker();
+                  } catch {
+                    colorInputRef.current?.click();
+                  }
+                }}
+              />
+              <input
+                type="text"
+                value={design.font_color}
+                onChange={(e) => update('font_color', e.target.value)}
+                className="color-text-input"
+              />
+              <input
+                ref={colorInputRef}
+                type="color"
+                value={design.font_color}
+                onChange={(e) => update('font_color', e.target.value)}
+                className="color-picker-hidden"
+              />
+            </div>
+          </div>
           <div className="tool-group"><label>Alignment</label><div className="align-group"><button className={`align-btn ${design.alignment === 'left' ? 'active' : ''}`} onClick={() => update('alignment', 'left')}><FaAlignLeft /></button><button className={`align-btn ${design.alignment === 'center' ? 'active' : ''}`} onClick={() => update('alignment', 'center')}><FaAlignCenter /></button><button className={`align-btn ${design.alignment === 'right' ? 'active' : ''}`} onClick={() => update('alignment', 'right')}><FaAlignRight /></button></div></div>
           <div className="tool-group row-group"><label>Letter Spacing</label><div className="slider-input-wrap"><input type="range" min="-5" max="20" value={design.letter_spacing} onChange={(e) => update('letter_spacing', Number(e.target.value))} className="custom-slider" /><input type="number" value={design.letter_spacing} onChange={(e) => update('letter_spacing', Number(e.target.value))} className="small-input" /><span className="unit">px</span></div></div>
           <div className="tool-group row-group"><label>Line Height</label><div className="slider-input-wrap"><input type="range" min="1" max="3" step="0.1" value={design.line_height} onChange={(e) => update('line_height', Number(e.target.value))} className="custom-slider" /><input type="number" step="0.1" value={design.line_height} onChange={(e) => update('line_height', Number(e.target.value))} className="small-input" /></div></div>
@@ -121,12 +150,3 @@ const CardDesignEditor = ({ card, initialValues, onSave, saving = false }) => {
 };
 
 export default CardDesignEditor;
-
-
-
-
-
-
-
-
-

@@ -121,10 +121,10 @@ const UserTopbar = ({ onMenuClick }) => {
       {/* Right - Icons + Profile */}
       <div className="user-topbar-right">
         {/* Search */}
-        <div className="user-search-wrapper">
-          <FiSearch className="user-search-icon" />
-          <input type="text" placeholder="Search..." className="user-search-input" />
-        </div>
+          {/* <div className="user-search-wrapper">
+            <FiSearch className="user-search-icon" />
+            <input type="text" placeholder="Search..." className="user-search-input" />
+          </div> */}
 
         {/* ===== FAVORITES ICON (Real Data) ===== */}
         <div className="user-icon-dropdown-wrapper">
