@@ -1,0 +1,151 @@
+/* --- Cards Page --- */
+.cards-page {
+  background: #f8f9fa;
+  min-height: 100vh;
+}
+
+/* Hero Section */
+.cards-hero {
+  background: linear-gradient(135deg, #fce4ec, #f8bbd0);
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.cards-hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.8rem;
+  color: #1a1a1a;
+  margin: 0 0 10px;
+}
+
+.cards-hero p {
+  font-size: 1.1rem;
+  color: #555;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Container */
+.cards-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+/* Loading State */
+.cards-empty {
+  text-align: center;
+  padding: 60px;
+  color: #888;
+  font-size: 16px;
+}
+
+/* Category Grid */
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+/* Category Card */
+.category-card {
+  background: #ffffff;
+  border: 1px solid #f0f0f0;
+  border-radius: 12px;
+  padding: 20px;
+  transition: all 0.2s ease;
+}
+
+.category-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  border-color: #e27c9f;
+}
+
+.category-card-title {
+  display: block;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a1a1a;
+  text-decoration: none;
+  margin-bottom: 12px;
+}
+
+.category-card-title:hover {
+  color: #e27c9f;
+}
+
+/* Subcategories */
+.subcategories-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.subcategory-link {
+  font-size: 13px;
+  color: #666;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.subcategory-link:hover {
+  color: #e27c9f;
+}
+
+.view-all-sub {
+  font-size: 13px;
+  font-weight: 500;
+  color: #7c3aed;
+  text-decoration: none;
+}
+
+.view-all-sub:hover {
+  text-decoration: underline;
+}
+
+.no-subcategories {
+  font-size: 13px;
+  color: #999;
+  margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .categories-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .cards-hero h1 {
+    font-size: 2rem;
+  }
+
+  .cards-hero p {
+    font-size: 1rem;
+  }
+
+  .categories-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  .category-card {
+    padding: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .categories-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cards-hero {
+    padding: 40px 16px;
+  }
+
+  .cards-hero h1 {
+    font-size: 1.7rem;
+  }
+}
