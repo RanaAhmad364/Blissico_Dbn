@@ -321,13 +321,13 @@ const Navbar = () => {
               aria-label="Search"
             />
           )}
-          <button
+          {/* <button
             className="icon-btn search-icon-btn"
             aria-label={isSearchOpen ? 'Close search' : 'Open search'}
             onClick={() => (isSearchOpen ? closeSearch() : openSearch())}
           >
             {isSearchOpen ? <FaTimes className="icon" /> : <FaSearch className="icon" />}
-          </button>
+          </button> */}
         </div>
 
         <div className="icons">
