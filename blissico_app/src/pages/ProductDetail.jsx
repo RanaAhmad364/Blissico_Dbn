@@ -4,8 +4,7 @@ import { getCard, getCards, assetUrl } from '../api/catalog';
 
 import {
   FaRegFileImage, FaRegFilePdf, FaShareNodes,
-  FaChevronLeft, FaChevronRight,
-  FaWhatsapp, FaFacebookF, FaInstagram, FaLink
+  FaChevronLeft, FaChevronRight
 } from 'react-icons/fa6';
 import Marquee from '../components/Marquee';
 import Navbar from '../components/Navbar';
@@ -32,11 +31,6 @@ const ProductDetail = () => {
   const navigate = useNavigate(); 
   const [downloadError, setDownloadError] = useState('');
   const [isPurchased, setIsPurchased] = useState(false);
-
-  // Share menu state
-  const shareRef = useRef(null);
-  const [shareOpen, setShareOpen] = useState(false);
-  const [copied, setCopied] = useState(false);
 
   // Fetch the main product whenever the URL id changes
   useEffect(() => {
@@ -109,17 +103,6 @@ const ProductDetail = () => {
     };
   }, [product]);
 
-  // Close the share menu when clicking outside of it
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (shareRef.current && !shareRef.current.contains(e.target)) {
-        setShareOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
   if (loading) return <div style={{ padding: 80, textAlign: 'center' }}>Loading...</div>;
   if (!product) return <div style={{ padding: 80, textAlign: 'center' }}>Card not found.</div>;
 
@@ -159,32 +142,6 @@ const ProductDetail = () => {
     } catch (err) {
       setDownloadError(err.response?.data?.message || 'Could not download this card.');
     }
-  };
-
-  // Share handlers
-  const shareUrl = `${window.location.origin}/product/${product.id}`;
-  const shareText = product.title;
-
-  const handleCopyLink = async () => {
-    try {
-      await navigator.clipboard.writeText(shareUrl);
-    } catch {
-      // Fallback for browsers without Clipboard API support
-      const temp = document.createElement('input');
-      temp.value = shareUrl;
-      document.body.appendChild(temp);
-      temp.select();
-      document.execCommand('copy');
-      document.body.removeChild(temp);
-    }
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-
-  const handleInstagramShare = () => {
-    // Instagram has no public web share URL, so we copy the link
-    // and the user pastes it into their Story / bio / DM.
-    handleCopyLink();
   };
 
 
@@ -261,43 +218,9 @@ const ProductDetail = () => {
             <a href="#" onClick={(e) => { e.preventDefault(); handleDownload('pdf'); }} className="download-link">
               <FaRegFilePdf /> Download PDF
             </a>
-
-            <div className="detail-share-wrapper" ref={shareRef}>
-              <a
-                href="#share"
-                className="download-link"
-                onClick={(e) => { e.preventDefault(); setShareOpen((prev) => !prev); }}
-              >
-                <FaShareNodes /> Share
-              </a>
-
-              {shareOpen && (
-                <div className="share-menu">
-                  <a
-                    href={`https://wa.me/?text=${encodeURIComponent(`${shareText} ${shareUrl}`)}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="share-menu-item"
-                  >
-                    <FaWhatsapp /> WhatsApp
-                  </a>
-                  <a
-                    href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="share-menu-item"
-                  >
-                    <FaFacebookF /> Facebook
-                  </a>
-                  <button type="button" className="share-menu-item" onClick={handleInstagramShare}>
-                    <FaInstagram /> {copied ? 'Link Copied!' : 'Instagram'}
-                  </button>
-                  <button type="button" className="share-menu-item" onClick={handleCopyLink}>
-                    <FaLink /> {copied ? 'Link Copied!' : 'Copy Link'}
-                  </button>
-                </div>
-              )}
-            </div>
+            <a href="#share" className="download-link">
+              <FaShareNodes /> Share
+            </a>
           </div>
           {downloadError && (
             <div style={{ color: '#c0392b', marginTop: 8 }}>

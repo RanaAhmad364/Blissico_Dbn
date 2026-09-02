@@ -1,5 +1,4 @@
 import api from './axiosConfig';
-import { BASE_URL } from './axiosConfig';
 
 export const getCategories = () => api.get('/api/categories').then(r => r.data.data);
 export const getCollections = () => api.get('/api/collections').then(r => r.data.data);
@@ -11,7 +10,7 @@ export const getCards = (params = {}) =>
 export const getCard = (id) =>
   api.get(`/api/cards/${id}`).then(r => r.data.data);
 
-export const API_BASE = BASE_URL;
+export const API_BASE = 'http://127.0.0.1:5000';
 export const assetUrl = (path) => (path ? `${API_BASE}${path}` : path);
 
 
