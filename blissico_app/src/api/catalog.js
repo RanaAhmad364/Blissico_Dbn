@@ -10,7 +10,7 @@ export const getCards = (params = {}) =>
 export const getCard = (id) =>
   api.get(`/api/cards/${id}`).then(r => r.data.data);
 
-export const API_BASE = 'https://blissico-dbn.onrender.com';
+// export const API_BASE = 'https://blissico-dbn.onrender.com';
 export const assetUrl = (path) => (path ? `${API_BASE}${path}` : path);
 
 
