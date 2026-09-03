@@ -1,10 +1,11 @@
 import axios from 'axios';
+import { API_BASE } from './Catalog';
 
 // export const BASE_URL = 'http://127.0.0.1:5000';
 export const BASE_URL = 'https://blissico-dbn.onrender.com';
 
 const api = axios.create({
-  baseURL: BASE_URL,
+  baseURL: API_BASE,
   headers: { 'Content-Type': 'application/json' }
 });
 
