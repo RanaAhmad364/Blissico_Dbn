@@ -37,3 +37,5 @@ Werkzeug==3.1.8
 WTForms==3.2.2
 img2pdf==0.5.1
 Pillow==10.4.0
+requests==2.32.3
+gunicorn==23.0.0
