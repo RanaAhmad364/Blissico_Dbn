@@ -1,7 +1,7 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import api from '../api/axiosConfig';
 import axios from 'axios';
-import { BASE_URL, registerSessionExpiredHandler } from '../api/axiosConfig';
+import { API_BASE, registerSessionExpiredHandler } from '../api/axiosConfig';
 import { useNavigate } from 'react-router-dom';
 
 const AuthContext = createContext();
@@ -108,7 +108,7 @@ const resendPasswordResetOTP = async (email) => {
       return;
     }
     try {
-      const res = await axios.post(`${BASE_URL}/api/auth/refresh`, {}, {
+      const res = await axios.post(`${API_BASE}/api/auth/refresh`, {}, {
         headers: { Authorization: `Bearer ${refreshToken}` },
       });
       localStorage.setItem('blissico_token', res.data.data.access_token);
