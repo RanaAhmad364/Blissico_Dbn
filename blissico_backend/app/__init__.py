@@ -72,7 +72,6 @@ def create_app(config_class=Config):
     login_manager.init_app(app)
     mail.init_app(app)
     jwt.init_app(app)
-    cor.init_app(app, resources={r"/api/*": {"origins": "*"}})
     cor.init_app(app, resources={r"/api/*": {"origins": "*"}}, expose_headers=["Content-Disposition"])
     migrate.init_app(app,db)
     ensure_notification_schema(app)
