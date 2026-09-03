@@ -1,4 +1,4 @@
-import api from './axiosConfig';
+import api, {API_BASE} from './axiosConfig';
 
 export const getCategories = () => api.get('/api/categories').then(r => r.data.data);
 export const getCollections = () => api.get('/api/collections').then(r => r.data.data);
