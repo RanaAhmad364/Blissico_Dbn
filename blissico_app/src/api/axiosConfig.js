@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { API_BASE } from './Catalog';
+import { API_BASE } from '../catalog';
 
 // export const BASE_URL = 'http://127.0.0.1:5000';
 export const BASE_URL = 'https://blissico-dbn.onrender.com';

@@ -8,11 +8,6 @@ import {
   getAnalyticsOverview, getMostDownloaded, getTopSelling, getMostFavorited,
   getRevenueSeries, getDownloadSeries,
 } from '../../api/admin';
-// import {
-//   getUsers, getAdminCards, getCategories, getCollections, getOccasions,
-//   getAnalyticsOverview, getMostDownloaded, getTopSelling, getMostFavorited,
-//   getRevenueSeries, getDownloadSeries,
-// } from '../../api/admin';
 import { assetUrl } from '../../api/catalog';
 import './AdminDashboard.css';
 
