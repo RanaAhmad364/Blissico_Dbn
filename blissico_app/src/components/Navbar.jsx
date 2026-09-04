@@ -24,9 +24,9 @@ const buildCardsDropdown = (cardCategories) => ({
         : [{ label: `Shop ${cat.name}`, path: `/cards/${cat.slug}` }],
   })),
   image: {
-    src: 'https://via.placeholder.com/200x280/666666/ffffff?text=Best+Sellers',
-    alt: 'Best Sellers',
-    label: 'Best Sellers',
+    // src: 'https://via.placeholder.com/200x280/666666/ffffff?text=Best+Sellers',
+    // alt: 'Best Sellers',
+    // label: 'Best Sellers',
   },
 });
 
@@ -40,9 +40,9 @@ const buildOccasionsDropdown = (occasionCategories) => ({
         : [{ label: `Shop ${occ.name}`, path: `/occasions/${occ.slug}` }],
   })),
   image: {
-    src: 'https://via.placeholder.com/200x280/666666/ffffff?text=Best+Sellers',
-    alt: 'Best Sellers',
-    label: 'Best Sellers',
+    // src: 'https://via.placeholder.com/200x280/666666/ffffff?text=Best+Sellers',
+    // alt: 'Best Sellers',
+    // label: 'Best Sellers',
   },
 });
 
@@ -56,9 +56,9 @@ const buildCollectionsDropdown = (collectionCategories) => ({
         : [{ label: `Shop ${col.name}`, path: `/collections/${col.slug}` }],
   })),
   image: {
-    src: 'https://via.placeholder.com/200x280/666666/ffffff?text=Best+Sellers',
-    alt: 'Best Sellers',
-    label: 'Best Sellers',
+    // src: 'https://via.placeholder.com/200x280/666666/ffffff?text=Best+Sellers',
+    // alt: 'Best Sellers',
+    // label: 'Best Sellers',
   },
 });
 
@@ -321,13 +321,13 @@ const Navbar = () => {
               aria-label="Search"
             />
           )}
-          <button
+          {/* <button
             className="icon-btn search-icon-btn"
             aria-label={isSearchOpen ? 'Close search' : 'Open search'}
             onClick={() => (isSearchOpen ? closeSearch() : openSearch())}
           >
             {isSearchOpen ? <FaTimes className="icon" /> : <FaSearch className="icon" />}
-          </button>
+          </button> */}
         </div>
 
         <div className="icons">
@@ -386,10 +386,10 @@ const Navbar = () => {
           </button>
         </div>
 
-        <div className="mobile-search-wrapper">
+        {/* <div className="mobile-search-wrapper">
           <FaSearch className="icon mobile-search-icon" />
           <input type="text" className="mobile-search-input" placeholder="Search designs..." aria-label="Search" />
-        </div>
+        </div> */}
 
         <ul className="mobile-nav-links">
           {navItems.map((item) => (

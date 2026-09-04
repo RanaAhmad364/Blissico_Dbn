@@ -21,7 +21,7 @@ const Cards = () => {
         <p>Select a category to browse.</p>
       </section>
 
-      <div style={{ padding: '20px 40px', display: 'flex', flexDirection: 'column', gap: '28px' }}>
+      {/* <div style={{ padding: '20px 40px', display: 'flex', flexDirection: 'column', gap: '28px' }}>
         {categories.map((cat) => (
           <div key={cat.id}>
             <Link to={`/cards/${cat.slug}`} className="product-card-link" style={{ fontSize: '1.1rem', fontWeight: 600 }}>
@@ -39,7 +39,7 @@ const Cards = () => {
             )}
           </div>
         ))}
-      </div>
+      </div> */}
 
       <Footer />
     </div>
