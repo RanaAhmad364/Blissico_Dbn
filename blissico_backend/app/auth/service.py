@@ -5,6 +5,9 @@ from app.utils.otp_services import OTPService
 from app.utils.email_services import EmailService
 from app.utils.jwt_services import JWTService
 from app import db
+import logging
+
+logger=logging.getLogger(__name__)
 
 
 class AuthService:
@@ -111,7 +114,9 @@ class AuthService:
                 otp=otp
             )
 
-        except Exception:
+        except Exception as e:
+            logger.error(f"Failed to sent OTP email to {user.email}:{e}",exc_info=True)
+            
             db.session.rollback()
 
             return {
@@ -378,14 +383,14 @@ class AuthService:
                 otp=otp
             )
 
-        except Exception:
+        except Exception as e:
+            logger.error(f"Failed to sent OTP email to {user.email}:{e}",exc_info=True)
+                    
             db.session.rollback()
-
+        
             return {
                 "success": False,
-                "message": (
-                    "Unable to send password reset email."
-                )
+                "message": "Unable to send password reset email."
             }, 500
 
         return {
@@ -464,15 +469,10 @@ class AuthService:
                 otp=otp
             )
 
-        except Exception:
+        except Exception as e:
+            logger.error(f"Failed to send OTP email to {user.email}:{e}",exc_info=True)
             db.session.rollback()
-
-            return {
-                "success": False,
-                "message": (
-                    "Unable to send password reset email."
-                )
-            }, 500
+            return {"success":False,"message":"Unable to send password reset email."},500
 
         return {
             "success": True,
