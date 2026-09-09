@@ -23,7 +23,7 @@ const Hero = () => {
     >
       <div className="slider-container" style={{ transform: `translateX(-${currentSlide * 100}vw)` }}>
         {slides.map((slide) => (
-          <div key={slide.id} className="slide" style={{ justifyContent: 'flex-start', textAlign: 'left', paddingLeft: '10%' }}>
+          <div key={slide.id} className="slide" >
             <div className="slide-content" style={{ maxWidth: '550px', margin: 0 }}>
               <h1>{slide.title}</h1>
               <p>{slide.desc}</p>

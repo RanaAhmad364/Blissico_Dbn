@@ -43,7 +43,7 @@
 }
 
 .auth-header h2 {
-  font-family: 'Playfair Display', serif;
+  font-family: 'SaolDisplay', serif;
   font-size: 2.4rem;
   color: #1a1a1a;
   margin-bottom: 8px;
@@ -51,7 +51,7 @@
 }
 
 .auth-header p {
-  font-family: 'Poppins', sans-serif;
+  font-family: 'NeueMontreal', sans-serif;
   color: #666;
   font-size: 0.95rem;
 }
@@ -70,7 +70,7 @@
 }
 
 .form-group label {
-  font-family: 'Poppins', sans-serif;
+  font-family: 'NeueMontreal', sans-serif;
   font-size: 0.85rem;
   font-weight: 500;
   color: #1a1a1a;
@@ -82,7 +82,7 @@
   padding: 14px 16px;
   border: 1px solid #e5e5e5;
   border-radius: 10px;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'NeueMontreal', sans-serif;
   font-size: 0.95rem;
   outline: none;
   transition: all 0.3s ease;
@@ -90,7 +90,7 @@
 }
 
 .form-group input:focus {
-  border-color: #e27c9f;
+  border-color: #e83caa;
   background: #ffffff;
   box-shadow: 0 0 0 4px rgba(226, 124, 159, 0.1);
 }
@@ -104,7 +104,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'NeueMontreal', sans-serif;
   font-size: 0.85rem;
   color: #555;
   cursor: pointer;
@@ -113,19 +113,19 @@
 .checkbox-label input[type="checkbox"] {
   width: 18px;
   height: 18px;
-  accent-color: #e27c9f;
+  accent-color: #e83caa;
   cursor: pointer;
 }
 
 /* --- BUTTONS --- */
 .auth-btn {
   width: 100%;
-  background: #e27c9f;
+  background: #e83caa;
   color: white;
   border: none;
   padding: 16px;
   border-radius: 12px;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'NeueMontreal', sans-serif;
   font-size: 1rem;
   font-weight: 500;
   cursor: pointer;
@@ -135,7 +135,7 @@
 
 .auth-btn:hover {
   transform: translateY(-2px);
-  background: #cf6f8d;
+  background: #e83caa;
   box-shadow: 0 8px 25px rgba(226, 124, 159, 0.4);
 }
 
@@ -154,7 +154,7 @@
   border-radius: 10px;
   margin-bottom: 20px;
   font-size: 0.9rem;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'NeueMontreal', sans-serif;
 }
 
 .auth-success {
@@ -165,27 +165,27 @@
   border-radius: 10px;
   margin-bottom: 20px;
   font-size: 0.9rem;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'NeueMontreal', sans-serif;
 }
 
 /* --- FOOTER --- */
 .auth-footer {
   margin-top: 25px;
   text-align: center;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'NeueMontreal', sans-serif;
   font-size: 0.9rem;
   color: #666;
 }
 
 .auth-link {
-  color: #e27c9f;
+  color: #e83caa;
   text-decoration: none;
   font-weight: 500;
   transition: color 0.3s;
 }
 
 .auth-link:hover {
-  color: #cf6f8d;
+  color: #e83caa;
   text-decoration: underline;
 }
 
@@ -237,5 +237,5 @@
 }
 
 .password-toggle-btn:hover {
-  color: #e27c9f;
+  color: #e83caa;
 }

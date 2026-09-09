@@ -1,6 +1,6 @@
 /* --- Footer Base Styles --- */
 .footer {
-  background: #1f1f1f;
+  background: #3d3d3d;
   color: #e0e0e0;
   padding: 60px 5% 30px;
 }
@@ -26,7 +26,7 @@
 }
 
 .footer-logo-img {
-  height: 75px;
+  height: 80px;
   width: auto;
   object-fit: contain;
   display: block;
@@ -35,12 +35,12 @@
 /* --- Social Icons --- */
 .social-icons {
   display: flex;
-  gap: 12px;
+  /* gap: 12px; */
   margin-bottom: 20px;
 }
 
 .s-icon-img {
-  width: 50px;
+  width: 60px;
   height: 100%;
   object-fit: contain;
   cursor: pointer;
@@ -83,7 +83,7 @@
 }
 
 .footer-col ul li a:hover {
-  color: #e27c9f;
+  color: #e83caa;
 }
 
 /* --- Newsletter Column --- */
@@ -113,7 +113,7 @@
   background: white;
   color: #333;
   outline: none;
-  font-family: 'SaolDisplay', 'Playfair Display', serif;
+  font-family: 'SaolDisplay', 'SaolDisplay', serif;
 }
 
 .subscribe-box input::placeholder {
@@ -122,7 +122,7 @@
 
 .subscribe-box button {
   border: none;
-  background: #e27c9f;
+  background: #e83caa;
   color: white;
   padding: 0 20px;
   cursor: pointer;
@@ -131,7 +131,7 @@
 }
 
 .subscribe-box button:hover {
-  background: #c86a89;
+  background: #efb1db;
 }
 
 
@@ -148,7 +148,7 @@
 /* ========================================================== */
 /* BREAKPOINT 2: MOBILE (425px and below) - 2f & 1f Layout   */
 /* ========================================================== */
-@media (max-width: 425px) {
+@media (max-width: 625px) {
   .footer {
     padding: 40px 20px;
   }

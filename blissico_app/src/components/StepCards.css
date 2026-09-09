@@ -2,7 +2,7 @@
 .card { flex: 1; max-width: 300px; padding: 20px; display: flex; flex-direction: column; align-items: center; background: transparent; }
 .card-icon { font-size: 2.5rem; margin-bottom: 15px; color: #333; }
 .card h3 { font-size: 1.2rem; margin-bottom: 10px; font-weight: 500; }
-.card p { font-size: 0.9rem; color: #666; line-height: 1.5; }
+.card p { font-size: 1.23rem; color: #666; line-height: 1.5; }
 /* Update your existing .card-icon styles */
 .card-icon {
   display: flex; /* Ensures the image centers perfectly */

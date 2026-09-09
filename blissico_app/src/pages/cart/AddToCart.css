@@ -3,7 +3,7 @@
   background: #f8f9fa;
   min-height: 100vh;
   padding-bottom: 60px;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'NeueMontreal', sans-serif;
 }
 
 /* --- Page Header (Pink Hero Style) --- */
@@ -31,11 +31,11 @@
 }
 
 .back-to-shop:hover {
-  color: #e27c9f;
+  color: #e83caa;
 }
 
 .cart-header-content h1 {
-  font-family: 'Playfair Display', serif;
+  font-family: 'SaolDisplay', serif;
   font-size: 2.5rem;
   color: #1a1a1a;
   margin: 0;
@@ -185,7 +185,7 @@
 }
 
 .empty-cart h3 {
-  font-family: 'Playfair Display', serif;
+  font-family: 'SaolDisplay', serif;
   font-size: 1.5rem;
   color: #1a1a1a;
 }
@@ -196,7 +196,7 @@
 }
 
 .shop-now-btn {
-  background: #e27c9f;
+  background: #e83caa;
   color: white;
   padding: 12px 30px;
   border-radius: 25px;
@@ -207,7 +207,7 @@
 }
 
 .shop-now-btn:hover {
-  background: #cf6f8d;
+  background: #e83caa;
 }
 
 /* --- RIGHT: Order Summary --- */
@@ -224,7 +224,7 @@
 }
 
 .summary-card h3 {
-  font-family: 'Playfair Display', serif;
+  font-family: 'SaolDisplay', serif;
   font-size: 1.3rem;
   color: #1a1a1a;
   margin: 0 0 20px 0;
@@ -252,7 +252,7 @@
 
 .checkout-btn {
   width: 100%;
-  background: #e27c9f;
+  background: #e83caa;
   color: white;
   border: none;
   padding: 16px;
@@ -265,7 +265,7 @@
 }
 
 .checkout-btn:hover {
-  background: #cf6f8d;
+  background: #e83caa;
 }
 
 .secure-badge {

@@ -6,7 +6,7 @@
 }
 
 .faq-title { 
-  font-family: 'SaolDisplay', 'Playfair Display', serif; /* Uses your premium serif */
+  font-family: 'SaolDisplay', 'SaolDisplay', serif; /* Uses your premium serif */
   text-align: center; 
   font-size: 3rem; 
   font-weight: 400; 
@@ -42,7 +42,7 @@
   justify-content: space-between; 
   align-items: center; 
   font-family: 'NeueMontreal', sans-serif;
-  font-size: 1.05rem; 
+  font-size: 1.5rem; 
   font-weight: 400; 
   color: #1a1a1a;
 }
@@ -93,7 +93,7 @@
 }
 
 .faq-title {
-  font-family: 'Playfair Display', serif;
+  font-family: 'SaolDisplay', serif;
   font-size: 2.8rem;
   font-weight: 400;
   text-align: center;
@@ -134,7 +134,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'NeueMontreal', sans-serif;
   font-size: 1.1rem;
   font-weight: 500;
   color: #1a1a1a;
@@ -161,7 +161,7 @@
   padding-top: 20px;
   margin-top: 15px;
   border-top: 1px solid #f0f0f0;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'NeueMontreal', sans-serif;
   font-size: 0.95rem;
   line-height: 1.8;
   color: #555555;

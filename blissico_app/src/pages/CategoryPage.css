@@ -1,22 +1,22 @@
 /* --- Category Page --- */
 .category-hero {
-  background-color: #e9a0ba;
+  background-color: #efb1db;
   padding: 80px 20px;
   text-align: center;
   color: white;
 }
-.category-hero h1 { font-family: 'Playfair Display', serif; font-size: 3.5rem; margin-bottom: 20px; font-weight: 400; }
-.category-hero p { font-family: 'Poppins', sans-serif; max-width: 700px; margin: 0 auto; font-size: 0.95rem; line-height: 1.6; opacity: 0.95; }
+.category-hero h1 { font-family: 'SaolDisplay', serif; font-size: 3.5rem; margin-bottom: 20px; font-weight: 400; }
+.category-hero p { font-family: 'NeueMontreal', sans-serif; max-width: 700px; margin: 0 auto; font-size: 0.95rem; line-height: 1.6; opacity: 0.95; }
 
 .category-content {
   max-width: 1300px;
   margin: 0 auto;
-  padding: 30px 20px 80px;
+  padding: 30px 80px 80px;
 }
 
 .breadcrumbs { font-size: 0.9rem; color: #333; margin-bottom: 30px; }
 .breadcrumbs a { text-decoration: none; color: #666; }
-.breadcrumbs a:hover { color: #e27c9f; }
+.breadcrumbs a:hover { color: #e83caa; }
 .breadcrumbs span { color: #1a1a1a; }
 
 /* Professional Layout (No Sidebar, full width) */
@@ -69,7 +69,7 @@
   color: #555;
   transition: color 0.2s;
 }
-.filter-option:hover { color: #e27c9f; }
+.filter-option:hover { color: #e83caa; }
 
 .radio-circle {
   width: 14px;
@@ -79,14 +79,14 @@
   display: inline-block;
 }
 .radio-circle.active {
-  background-color: #e27c9f;
-  border-color: #e27c9f;
+  background-color: #e83caa;
+  border-color: #e83caa;
 }
 
 /* Sorting Select */
 .toolbar-right select {
   border: none;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'NeueMontreal', sans-serif;
   font-size: 0.9rem;
   cursor: pointer;
   background: transparent;
@@ -96,7 +96,7 @@
 }
 
 /* Grid: 4 columns */
-.product-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-bottom: 60px; }
+.product-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; margin-bottom: 60px; padding: 0 30px 0 30px; }
 .product-card { display: flex; flex-direction: column; align-items: center; text-align: center; }
 .product-image-placeholder { width: 100%; aspect-ratio: 3 / 4; background: #666; margin-bottom: 12px; border-radius: 4px;}
 .product-info { display: flex; flex-direction: column; gap: 4px; }
@@ -141,7 +141,7 @@
   transition: all 0.3s;
 }
 .page-item:hover:not(.active) { background: #f9eef1; }
-.page-item.active { background: #e9a0ba; color: white; }
+.page-item.active { background: #efb1db; color: white; }
 .page-item.arrow { font-size: 1rem; font-weight: bold; }
 
 /* Mobile responsiveness */

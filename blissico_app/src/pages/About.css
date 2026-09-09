@@ -1,26 +1,26 @@
  .about-hero {
-  background-color: #e27c9f;
+  background-color: #efb1db;
   padding: 100px 20px;
   text-align: center;
   color: white;
 }
 
 .about-hero h1 {
-  font-family: 'Playfair Display', serif;
-  font-size: 4.5rem;
+  font-family: 'SaolDisplay', serif;
+  font-size: 4rem;
   margin-bottom: 15px;
 }
 
 .about-hero h2 {
-  font-family: 'Playfair Display', serif;
-  font-size: 2.5rem;
+  font-family:'SaolDisplay';
+  font-size: 4rem;
   font-weight: 400;
   margin-bottom: 10px;
 }
 
 .about-hero p {
-  font-family: 'Poppins', sans-serif;
-  font-size: 1.1rem;
+  font-family: 'NeueMontreal';
+  font-size: 1.6rem;
   opacity: 0.9;
 }
 
@@ -31,16 +31,16 @@
 }
 
 .about-story h2 {
-  font-family: 'Playfair Display', serif;
-  font-size: 2.8rem;
+  font-family:'SaolDisplay';
+  font-size: 4rem;
   margin-bottom: 40px;
   color: #1a1a1a;
 }
 
 .about-story p {
   font-size: 1rem;
-  line-height: 1.9;
-  color: #555;
+  line-height: 1.5;
+  color: #000;
   max-width: 900px;
   margin: 0 auto;
   text-align: left;
@@ -53,7 +53,7 @@
 }
 
 .note-title {
-  font-family: 'Playfair Display', serif;
+  font-family:'SaolDisplay';
   font-size: 4rem;
   font-weight: 400;
   margin-bottom: 30px;
@@ -61,12 +61,12 @@
 }
 
 .note-title .highlight {
-  color: #e27c9f;
+  color: #e83caa;
 }
 
 .about-note blockquote {
-      font-size: 1rem;
-    line-height: 1.8;
+      font-size: 1.6rem;
+    line-height: 1.3;
     color: #333;
 }
 
@@ -79,14 +79,14 @@ display: inline-block;
 }
 
 .nimrah-details h4 {
-  font-family: 'Playfair Display', serif;
+  font-family:'SaolDisplay';
   font-size: 1.8rem;
   margin: 0;
 }
 
 .nimrah-details p {
-  font-family: 'Poppins', sans-serif;
-  font-size: 0.95rem;
+  font-family: 'NeueMontreal';
+  font-size: 1.6rem;
   margin: 5px 0 0;
   font-weight: 300;
 }
@@ -105,17 +105,17 @@ display: inline-block;
 }
 
 .about-cta-content h3 {
-  font-family: 'Playfair Display', serif;
+  font-family:'SaolDisplay';
   font-size: 2.8rem;
   margin-bottom: 20px;
   color: #1a1a1a;
 }
 
 .about-cta-content .highlight {
-  color: #e27c9f;
+  color: #e83caa;
 }
 blockquote .highlight{
-  color: #e27c9f;
+  color: #e83caa;
   font-size: large;
 }
 .about-cta-content p {
@@ -125,7 +125,7 @@ blockquote .highlight{
 }
 
 .cta-btn {
-  background: #e27c9f;
+  background: #e83caa;
   color: white;
   border: none;
   padding: 12px 30px;
@@ -171,8 +171,8 @@ blockquote .highlight{
 }
 
 .nav-links li.active {
-  color: #e27c9f;
-  border-bottom: 2px solid #e27c9f;
+  color: #e83caa;
+  border-bottom: 2px solid #e83caa;
 }
 
 .nav-link {

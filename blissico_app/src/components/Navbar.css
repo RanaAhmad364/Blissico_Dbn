@@ -4,8 +4,8 @@
    ========================================================= */
 
 :root {
-  --brand-pink: #cf6f8d;
-  --brand-pink-active: #e27c9f;
+  --brand-pink: #e83caa;
+  --brand-pink-active: #e83caa;
   --nav-height: 80px;
 }
 
@@ -58,7 +58,7 @@ html, body {
 }
 .logo-link { display: flex; align-items: center; text-decoration: none; }
 .logo-img {
-  height: 48px;
+  height: 60px;
   width: auto;
   object-fit: contain;
   display: block;
@@ -126,7 +126,7 @@ html, body {
 }
 
 .signature-btn {
-  background: var(--brand-pink-active);
+  background: #e83caa;
   color: white;
   border: none;
   padding: 8px 16px;
@@ -161,7 +161,7 @@ html, body {
 
 .favorites-count-badge {
   align-items: center;
-  background: #e27c9f;
+  background: #e83caa;
   border-radius: 999px;
   color: white;
   display: flex;

@@ -2,14 +2,14 @@
 
 /* Pink Hero Header */
 .privacy-hero {
-  background-color: #e9a0ba;
+  background-color: #efb1db;
   padding: 80px 20px;
   text-align: center;
   color: white;
 }
 
 .privacy-hero h1 {
-  font-family: 'Playfair Display', serif;
+  font-family: 'SaolDisplay', serif;
   font-size: 3.5rem;
   font-weight: 400;
 }

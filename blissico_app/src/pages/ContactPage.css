@@ -1,13 +1,13 @@
 /* --- Contact Page --- */
 .contact-hero {
-  background-color: #e9a0ba;
+  background-color: #efb1db;
   padding: 80px 20px;
   text-align: center;
   color: white;
 }
 
 .contact-hero h1 {
-  font-family: 'Playfair Display', serif;
+  font-family: 'SaolDisplay', serif;
   font-size: 3.5rem;
   font-weight: 400;
 }
@@ -51,18 +51,18 @@
   border-radius: 2px;
   font-size: 1rem;
   outline: none;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'NeueMontreal', sans-serif;
   transition: border-color 0.3s;
   background: white;
 }
 
 .form-group input:focus,
 .form-group textarea:focus {
-  border-color: #e9a0ba;
+  border-color: #efb1db;
 }
 
 .send-btn {
-  background: #e27c9f;
+  background: #e83caa;
   color: white;
   border: none;
   padding: 12px 35px;

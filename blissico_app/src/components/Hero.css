@@ -34,7 +34,7 @@
   display: flex;
   align-items: center;
   /* Changed: justify-content is now handled via inline style in JSX, defaulting to flex-start */
-  padding: 0 10%;
+  padding: 0 5%;
 }
 
 .slide-content {
@@ -44,7 +44,8 @@
 }
 
 .slide-content h1 {
-  font-size: 3rem;
+  font-family: 'SaolDisplay-Regular', serif;
+  font-size: 55px;
   line-height: 1.1;
   margin-bottom: 20px;
   color: #ffffff;

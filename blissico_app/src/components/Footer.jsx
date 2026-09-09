@@ -18,9 +18,32 @@ const Footer = () => (
           <img src={footerLogo} alt="Blissico Footer Logo" className="footer-logo-img" />
         </Link>
         <div className="social-icons">
-          <img src={instaIcon} alt="Instagram" className="s-icon-img" />
-          <img src={fbIcon} alt="Facebook" className="s-icon-img" />
-          <img src={pintIcon} alt="Pinterest" className="s-icon-img" />
+          <a 
+            href="https://www.instagram.com/blissicoby.nimrah/" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            aria-label="Instagram"
+          >
+            <img src={instaIcon} alt="Instagram" className="s-icon-img" />
+          </a>
+          
+          <a 
+            href="https://www.facebook.com/profile.php?id=61575620455329" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            aria-label="Facebook"
+          >
+            <img src={fbIcon} alt="Facebook" className="s-icon-img" />
+          </a>
+          
+          <a 
+            href="https://www.pinterest.com/blissicobynimrah" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            aria-label="Pinterest"
+          >
+            <img src={pintIcon} alt="Pinterest" className="s-icon-img" />
+          </a>
         </div>
         <p className="copyright">© 2026 Blissico By Nimrah</p>
       </div>

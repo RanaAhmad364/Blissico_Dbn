@@ -18,9 +18,8 @@ const About = () => {
 
       {/* 2. Brand Story Section */}
       <section className="about-story">
-        <p>Designed with Heart. Created for Meaningful Moments.</p>
-        <p>
-          Blissico was born from a passion for thoughtful design and the belief that life's most
+        {/* <p>Designed with Heart. Created for Meaningful Moments.</p> */}
+        <p>Designed with Heart. Created for Meaningful Moments.<br /><br />Blissico was born from a passion for thoughtful design and the belief that life's most
           meaningful moments deserve to be celebrated beautifully.<br /><br />
           My journey as a designer began in 2017, and over the past 9+ years, I've had the privilege
           of helping hundreds of clients bring their ideas to life through creative design.<br /><br />

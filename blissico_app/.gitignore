@@ -20,3 +20,10 @@ lerna-debug.log*
 *.njsproj
 *.sln
 *.sw?
+
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+blissico_app/dist/

@@ -17,7 +17,7 @@
   color: #666;
 }
 .detail-breadcrumbs a:hover {
-  color: #e27c9f;
+  color: #e83caa;
 }
 
 /* Main Layout */
@@ -46,7 +46,7 @@
 }
 
 .detail-title {
-  font-family: 'Playfair Display', serif;
+  font-family: 'SaolDisplay', serif;
   font-size: 2.5rem;
   font-weight: 400;
   margin-bottom: 10px;
@@ -72,7 +72,7 @@
 
 /* Customize Button */
 .detail-customize-btn {
-  background: #e27c9f;
+  background: #e83caa;
   color: white;
   text-decoration: none;
   text-align: center;
@@ -137,7 +137,7 @@
   transition: color 0.3s;
 }
 .download-link:hover {
-  color: #e27c9f;
+  color: #e83caa;
 }
 
 /* Description */
@@ -171,7 +171,7 @@
 }
 
 .related-title {
-  font-family: 'Playfair Display', serif;
+  font-family: 'SaolDisplay', serif;
   text-align: center;
   font-size: 2.5rem;
   font-weight: 400;
@@ -328,5 +328,5 @@
 }
 .share-menu-item:hover {
   background: #f7f0f3;
-  color: #e27c9f;
+  color: #e83caa;
 }

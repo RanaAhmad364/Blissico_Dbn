@@ -3,7 +3,7 @@
   background: #f8f9fa;
   min-height: 100vh;
   padding-bottom: 60px;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'NeueMontreal', sans-serif;
 }
 
 /* --- Header --- */
@@ -30,11 +30,11 @@
   transition: color 0.3s;
 }
 .back-to-shop:hover {
-  color: #e27c9f;
+  color: #e83caa;
 }
 
 .favorites-header-content h1 {
-  font-family: 'Playfair Display', serif;
+  font-family: 'SaolDisplay', serif;
   font-size: 2.5rem;
   color: #1a1a1a;
   margin: 0;
@@ -132,7 +132,7 @@
 }
 
 .view-product-btn {
-  background: #e27c9f;
+  background: #e83caa;
   color: white;
   padding: 8px 16px;
   border-radius: 8px;
@@ -141,7 +141,7 @@
   transition: background 0.3s;
 }
 .view-product-btn:hover {
-  background: #cf6f8d;
+  background: #e83caa;
 }
 
 .remove-fav-btn {
@@ -170,11 +170,11 @@
 }
 .empty-fav-icon {
   font-size: 4rem;
-  color: #e27c9f;
+  color: #e83caa;
   margin-bottom: 20px;
 }
 .empty-favorites h3 {
-  font-family: 'Playfair Display', serif;
+  font-family: 'SaolDisplay', serif;
   font-size: 1.5rem;
   color: #1a1a1a;
 }
@@ -184,7 +184,7 @@
 }
 
 .shop-now-btn {
-  background: #e27c9f;
+  background: #e83caa;
   color: white;
   padding: 12px 30px;
   border-radius: 25px;
@@ -194,7 +194,7 @@
   transition: background 0.3s;
 }
 .shop-now-btn:hover {
-  background: #cf6f8d;
+  background: #e83caa;
 }
 
 /* --- RIGHT: Summary --- */
@@ -211,7 +211,7 @@
 }
 
 .summary-card h3 {
-  font-family: 'Playfair Display', serif;
+  font-family: 'SaolDisplay', serif;
   font-size: 1.3rem;
   color: #1a1a1a;
   margin: 0 0 20px 0;
@@ -239,7 +239,7 @@
 }
 
 .action-btn-primary {
-  background: #e27c9f;
+  background: #e83caa;
   color: white;
   border: none;
   padding: 14px;
@@ -252,7 +252,7 @@
   transition: background 0.3s;
 }
 .action-btn-primary:hover {
-  background: #cf6f8d;
+  background: #e83caa;
 }
 
 .action-btn-secondary {
