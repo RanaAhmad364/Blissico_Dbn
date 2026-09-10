@@ -12,6 +12,7 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import CardDesignOverlay from '../components/customize/CardDesignOverlay';
 import { downloadCardFile, checkOwnership } from '../api/downloads';
+import useScreenshotProtection from '../hooks/useScreenshotProtection';
 import './ProductDetail.css';
 
 
@@ -22,6 +23,7 @@ import { useCart } from '../context/CartContext';
 
 
 const ProductDetail = () => {
+  useScreenshotProtection(); // ✅ Screenshot protection hook
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);

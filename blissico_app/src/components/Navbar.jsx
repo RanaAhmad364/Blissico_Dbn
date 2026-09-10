@@ -309,7 +309,14 @@ const Navbar = () => {
 
       {/* ---------------- Right side actions ---------------- */}
       <div className="nav-actions">
-        <button className="signature-btn">Signature Design</button>
+         <a 
+    href="https://designsbynimrah.com/" 
+    target="_blank" 
+    rel="noopener noreferrer"
+    className="signature-btn"
+  >
+    Signature Design
+  </a>
 
         <div className={`search-wrapper ${isSearchOpen ? 'search-open' : ''}`} ref={searchWrapperRef}>
           {isSearchOpen && (

@@ -83,6 +83,23 @@ p {
   font-family: 'NeueMontreal', sans-serif;
   font-weight: 400;
 }
+
+ body.protected-page {
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      user-select: none;
+    }
+
+    body.protected-page img:not(.editable-canvas img) {
+      -webkit-user-drag: none;
+      pointer-events: none;
+    }
+
+    @media print {
+      body.protected-page {
+        display: none !important;
+      }
+    }
 /* --- Top Bar / Marquee --- */
 /* .top-bar { background-color: #f7e2e8; padding: 8px 0; text-align: center; font-size: 0.85rem; color: #7a4d5b; }
 .marquee-text { display: inline-block; white-space: nowrap; }

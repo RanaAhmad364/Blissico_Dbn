@@ -10,12 +10,14 @@ import Footer from '../components/Footer';
 import CardDesignOverlay from '../components/customize/CardDesignOverlay';
 import { getCards, assetUrl } from '../api/catalog';
 import { checkOwnership } from '../api/downloads';
+import useScreenshotProtection from '../hooks/useScreenshotProtection';
 import './CategoryPage.css';
 
 // Maps the URL's first segment to the query param the backend expects
 const FILTER_KEY = { cards: 'category', occasions: 'occasion', collections: 'collection' };
 
 const CategoryPage = () => {
+  useScreenshotProtection(); // ✅ Screenshot protection hook
   const { category, slug } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();

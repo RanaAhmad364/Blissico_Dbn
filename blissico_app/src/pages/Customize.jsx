@@ -14,13 +14,14 @@ import Navbar from '../components/Navbar';
 import './Customize.css';
 import { useCart } from '../context/CartContext';
 import { checkOwnership } from '../api/downloads';
-
+import useScreenshotProtection from '../hooks/useScreenshotProtection';
 // import { useCart } from '../context/CartContext';
 // const { addToCart } = useCart();
 // const navigate = useNavigate(); 
 
 
 const Customize = () => {
+  useScreenshotProtection(); // ✅ Screenshot protection hook
   const PLACEHOLDER_TEXT = 'Click here to add your greeting text';
   const { cardId } = useParams();
   const { user, loading: authLoading } = useAuth();
