@@ -31,7 +31,7 @@
   gap: 15px;
 }
 
-.save-btn {
+.user-customized-user-customized-save-btn {
   background: transparent;
   border: 1px solid #e27c9f;
   color: #e27c9f;
@@ -40,7 +40,7 @@
   cursor: pointer;
   transition: all 0.3s;
 }
-.save-btn:hover { background: #f9f0f3; }
+.user-customized-user-customized-save-btn:hover { background: #f9f0f3; }
 
 .add-cart-btn {
   background: #e27c9f;
@@ -396,7 +396,7 @@
 .canvas-viewport {
   width: 70%;
   height: 100vh;
-  background: #efb1db;
+  /* background: #f1d7e9; */
   overflow: hidden;
   display: flex;
   justify-content: center;
@@ -485,7 +485,7 @@
 @media (max-width: 768px) {
   .customize-top-bar { flex-wrap: wrap; gap: 14px; padding: 16px 20px; }
   .top-right-actions { width: 100%; }
-  .top-right-actions .save-btn,
+  .top-right-actions .user-customized-user-customized-save-btn,
   .top-right-actions .add-cart-btn { flex: 1; min-width: 0; padding: 10px 12px; }
   .customize-workspace { flex-direction: column; height: auto; min-width: 0; padding: 16px; gap: 18px; }
   .left-toolbars { width: 100%; flex-direction: column; }
@@ -503,7 +503,7 @@
   .customize-top-bar { padding: 14px 12px; }
   .customize-workspace { padding: 12px; }
   .top-right-actions { gap: 8px; }
-  .top-right-actions .save-btn,
+  .top-right-actions .user-customized-user-customized-save-btn,
   .top-right-actions .add-cart-btn { font-size: 0.82rem; }
   .tools-panel { padding: 12px; gap: 16px; }
   .slider-input-wrap { gap: 8px; }
@@ -519,9 +519,10 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  cursor: default;
+  /* cursor: default; */
   /* max-width: 90%; */
   max-width: 320px;
+  touch-action: none;
 }
 
 .text-drag-wrapper.dragging {
@@ -549,6 +550,7 @@
   opacity: 0;
   transition: opacity 0.15s ease;
   z-index: 5;
+  touch-action: none;
 }
 
 .text-drag-wrapper:hover .drag-handle,

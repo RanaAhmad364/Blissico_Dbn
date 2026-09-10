@@ -63,7 +63,7 @@
 /* --- Answer --- */
 .faq-answer { 
   margin-top: 15px; 
-  font-size: 0.95rem; 
+  font-size: 1.23rem; 
   color: #555; 
   line-height: 1.7; 
   padding-right: 20px;
@@ -84,6 +84,12 @@
   .faq-question { font-size: 0.95rem; }
   .faq-answer { padding-right: 0; }
 }
+
+@media (max-width: 425px) {
+    .faq-section {
+        padding: 60px 90px;
+    }
+  }
 /* --- Professional FAQ Section --- */
 /* .faq-section {
   padding: 80px 10%;

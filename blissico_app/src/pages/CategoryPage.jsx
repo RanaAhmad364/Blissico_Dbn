@@ -176,10 +176,10 @@ const CategoryPage = () => {
 
       <section className="category-hero">
         <h1>{formatTitle(slug)}</h1>
-        <p>
+        {/* <p>
           Discover our thoughtfully crafted digital cards designed to make every occasion feel truly special.
           Personalise your chosen design, enjoy instant access, share it digitally, or print it beautifully.
-        </p>
+        </p> */}
       </section>
 
       <div className="category-content">

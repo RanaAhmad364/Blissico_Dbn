@@ -36,7 +36,7 @@ const Sidebar = ({ isOpen, onClose }) => {
     { label: 'Downloads', path: '/admin/downloads', icon: FiDownload },
     // { label: 'Customers', path: '/admin/customers', icon: FiUsers },
     { label: 'Products', path: '/admin/products', icon: FiPackage },
-    { label: 'Categories', path: '/admin/categories', icon: FiGrid },
+    { label: 'Cards', path: '/admin/categories', icon: FiGrid },
     { label: 'Collections', path: '/admin/collections', icon: FiTag },  
     { label: 'Occasions', path: '/admin/occasions', icon: FiStar },
     

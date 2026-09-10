@@ -146,6 +146,7 @@ const Customize = () => {
     if (!isDragging) return;
 
     const handleMove = (e) => {
+      if (e.touches) e.preventDefault(); // stop native page-scroll while dragging on mobile
       const point = e.touches ? e.touches[0] : e;
       dragStateRef.current.moved = true;
       updatePositionFromPointer(point.clientX, point.clientY);
@@ -245,7 +246,7 @@ const Customize = () => {
         </Link>
         <div className="top-right-actions">
           {saveMessage && <span style={{ color: '#1e7e34', marginRight: 10 }}>{saveMessage}</span>}
-          <button className="save-btn" onClick={handleSave} disabled={saving}>
+          <button className="user-customized-save-btn" onClick={handleSave} disabled={saving}>
             {saving ? 'Saving...' : 'Save'}
           </button>
           {/* <button className="add-cart-btn" onClick={handleAddToCart}>Add to Cart</button> */}
@@ -358,7 +359,7 @@ const Customize = () => {
             <div className="tool-group" style={{ marginTop: 20, paddingTop: 20, borderTop: '1px solid #eee' }}>
               <label>Text Position</label>
               <p style={{ fontSize: 12, color: '#888', margin: '4px 0 10px' }}>
-                Card par text ko drag handle (<FaArrowsAlt style={{ verticalAlign: 'middle' }} />) se ghaseet kar apni marzi ki jagah rakhein.
+                Drag the move handle (<FaArrowsAlt style={{ verticalAlign: 'middle' }} />) on the card to position the text anywhere you like.
               </p>
               <button type="button" className="format-btn" onClick={resetPosition} style={{ width: 'auto', padding: '6px 14px' }}>
                 Reset to Center

@@ -535,7 +535,7 @@ p {
   .steps-gif-container { width: 80%; }
   .step-cards-section { flex-direction: column; align-items: center; gap: 30px; }
   /* .occasion-block, .occasion-block.reverse { flex-direction: column; gap: 20px; text-align: center; } */
-  .occ-links a { max-width: 100%; justify-content: center; gap: 10px; }
+  /* .occ-links a { max-width: 100%; justify-content: center; gap: 10px; } */
   
 }
 

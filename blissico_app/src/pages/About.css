@@ -6,20 +6,20 @@
 }
 
 .about-hero h1 {
-  font-family: 'SaolDisplay', serif;
+  font-family: 'SaolDisplay', serif; ;
   font-size: 4rem;
-  margin-bottom: 15px;
+  /* margin-bottom: 15px; */
 }
 
 .about-hero h2 {
-  font-family:'SaolDisplay';
+  font-family: 'SaolDisplay', serif; 
   font-size: 4rem;
   font-weight: 400;
   margin-bottom: 10px;
 }
 
 .about-hero p {
-  font-family: 'NeueMontreal';
+  font-family: 'NeueMontreal', sans-serif;
   font-size: 1.6rem;
   opacity: 0.9;
 }
@@ -31,12 +31,19 @@
 }
 
 .about-story h2 {
-  font-family:'SaolDisplay';
-  font-size: 4rem;
+  font-family: 'SaolDisplay', serif; ;
+  font-size: 2.8rem;
   margin-bottom: 40px;
   color: #1a1a1a;
 }
-
+.about-full{
+font-size: 1rem;
+    line-height: 1.5;
+    color: #000;
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: left;
+}
 .about-story p {
   font-size: 1rem;
   line-height: 1.5;
@@ -47,13 +54,13 @@
 }
 
 .about-note {
-  padding: 10px 16%;
+  /* padding: 10px 16%; */
   background: #fcfcfc;
-  /* text-align: center; */
+  
 }
 
 .note-title {
-  font-family:'SaolDisplay';
+  font-family: 'SaolDisplay', serif; ;
   font-size: 4rem;
   font-weight: 400;
   margin-bottom: 30px;
@@ -67,7 +74,7 @@
 .about-note blockquote {
       font-size: 1.6rem;
     line-height: 1.3;
-    color: #333;
+    color: #000;
 }
 
 .nimrah-details {
@@ -79,21 +86,22 @@ display: inline-block;
 }
 
 .nimrah-details h4 {
-  font-family:'SaolDisplay';
-  font-size: 1.8rem;
+  font-family: 'NeueMontreal' ;
+  font-size: 1.9rem;
+  text-align: left;
   margin: 0;
 }
 
 .nimrah-details p {
   font-family: 'NeueMontreal';
-  font-size: 1.6rem;
+  font-size: 1.5rem;
   margin: 5px 0 0;
   font-weight: 300;
 }
 
 .about-cta {
   background-color: #f6f6f6;
-  padding: 100px 10%;
+  padding: 70px 0 70px 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -105,7 +113,7 @@ display: inline-block;
 }
 
 .about-cta-content h3 {
-  font-family:'SaolDisplay';
+  font-family: 'SaolDisplay', serif; ;
   font-size: 2.8rem;
   margin-bottom: 20px;
   color: #1a1a1a;
@@ -116,7 +124,7 @@ display: inline-block;
 }
 blockquote .highlight{
   color: #e83caa;
-  font-size: large;
+  font-size: 4rem;
 }
 .about-cta-content p {
   font-size: 1rem;
@@ -159,7 +167,17 @@ blockquote .highlight{
   .about-note blockquote { font-size: 1.1rem; }
   .about-cta { flex-direction: column; text-align: center; }
   .about-cta-image { width: 100%; height: 300px; }
-  .about-cta-content h3 { font-size: 2rem; }
+  .about-cta-content h3 { font-size: 1rem; }
+  .nimrah-details p {
+    font-size: 1rem;
+  }
+  .about-cta {
+  padding: 0 16%;
+}
+.about-note {
+  padding: 10px 16%;
+  
+}
 }
 
 .nav-links li {
@@ -180,4 +198,9 @@ blockquote .highlight{
   color: inherit;
   width: 100%;
   height: 100%;
+}
+@media (max-width: 768px) {
+.about-story p {
+    padding: 10px 16%;
+}
 }

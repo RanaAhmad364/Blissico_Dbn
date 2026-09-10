@@ -15,7 +15,7 @@ const About = () => {
         <h2>From Passion to Purpose</h2>
         <p>The journey behind Blissico.</p>
       </section>
-
+      <section className='about-full'>
       {/* 2. Brand Story Section */}
       <section className="about-story">
         {/* <p>Designed with Heart. Created for Meaningful Moments.</p> */}
@@ -72,7 +72,7 @@ const About = () => {
         </div>
         <div className="about-cta-image"></div>
       </section>
-
+</section>
       <Footer />
     </div>
   );
