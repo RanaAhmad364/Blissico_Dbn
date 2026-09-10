@@ -55,7 +55,7 @@ const About = () => {
          <span className="highlight">“</span> I've always believed that the most meaningful moments aren't defined by grand
           gestures, but by the thought and love behind them. Through Blissico, my hope is to
           help people celebrate, connect, and create lasting memories through beautifully
-          crafted designs that come from the heart.<span className="highlight">“</span>
+          crafted designs that come from the heart.<span className="highlight">”</span>
         </blockquote>
         <div className="nimrah-details">
           <h4>Nimrah Hamid</h4>

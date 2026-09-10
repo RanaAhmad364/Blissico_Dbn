@@ -1,6 +1,6 @@
  .about-hero {
   background-color: #efb1db;
-  padding: 100px 20px;
+  padding: 40px;
   text-align: center;
   color: white;
 }
@@ -13,14 +13,14 @@
 
 .about-hero h2 {
   font-family: 'SaolDisplay', serif; 
-  font-size: 4rem;
+  font-size: 4.8rem;
   font-weight: 400;
   margin-bottom: 10px;
 }
 
 .about-hero p {
   font-family: 'NeueMontreal', sans-serif;
-  font-size: 1.6rem;
+  font-size: 2.6rem;
   opacity: 0.9;
 }
 
@@ -45,7 +45,7 @@ font-size: 1rem;
     text-align: left;
 }
 .about-story p {
-  font-size: 1rem;
+  font-size: 1.2rem;
   line-height: 1.5;
   color: #000;
   max-width: 900px;
@@ -61,14 +61,16 @@ font-size: 1rem;
 
 .note-title {
   font-family: 'SaolDisplay', serif; ;
-  font-size: 4rem;
+  font-size: 2.89rem;
   font-weight: 400;
-  margin-bottom: 30px;
-  color: #1a1a1a;
+      margin-top: 30px;
+    margin-bottom: 30px;
+    color: #1a1a1a;
+    text-align: left;
 }
 
 .note-title .highlight {
-  color: #e83caa;
+  color: #efb1db;
 }
 
 .about-note blockquote {
@@ -122,9 +124,10 @@ display: inline-block;
 .about-cta-content .highlight {
   color: #e83caa;
 }
-blockquote .highlight{
-  color: #e83caa;
-  font-size: 4rem;
+blockquote .highlight {
+    color: #efb1db;
+    font-size: 2rem;
+    line-height: 0;
 }
 .about-cta-content p {
   font-size: 1rem;

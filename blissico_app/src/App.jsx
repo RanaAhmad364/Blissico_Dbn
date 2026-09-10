@@ -59,13 +59,14 @@ import CustomizedCards from './pages/user/CustomizedCards';
   import AdminCustomizeCard from './pages/admin/AdminCustomizeCard';
   import AdminPurchases from './pages/admin/AdminPurchases';
   import AdminDownloads from './pages/admin/AdminDownloads';
-
+  import ScrollToTop from './components/ScrollToTop';
 
 import './App.css';
 
 function App() {
   return (
     <BrowserRouter>
+     <ScrollToTop />
       {/* Wrap everything in AuthProvider so all pages know if a user is logged in */}
       <AuthProvider>
         <FavoritesProvider>

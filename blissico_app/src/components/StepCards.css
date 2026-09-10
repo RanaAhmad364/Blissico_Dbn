@@ -1,4 +1,4 @@
-.step-cards-section { background: #f6f6f6; padding: 60px 10%; display: flex; justify-content: space-around; text-align: center; }
+.step-cards-section { background: #f6f6f6; padding: 60px 60px; display: flex; justify-content: space-around; text-align: center; }
 .card { flex: 1; max-width: 300px; padding: 20px; display: flex; flex-direction: column; align-items: center; background: transparent; }
 .card-icon { font-size: 2.5rem; margin-bottom: 15px; color: #333; }
 .card h3 { font-family: 'NeueMontreal'; font-size: 1.2rem; margin-bottom: 10px; font-weight: 500; }

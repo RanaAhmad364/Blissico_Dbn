@@ -32,7 +32,7 @@
 }
 
 .user-customized-save-btn {
-  background: transparent;
+  background: #e27c9f;
   border: 1px solid #e27c9f;
   color: #e27c9f;
   padding: 8px 25px;
@@ -40,7 +40,7 @@
   cursor: pointer;
   transition: all 0.3s;
 }
-.user-customized-save-btn:hover { background: #f9f0f3; }
+/* .user-customized-save-btn:hover { background: #f9f0f3; } */
 
 .add-cart-btn {
   background: #e27c9f;
