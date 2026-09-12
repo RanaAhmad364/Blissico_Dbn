@@ -408,19 +408,16 @@ const Navbar = () => {
                     onClick={() => toggleMobileDropdown(item.label)}
                     aria-expanded={openMobileDropdown === item.label}
                   >
-                    <Link
-                      to={item.path}
-                      className="nav-link"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      {item.label}
-                    </Link>
+                    <span className="nav-link">{item.label}</span>
                     <FaChevronDown
                       className={`mobile-dropdown-arrow ${openMobileDropdown === item.label ? 'rotated' : ''}`}
                       aria-hidden="true"
                     />
                   </button>
                   <div className={`mobile-dropdown-panel ${openMobileDropdown === item.label ? 'mobile-dropdown-panel-open' : ''}`}>
+                    {/* <Link to={item.path} className="mobile-dropdown-viewall">
+                      View All {item.label} →
+                    </Link> */}
                     {renderMobileDropdownContent(item.dropdown)}
                   </div>
                 </>

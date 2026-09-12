@@ -522,6 +522,7 @@ html, body {
     transition-duration: 0.01ms !important;
   }
 }
+ /* .mobile-dropdown-viewall { display: block; padding: 10px 20px; font-size: 0.85rem; font-weight: 600; color: #e83caa; text-decoration: none; border-bottom: 1px solid #f0f0f0; } */
 
 /* ====================== RESPONSIVE BREAKPOINTS ====================== */
 @media (max-width: 1024px) {
@@ -548,7 +549,7 @@ html, body {
   .hamburger-btn { display: inline-flex; }
   .signature-btn { display: none; } /* moves into mobile panel */
   .search-wrapper { display: none; } /* mobile uses panel search */
-  .logo-img { height: 36px; }
+  .logo-img { height: 55px; }
   .nav-actions {
     margin-left: auto !important;
     gap: 10px;
@@ -558,6 +559,6 @@ html, body {
   .icons { gap: 10px; }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 425px) {
   .logo { font-size: 1.4rem; }
 }

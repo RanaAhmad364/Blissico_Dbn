@@ -6,4 +6,8 @@
 .steps-text h2 {
     font-size: 1.9rem;
 }
+.steps-section{
+        padding: 35px 10%;
+        gap: 0px;
+}
 }

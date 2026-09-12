@@ -89,6 +89,12 @@
     .faq-section {
         padding: 60px 90px;
     }
+    .faq-title { 
+      font-size: 2rem; 
+    }
+        .faq-question {
+        font-size: 1.25rem;
+    }
   }
 /* --- Professional FAQ Section --- */
 /* .faq-section {

@@ -7,20 +7,20 @@
 
 .about-hero h1 {
   font-family: 'SaolDisplay', serif; ;
-  font-size: 4rem;
+  font-size: 3rem;
   /* margin-bottom: 15px; */
 }
 
 .about-hero h2 {
   font-family: 'SaolDisplay', serif; 
-  font-size: 4.8rem;
+  font-size: 3.4rem;
   font-weight: 400;
   margin-bottom: 10px;
 }
 
 .about-hero p {
   font-family: 'NeueMontreal', sans-serif;
-  font-size: 2.6rem;
+  font-size: 1.8rem;
   opacity: 0.9;
 }
 
@@ -178,8 +178,10 @@ blockquote .highlight {
   padding: 0 16%;
 }
 .about-note {
-  padding: 10px 16%;
-  
+  padding: 10px 16%; 
+}
+.about-story p {
+    padding: 10px 16%;
 }
 }
 
@@ -202,8 +204,24 @@ blockquote .highlight {
   width: 100%;
   height: 100%;
 }
-@media (max-width: 768px) {
+@media (max-width: 425px) {
+.about-hero h1 {
+        font-size: 2.8rem;
+    }
+.about-hero p {
+    font-size: 1.23rem;
+}
 .about-story p {
-    padding: 10px 16%;
+    font-size: 1rem;
+}
+    .note-title {
+        font-size: 2.1rem;
+        margin-top: 0px;
+    }
+        .about-note blockquote {
+        font-size: 1rem;
+    }
+    blockquote .highlight {
+    font-size: 1rem;
 }
 }

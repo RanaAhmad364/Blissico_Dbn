@@ -24,7 +24,7 @@
   font-size: 0.9rem;
   transition: color 0.3s;
 }
-.back-link:hover { color: #e27c9f; }
+.back-link:hover { color: #e83caa; }
 
 .top-right-actions {
   display: flex;
@@ -32,9 +32,9 @@
 }
 
 .user-customized-save-btn {
-  background: #e27c9f;
-  border: 1px solid #e27c9f;
-  color: #e27c9f;
+  background: #e83caa;
+  border: 1px solid #e83caa;
+  color: white;
   padding: 8px 25px;
   border-radius: 4px;
   cursor: pointer;
@@ -43,7 +43,7 @@
 /* .user-customized-save-btn:hover { background: #f9f0f3; } */
 
 .add-cart-btn {
-  background: #e27c9f;
+  background: #e83caa;
   border: none;
   color: white;
   padding: 8px 25px;
@@ -157,14 +157,14 @@
   width: 14px;
   height: 14px;
   border-radius: 50%;
-  background: #e27c9f;
+  background: #e83caa;
   cursor: pointer;
 }
 .custom-slider::-moz-range-thumb {
   width: 14px;
   height: 14px;
   border-radius: 50%;
-  background: #e27c9f;
+  background: #e83caa;
   cursor: pointer;
   border: none;
 }
@@ -176,7 +176,7 @@
   border-radius: 4px;
   outline: none;
 }
-.small-input:focus { border-color: #e27c9f; }
+.small-input:focus { border-color: #e83caa; }
 .unit { font-size: 0.8rem; color: #888; width: 15px; }
 
 /* Formatting Buttons */
@@ -205,7 +205,7 @@
   white-space: nowrap;
 }
 .format-btn:hover, .format-btn.active {
-  border-color: #e27c9f;
+  border-color: #e83caa;
   background: #fcf6f8;
 }
 
@@ -256,7 +256,7 @@
   color: #1a1a1a;
 }
 .align-btn:hover, .align-btn.active {
-  border-color: #e27c9f;
+  border-color: #e83caa;
   background: #fcf6f8;
 }
 
@@ -364,7 +364,7 @@
   background: #fafafa;
   margin-top: 20px;
 }
-.upload-area:hover { border-color: #e27c9f; background: #fff; }
+.upload-area:hover { border-color: #e83caa; background: #fff; }
 .upload-icon { font-size: 2rem; color: #888; margin-bottom: 10px; }
 .upload-area span { color: #555; font-size: 0.9rem; }
 .remove-image-btn {
