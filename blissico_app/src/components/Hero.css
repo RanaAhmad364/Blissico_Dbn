@@ -15,7 +15,7 @@
   position: relative;
   height: 80vh;
   min-height: 500px;
-  background: #ebbbc5;
+  background: #ebbbc5; /* fallback color, shows briefly while a slide's image loads */
   overflow: hidden; /* Prevents horizontal scrollbars */
   display: flex;
   flex-direction: column;
@@ -34,7 +34,10 @@
   display: flex;
   align-items: center;
   /* Changed: justify-content is now handled via inline style in JSX, defaulting to flex-start */
-  padding: 0 5%;
+  padding: 0 10%;
+  background-image: var(--desktop-bg);
+  background-size: cover;
+  background-position: center;
 }
 
 .slide-content {
@@ -44,8 +47,7 @@
 }
 
 .slide-content h1 {
-  font-family: 'SaolDisplay', serif;
-  font-size: 55px;
+  font-size: 3rem;
   line-height: 1.1;
   margin-bottom: 20px;
   color: #ffffff;
@@ -125,7 +127,7 @@
 @media (max-width: 768px) {
   .hero-slider {
     height: auto;
-    min-height: 100vh; /* Full screen height for mobile */
+    min-height: 75vh; /* less extreme aspect mismatch than 100vh, less zoom/crop */
     padding-top: 40px;
     padding-bottom: 60px;
   }
@@ -135,6 +137,8 @@
     padding: 20px;
     justify-content: center;
     gap: 30px;
+    background-image: var(--mobile-bg); /* switch to the mobile-specific image */
+    background-position: center 30%; /* keeps upper/subject area visible instead of cropping it */
   }
   
   .slide-content {

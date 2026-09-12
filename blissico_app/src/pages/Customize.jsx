@@ -11,17 +11,17 @@ import { getCard, assetUrl } from '../api/catalog';
 import { getCustomization, saveCustomization } from '../api/customization';
 import Marquee from '../components/Marquee';
 import Navbar from '../components/Navbar';
+import ColorSwatchPicker from '../components/customize/ColorSwatchPicker';
 import './Customize.css';
 import { useCart } from '../context/CartContext';
 import { checkOwnership } from '../api/downloads';
-import useScreenshotProtection from '../hooks/useScreenshotProtection';
+
 // import { useCart } from '../context/CartContext';
 // const { addToCart } = useCart();
 // const navigate = useNavigate(); 
 
 
 const Customize = () => {
-  useScreenshotProtection(); // ✅ Screenshot protection hook
   const PLACEHOLDER_TEXT = 'Click here to add your greeting text';
   const { cardId } = useParams();
   const { user, loading: authLoading } = useAuth();
@@ -56,7 +56,6 @@ const Customize = () => {
 
   const textRef = useRef(null);
   const cardStageRef = useRef(null); // the .canvas-card element — drag bounds
-  const colorInputRef = useRef(null);
   const dragWrapperRef = useRef(null);
   const dragStateRef = useRef({ startX: 0, startY: 0, moved: false });
   const [isPurchased, setIsPurchased] = useState(false);
@@ -246,7 +245,7 @@ const Customize = () => {
         </Link>
         <div className="top-right-actions">
           {saveMessage && <span style={{ color: '#1e7e34', marginRight: 10 }}>{saveMessage}</span>}
-          <button className="user-customized-save-btn" onClick={handleSave} disabled={saving}>
+          <button className="customize-save-btn" onClick={handleSave} disabled={saving}>
             {saving ? 'Saving...' : 'Save'}
           </button>
           {/* <button className="add-cart-btn" onClick={handleAddToCart}>Add to Cart</button> */}
@@ -301,30 +300,13 @@ const Customize = () => {
 
             <div className="tool-group row-group">
               <label>Text Color</label>
-              <div className="color-input-wrap">
-                <div
-                  className="color-preview"
-                  style={{ backgroundColor: textColor, cursor: 'pointer' }}
-                  onClick={() => {
-                    try {
-                      colorInputRef.current?.showPicker();
-                    } catch {
-                      colorInputRef.current?.click();
-                    }
-                  }}
-                ></div>
+              <div className="color-input-wrap-custom">
+                <ColorSwatchPicker value={textColor} onChange={setTextColor} />
                 <input
                   type="text"
                   value={textColor}
                   onChange={(e) => setTextColor(e.target.value)}
                   className="color-text-input"
-                />
-                <input
-                  ref={colorInputRef}
-                  type="color"
-                  value={textColor}
-                  onChange={(e) => setTextColor(e.target.value)}
-                  className="color-picker-hidden"
                 />
               </div>
             </div>
@@ -359,7 +341,7 @@ const Customize = () => {
             <div className="tool-group" style={{ marginTop: 20, paddingTop: 20, borderTop: '1px solid #eee' }}>
               <label>Text Position</label>
               <p style={{ fontSize: 12, color: '#888', margin: '4px 0 10px' }}>
-                Drag the move handle (<FaArrowsAlt style={{ verticalAlign: 'middle' }} />) on the card to position the text anywhere you like.
+                Card par text ko drag handle (<FaArrowsAlt style={{ verticalAlign: 'middle' }} />) se ghaseet kar apni marzi ki jagah rakhein.
               </p>
               <button type="button" className="format-btn" onClick={resetPosition} style={{ width: 'auto', padding: '6px 14px' }}>
                 Reset to Center

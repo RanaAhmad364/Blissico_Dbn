@@ -29,13 +29,13 @@
 
 @media (max-width: 525px) {
   .occasions-section {
-    padding: 80px 18%;
+      padding: 80px 10% 30px 10%;
 }
 .section-header h2 {
-    font-size: 2.1rem;
+    font-size: 1.9rem;
 }
 .section-header .sub-title {
-    font-size: 1.5rem;
+    font-size: 2rem;
 }
   .occasion-block, .occasion-block.reverse {
     flex-direction: column;
@@ -51,7 +51,7 @@
 
   .occ-image {
     width: 100%;
-    height: 280px;
+    height: 300px;
     flex: none;
     display: block;
   }
@@ -63,14 +63,15 @@
 
   .occ-content h3 {
     font-family: 'NeueMontreal', 'sans-serif';
-    font-size: 1.8rem;
+    font-size: 2rem;
     text-align: center;
     margin-bottom: 20px;
   }
 
   .occ-links a {
     max-width: 100%;
-    justify-content: center;
+    justify-content: space-around;
+    font-size: 1.4rem;
     padding: 15px 0;
     gap: 15px;
   }

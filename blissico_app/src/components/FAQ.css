@@ -79,7 +79,7 @@
 
 /* --- Mobile Responsiveness --- */
 @media (max-width: 768px) {
-  .faq-section { padding: 60px 20px; }
+  .faq-section { padding: 60px 10%; }
   .faq-title { font-size: 2.2rem; }
   .faq-question { font-size: 0.95rem; }
   .faq-answer { padding-right: 0; }
@@ -87,13 +87,18 @@
 
 @media (max-width: 425px) {
     .faq-section {
-        padding: 60px 90px;
+        padding: 30px 10%;
     }
     .faq-title { 
       font-size: 2rem; 
+      margin-bottom: 20px;
     }
         .faq-question {
-        font-size: 1.25rem;
+        font-size: 1.4rem;
+    }
+    .faq-answer{
+      font-size: 0.9rem;
+    line-height: 1.4;
     }
   }
 /* --- Professional FAQ Section --- */

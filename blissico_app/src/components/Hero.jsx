@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import  './Hero.css';
 
 import sliderImage from '../assets/images/slider image.png';
+// import sliderImageMobile from '../assets/images/slider-image-mobile.png';
 
 const Hero = () => {
   const [currentSlide, setCurrentSlide] = useState(0);

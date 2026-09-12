@@ -21,12 +21,15 @@
 }
 @media (max-width: 425px) {
 .card h3 {
-    font-size: 1.8rem;
+    font-size: 2rem;
 }
 .card {
     padding: 5px;
 }
 .card p {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
+}
+.step-cards-section{
+    padding: 60px 10%;
 }
 }
