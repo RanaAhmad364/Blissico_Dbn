@@ -36,39 +36,52 @@ class CustomizationService:
 
     @staticmethod
     def _write_boxes(customization, boxes_data):
+        # BUG FIX: `greeting_text`/`font_family`/etc. are NOT NULL columns on
+        # CardCustomization with no default value. The caller creates the row
+        # with ONLY user_id/card_id set, then calls db.session.flush() to get
+        # an id — but flush() sends the INSERT to the database immediately.
+        # On Postgres (unlike lenient SQLite) that INSERT is rejected by the
+        # NOT NULL constraint because greeting_text is still None at that
+        # point, which is exactly the 500 you're seeing on save. Setting the
+        # flat fields FIRST (before anything can flush) fixes it regardless
+        # of what order the caller flushes/commits in.
+        first = boxes_data[0]
+        customization.greeting_text = first.get("content", "") or ""
+        customization.font_family = first.get("font_family") or "Poppins"
+        customization.font_size = int(first.get("font_size") or 24)
+        customization.font_color = first.get("font_color") or "#000000"
+        customization.bold = bool(first.get("bold", False))
+        customization.italic = bool(first.get("italic", False))
+        customization.underline = bool(first.get("underline", False))
+        customization.alignment = first.get("alignment") or "center"
+        customization.letter_spacing = float(first.get("letter_spacing") if first.get("letter_spacing") not in (None, "") else 0)
+        customization.line_height = float(first.get("line_height") if first.get("line_height") not in (None, "") else 1.2)
+        customization.position_x = float(first.get("position_x") if first.get("position_x") not in (None, "") else 50)
+        customization.position_y = float(first.get("position_y") if first.get("position_y") not in (None, "") else 50)
+
+        # Needs an id to attach child rows to — safe to flush now that the
+        # NOT NULL columns above are already populated.
+        if customization.id is None:
+            db.session.flush()
+
         CustomizationTextBox.query.filter_by(customization_id=customization.id).delete()
         for i, b in enumerate(boxes_data):
             db.session.add(CustomizationTextBox(
                 customization_id=customization.id,
-                content=b.get("content", ""),
-                font_family=b.get("font_family", "Poppins"),
-                font_size=int(b.get("font_size", 24)),
-                font_color=b.get("font_color", "#000000"),
+                content=b.get("content", "") or "",
+                font_family=b.get("font_family") or "Poppins",
+                font_size=int(b.get("font_size") or 24),
+                font_color=b.get("font_color") or "#000000",
                 bold=bool(b.get("bold", False)),
                 italic=bool(b.get("italic", False)),
                 underline=bool(b.get("underline", False)),
-                alignment=b.get("alignment", "center"),
-                letter_spacing=float(b.get("letter_spacing", 0)),
-                line_height=float(b.get("line_height", 1.2)),
-                position_x=float(b.get("position_x", 50)),
-                position_y=float(b.get("position_y", 50)),
+                alignment=b.get("alignment") or "center",
+                letter_spacing=float(b.get("letter_spacing") if b.get("letter_spacing") not in (None, "") else 0),
+                line_height=float(b.get("line_height") if b.get("line_height") not in (None, "") else 1.2),
+                position_x=float(b.get("position_x") if b.get("position_x") not in (None, "") else 50),
+                position_y=float(b.get("position_y") if b.get("position_y") not in (None, "") else 50),
                 z_index=i,
             ))
-        # Keep legacy flat fields in sync via the first box, for anything
-        # not yet migrated to read text_boxes.
-        first = boxes_data[0]
-        customization.greeting_text = first.get("content", "")
-        customization.font_family = first.get("font_family", "Poppins")
-        customization.font_size = int(first.get("font_size", 24))
-        customization.font_color = first.get("font_color", "#000000")
-        customization.bold = bool(first.get("bold", False))
-        customization.italic = bool(first.get("italic", False))
-        customization.underline = bool(first.get("underline", False))
-        customization.alignment = first.get("alignment", "center")
-        customization.letter_spacing = float(first.get("letter_spacing", 0))
-        customization.line_height = float(first.get("line_height", 1.2))
-        customization.position_x = float(first.get("position_x", 50))
-        customization.position_y = float(first.get("position_y", 50))
 
     @staticmethod
     def get_customization(user_id, card_id):
@@ -102,9 +115,10 @@ class CustomizationService:
         customization = CardCustomization.query.filter_by(user_id=user_id, card_id=card_id, is_default=False).first()
         is_new = customization is None
         if is_new:
+            # NOTE: no premature flush() here anymore — _write_boxes sets the
+            # NOT NULL fields first and flushes itself only once it's safe to.
             customization = CardCustomization(user_id=user_id, card_id=card_id)
             db.session.add(customization)
-            db.session.flush()
 
         CustomizationService._write_boxes(customization, boxes_data)
         db.session.commit()
@@ -147,9 +161,10 @@ class CustomizationService:
         customization = CardCustomization.query.filter_by(card_id=card_id, is_default=True).first()
         is_new = customization is None
         if is_new:
+            # Same fix as save_customization: don't flush before the NOT NULL
+            # flat fields are set.
             customization = CardCustomization(user_id=None, card_id=card_id, is_default=True)
             db.session.add(customization)
-            db.session.flush()
 
         CustomizationService._write_boxes(customization, boxes_data)
         db.session.commit()
