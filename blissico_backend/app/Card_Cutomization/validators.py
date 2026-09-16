@@ -14,36 +14,42 @@ class CustomizationValidator:
     @staticmethod
     def validate(data):
         errors = {}
+        boxes = data.get("text_boxes")
 
-        text = data.get("greeting_text")
-        if not text or not str(text).strip():
-            errors["greeting_text"] = "Greeting text is required."
-        elif len(str(text)) > 500:
-            errors["greeting_text"] = "Greeting text must be under 500 characters."
+        if not boxes or not isinstance(boxes, list):
+            errors["text_boxes"] = "At least one text box is required."
+            raise CustomizationValidationError(errors)
 
-        if data.get("alignment") and data["alignment"] not in CustomizationValidator.ALLOWED_ALIGNMENTS:
-            errors["alignment"] = "Alignment must be left, center, or right."
+        for i, box in enumerate(boxes):
+            prefix = f"text_boxes[{i}]"
 
-        if "font_size" in data and data["font_size"] not in (None, ""):
-            try:
-                size = int(data["font_size"])
-                if not (8 <= size <= 200):
-                    errors["font_size"] = "Font size must be between 8 and 200."
-            except (TypeError, ValueError):
-                errors["font_size"] = "Font size must be a whole number."
+            if not box.get("content") or not str(box["content"]).strip():
+                errors[f"{prefix}.content"] = "Text content is required."
+            elif len(str(box["content"])) > 500:
+                errors[f"{prefix}.content"] = "Text must be under 500 characters."
 
-        if data.get("font_color") and not CustomizationValidator.HEX_COLOR_RE.match(data["font_color"]):
-            errors["font_color"] = "Font color must be a valid hex code, e.g. #ff0000."
+            if box.get("alignment") and box["alignment"] not in CustomizationValidator.ALLOWED_ALIGNMENTS:
+                errors[f"{prefix}.alignment"] = "Alignment must be left, center, or right."
 
-        for field in ("letter_spacing", "line_height","position_x","position_y"):
-            if field in data and data[field] not in (None, ""):
+            if "font_size" in box and box["font_size"] not in (None, ""):
                 try:
-                    float(data[field])
-                    value = float(data[field])
-                    if field in ("position_x", "position_y") and not 0 <= value <= 100:
-                        errors[field] = f"{field.replace('_', ' ').capitalize()} must be between 0 and 100."
+                    size = int(box["font_size"])
+                    if not (8 <= size <= 200):
+                        errors[f"{prefix}.font_size"] = "Font size must be between 8 and 200."
                 except (TypeError, ValueError):
-                    errors[field] = f"{field.replace('_', ' ').capitalize()} must be a number."
+                    errors[f"{prefix}.font_size"] = "Font size must be a whole number."
+
+            if box.get("font_color") and not CustomizationValidator.HEX_COLOR_RE.match(box["font_color"]):
+                errors[f"{prefix}.font_color"] = "Font color must be a valid hex code, e.g. #ff0000."
+
+            for field in ("letter_spacing", "line_height", "position_x", "position_y"):
+                if field in box and box[field] not in (None, ""):
+                    try:
+                        value = float(box[field])
+                        if field in ("position_x", "position_y") and not 0 <= value <= 100:
+                            errors[f"{prefix}.{field}"] = f"{field} must be between 0 and 100."
+                    except (TypeError, ValueError):
+                        errors[f"{prefix}.{field}"] = f"{field} must be a number."
 
         if errors:
             raise CustomizationValidationError(errors)

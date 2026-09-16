@@ -1,10 +1,5 @@
-// src/components/customize/ColorSwatchPicker.jsx
-//
-// A fully custom color picker (no native <input type="color">), so it
-// looks the same and works reliably on every browser/OS — including
-// iOS Safari, where native color-picker triggering from JS is unreliable.
-
 import React, { useState, useRef, useEffect } from 'react';
+import { FaPalette } from 'react-icons/fa';
 import './ColorSwatchPicker.css';
 
 const DESIGN_COLORS = [
@@ -102,14 +97,19 @@ export default function ColorSwatchPicker({ value, onChange }) {
           <div className="swatch-custom-row">
             <span className="swatch-section-label" style={{ marginBottom: 0 }}>Custom</span>
             <div className="swatch-custom-input-wrap">
-              <label
+             <label
                 htmlFor="customColorWheelInput"
                 className="swatch-custom-preview"
+                title="Click to open custom color picker"
+                aria-label="Open custom color picker"
                 style={{
-                  backgroundColor: /^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/.test(customHex) ? customHex : 'transparent',
-                  cursor: 'pointer',
+                  backgroundColor: /^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/.test(customHex)
+                    ? customHex
+                    : '#e5e5e5',
                 }}
-              ></label>
+              >
+                <FaPalette className="swatch-custom-icon" />
+              </label>
               <input
                 id="customColorWheelInput"
                 type="color"

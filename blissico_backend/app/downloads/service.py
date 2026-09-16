@@ -89,7 +89,11 @@ class DownloadService:
             return {"success": False, "message": "You need to purchase this card before downloading it."}, 403
 
         safe_title = "".join(c for c in card.title if c.isalnum() or c in (" ", "-", "_")).strip() or "card"
+        # customization = CardCustomization.query.filter_by(user_id=user_id, card_id=card_id, is_default=False).first()
         customization = CardCustomization.query.filter_by(user_id=user_id, card_id=card_id, is_default=False).first()
+        if not customization:
+            customization = CardCustomization.query.filter_by(card_id=card_id, is_default=True).first()
+        print("[DOWNLOAD DEBUG] customization:", customization)
 
         # --- GIF: a fully separate path — no compositing, no fallthrough ---
         if fmt == "gif":
@@ -106,8 +110,20 @@ class DownloadService:
             if not os.path.exists(gif_disk_path):
                 return {"success": False, "message": "The animated file is missing on the server."}, 404
 
-            with open(gif_disk_path, "rb") as f:
-                out_bytes = f.read()
+            # with open(gif_disk_path, "rb") as f:
+            #     out_bytes = f.read()
+            # filename = f"{safe_title}.gif"
+            # mimetype = "image/gif"
+             # Apply user's customization to every GIF frame
+            if customization:
+                out_bytes = RenderService.render_gif(
+                    gif_disk_path,
+                    customization
+                )
+            else:
+                with open(gif_disk_path, "rb") as f:
+                    out_bytes = f.read()
+
             filename = f"{safe_title}.gif"
             mimetype = "image/gif"
 
@@ -175,8 +191,3 @@ class DownloadService:
             }
             for d, card, user in rows
         ]
-
-
-
-
-

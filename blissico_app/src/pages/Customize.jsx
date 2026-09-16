@@ -3,26 +3,40 @@ import { Link, useParams, useNavigate } from 'react-router-dom';
 import {
   FaAlignLeft, FaAlignCenter, FaAlignRight,
   FaBold, FaItalic, FaUnderline,
-  FaArrowLeft, FaArrowsAlt
+  FaArrowLeft, FaArrowsAlt, FaPlus, FaTrash
 } from 'react-icons/fa';
 import { useAuth } from '../context/AuthContext';
+import { useCart } from '../context/CartContext';
+import { checkOwnership } from '../api/downloads';
 import { getCard, assetUrl } from '../api/catalog';
-
 import { getCustomization, saveCustomization } from '../api/customization';
 import Marquee from '../components/Marquee';
 import Navbar from '../components/Navbar';
 import ColorSwatchPicker from '../components/customize/ColorSwatchPicker';
+import useScreenshotProtection from '../hooks/useScreenshotProtection';
 import './Customize.css';
-import { useCart } from '../context/CartContext';
-import { checkOwnership } from '../api/downloads';
 
-// import { useCart } from '../context/CartContext';
-// const { addToCart } = useCart();
-// const navigate = useNavigate(); 
+const FONT_OPTIONS = [
+  'Poppins', 'Montserrat', 'Playfair Display', 'Open Sans', 'Oswald', 'Pacifico',
+  'Parisienne', 'Patrick Hand', 'Pinyon Script', 'Prata', 'Questrial', 'Raleway',
+  'Satisfy', 'Vidaloka', 'Work Sans', 'Yellowtail', 'Alex Brush', 'Amatic SC',
+  'Caveat', 'Cinzel Decorative', 'Comfortaa', 'Comic Neue', 'Cormorant Garamond',
+  'Cormorant Infant', 'DM Sans', 'DM Serif Display', 'Dancing Script', 'Gilda Display',
+  'Grandstander', 'Great Vibes', 'Helvetica', 'Italiana', 'Kalam', 'Libre Baskerville',
+  'Libre Caslon Display', 'Lobster', 'Lora', 'Marcellus', 'Newsreader', 'Oleragie',
+  'Peristiwa', 'Penna Swashes', 'Switzerland', 'Times New Roman', 'Mitogen Signature',
+  'Paul Signature', 'Yustine Signature', 'Brittany Signature', 'Brush Signature',
+  'Creative Signature', 'Geraldyne Signature', 'Signatie', 'D Signature', 'Bright Mirage',
+];
 
+const newBox = () => ({
+  content: 'New text', font_family: 'Poppins', font_size: 24, font_color: '#000000',
+  bold: false, italic: false, underline: false, alignment: 'center',
+  letter_spacing: 0, line_height: 1.2, position_x: 50, position_y: 50,
+});
 
 const Customize = () => {
-  const PLACEHOLDER_TEXT = 'Click here to add your greeting text';
+  useScreenshotProtection(); // ✅ Screenshot protection hook
   const { cardId } = useParams();
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
@@ -33,45 +47,31 @@ const Customize = () => {
   const [saving, setSaving] = useState(false);
   const [saveMessage, setSaveMessage] = useState('');
   const [error, setError] = useState('');
+  const [isPurchased, setIsPurchased] = useState(false);
 
   const [activeTemplateIndex, setActiveTemplateIndex] = useState(0);
   const [zoomLevel, setZoomLevel] = useState(1);
 
-  const [greetingText, setGreetingText] = useState('');
-  const [fontFamily, setFontFamily] = useState('Poppins');
-  const [fontSize, setFontSize] = useState(24);
-  const [isBold, setIsBold] = useState(false);
-  const [isItalic, setIsItalic] = useState(false);
-  const [isUnderline, setIsUnderline] = useState(false);
-  const [textColor, setTextColor] = useState('#000000');
-  const [alignment, setAlignment] = useState('center');
-  const [letterSpacing, setLetterSpacing] = useState(0);
-  const [lineHeight, setLineHeight] = useState(1.2);
-
-  // NEW: free text position — stored as % of card width/height so it
-  // scales correctly regardless of zoom or screen size. 50/50 = center.
-  const [positionX, setPositionX] = useState(50);
-  const [positionY, setPositionY] = useState(50);
+  const [textBoxes, setTextBoxes] = useState([newBox()]);
+  const [savedTextBoxes, setSavedTextBoxes] = useState([newBox()]);
+  const [selectedBoxIndex, setSelectedBoxIndex] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
 
-  const textRef = useRef(null);
-  const cardStageRef = useRef(null); // the .canvas-card element — drag bounds
-  const dragWrapperRef = useRef(null);
-  const dragStateRef = useRef({ startX: 0, startY: 0, moved: false });
-  const [isPurchased, setIsPurchased] = useState(false);
+  const cardStageRef = useRef(null);
+  const boxRefs = useRef([]);
 
-  // Redirect guests — only registered users may customize (per spec)
+  const selectedBox = textBoxes[selectedBoxIndex] || textBoxes[0];
+
+  const updateSelectedBox = (patch) => {
+    setTextBoxes((prev) => prev.map((b, i) => (i === selectedBoxIndex ? { ...b, ...patch } : b)));
+  };
+
   useEffect(() => {
     if (!authLoading && !user) {
       navigate('/login', { state: { from: `/customize/${cardId}` } });
     }
   }, [authLoading, user, cardId, navigate]);
 
-  // 
-  
-
-  
-//  Load the card + this user's existing customization (or defaults) + This useEffect used for ownership of the card for the user
   useEffect(() => {
     if (!user) return;
     setLoading(true);
@@ -79,76 +79,47 @@ const Customize = () => {
 
     Promise.all([getCard(cardId), getCustomization(cardId), checkOwnership(cardId)])
       .then(([cardData, custom, ownership]) => {
-        const savedDesign = custom?.id ? custom : cardData.default_design; 
         setCard(cardData);
         setIsPurchased(ownership.is_purchased);
-        setGreetingText(savedDesign?.greeting_text || '');
-        setFontFamily(savedDesign?.font_family || 'Poppins');
-        setFontSize(savedDesign?.font_size ?? 24);
-        setIsBold(savedDesign?.bold ?? false);
-        setIsItalic(savedDesign?.italic ?? false);
-        setIsUnderline(savedDesign?.underline ?? false);
-        setTextColor(savedDesign?.font_color || '#000000');
-        setAlignment(savedDesign?.alignment || 'center');
-        setLetterSpacing(savedDesign?.letter_spacing ?? 0);
-        setLineHeight(savedDesign?.line_height ?? 1.2);
-        // fall back to center if this customization has no saved position yet
-        setPositionX(savedDesign?.position_x ?? 50);
-        setPositionY(savedDesign?.position_y ?? 50);
+        const boxes = custom?.text_boxes?.length ? custom.text_boxes : [newBox()];
+        setTextBoxes(boxes);
+        setSavedTextBoxes(boxes);
+        setSelectedBoxIndex(0);
       })
       .catch(() => setError('Could not load this card. Please go back and try again.'))
       .finally(() => setLoading(false));
   }, [cardId, user]);
 
-
-
-
-  // Sync loaded text into the contentEditable div without fighting React re-renders
-  useEffect(() => {
-    if (textRef.current && !loading) {
-      textRef.current.innerText = greetingText;
-    }
-  }, [loading]); // eslint-disable-line react-hooks/exhaustive-deps
-
   const toggleFormat = (format) => {
-    if (format === 'bold') setIsBold((v) => !v);
-    if (format === 'italic') setIsItalic((v) => !v);
-    if (format === 'underline') setIsUnderline((v) => !v);
+    if (format === 'bold') updateSelectedBox({ bold: !selectedBox.bold });
+    if (format === 'italic') updateSelectedBox({ italic: !selectedBox.italic });
+    if (format === 'underline') updateSelectedBox({ underline: !selectedBox.underline });
   };
-
-  /* ---------------- Drag-to-position logic ---------------- */
 
   const clamp = (val, min, max) => Math.min(max, Math.max(min, val));
 
-  const updatePositionFromPointer = useCallback((clientX, clientY) => {
+  const updatePositionFromPointer = useCallback((clientX, clientY, index) => {
     const stage = cardStageRef.current;
     if (!stage) return;
     const rect = stage.getBoundingClientRect();
-    // Convert cursor position to a percentage of the card's own box,
-    // independent of current zoom level (rect already reflects the scaled size).
     const xPct = clamp(((clientX - rect.left) / rect.width) * 100, 0, 100);
     const yPct = clamp(((clientY - rect.top) / rect.height) * 100, 0, 100);
-    setPositionX(xPct);
-    setPositionY(yPct);
+    setTextBoxes((prev) => prev.map((b, i) => (i === index ? { ...b, position_x: xPct, position_y: yPct } : b)));
   }, []);
 
-  const handleDragStart = (e) => {
-    // Only start a drag from the handle / wrapper border, so a plain click
-    // still lets the user place their cursor inside the text to edit it.
+  const handleDragStart = (e, index) => {
     e.preventDefault();
-    const point = e.touches ? e.touches[0] : e;
-    dragStateRef.current = { startX: point.clientX, startY: point.clientY, moved: false };
-    setIsDragging(true);
+    setSelectedBoxIndex(index);
+    setIsDragging(index);
   };
 
   useEffect(() => {
-    if (!isDragging) return;
+    if (isDragging === false || isDragging === null) return;
+    const index = isDragging;
 
     const handleMove = (e) => {
-      if (e.touches) e.preventDefault(); // stop native page-scroll while dragging on mobile
       const point = e.touches ? e.touches[0] : e;
-      dragStateRef.current.moved = true;
-      updatePositionFromPointer(point.clientX, point.clientY);
+      updatePositionFromPointer(point.clientX, point.clientY, index);
     };
     const handleUp = () => setIsDragging(false);
 
@@ -156,7 +127,6 @@ const Customize = () => {
     window.addEventListener('mouseup', handleUp);
     window.addEventListener('touchmove', handleMove, { passive: false });
     window.addEventListener('touchend', handleUp);
-
     return () => {
       window.removeEventListener('mousemove', handleMove);
       window.removeEventListener('mouseup', handleUp);
@@ -165,39 +135,28 @@ const Customize = () => {
     };
   }, [isDragging, updatePositionFromPointer]);
 
-  const resetPosition = () => {
-    setPositionX(50);
-    setPositionY(50);
+  const handleAddBox = () => {
+    setTextBoxes((prev) => [...prev, newBox()]);
+    setSelectedBoxIndex(textBoxes.length);
   };
 
-  /* ---------------- Save ---------------- */
+  const handleDeleteBox = (index) => {
+    if (textBoxes.length === 1) return; // always keep at least one
+    setTextBoxes((prev) => prev.filter((_, i) => i !== index));
+    setSelectedBoxIndex(0);
+  };
+  const resetSelectedPosition = () => {
+  updateSelectedBox({ position_x: 50, position_y: 50 });
+};
 
   const handleSave = async () => {
-    const enteredText = textRef.current ? textRef.current.innerText : greetingText;
-    const text = enteredText.trim() === PLACEHOLDER_TEXT ? '' : enteredText.trim();
-    if (!text) {
-      setError('Please add greeting text before saving your design.');
-      return;
-    }
     setSaving(true);
     setSaveMessage('');
     setError('');
     try {
-      await saveCustomization(cardId, {
-        greeting_text: text,
-        font_family: fontFamily,
-        font_size: fontSize,
-        font_color: textColor,
-        bold: isBold,
-        italic: isItalic,
-        underline: isUnderline,
-        alignment,
-        letter_spacing: letterSpacing,
-        line_height: lineHeight,
-        position_x: positionX,
-        position_y: positionY,
-      });
-      setGreetingText(text);
+      const res = await saveCustomization(cardId, { text_boxes: textBoxes });
+      setTextBoxes(res.text_boxes);
+      setSavedTextBoxes(res.text_boxes);
       setSaveMessage('Design saved!');
       setTimeout(() => setSaveMessage(''), 2500);
     } catch (err) {
@@ -208,51 +167,37 @@ const Customize = () => {
   };
 
   const handleAddToCart = () => {
-     addToCart({
-    id: card.id,
-    title: card.title,
-    thumbnail: card.thumbnail,
-    price: card.price,
-    is_free: card.is_free,
-  });
-  // navigate('/cart');
+    addToCart({ id: card.id, title: card.title, thumbnail: card.thumbnail, price: card.price, is_free: card.is_free });
   };
 
-  if (authLoading || loading) {
-    return <div style={{ padding: 80, textAlign: 'center' }}>Loading...</div>;
-  }
-  if (error && !card) {
-    return <div style={{ padding: 80, textAlign: 'center' }}>{error}</div>;
-  }
+  if (authLoading || loading) return <div style={{ padding: 80, textAlign: 'center' }}>Loading...</div>;
+  if (error && !card) return <div style={{ padding: 80, textAlign: 'center' }}>{error}</div>;
 
   const templates = card?.templates || [];
   const activeTemplate = templates[activeTemplateIndex];
   const backgroundImage = activeTemplate?.preview_image
     ? assetUrl(activeTemplate.preview_image)
-    : card?.thumbnail
-    ? assetUrl(card.thumbnail)
-    : undefined;
+    : card?.thumbnail ? assetUrl(card.thumbnail) : undefined;
 
   return (
     <div className="customize-page">
       <Marquee />
       <Navbar />
 
-      {/* --- Top Action Bar --- */}
       <div className="customize-top-bar">
-        <Link to={`/product/${cardId}`} className="back-link">
-          <FaArrowLeft /> Back To Card
-        </Link>
+        {/* <Link to={`/product/${cardId}`} className="back-link"><FaArrowLeft /> Back To Card</Link> */}
+        <button
+            type="button"
+            className="back-link"
+            onClick={() => {
+              setTextBoxes(savedTextBoxes);
+              navigate(`/product/${cardId}`);
+            }}><FaArrowLeft /> Back To Card</button>
         <div className="top-right-actions">
           {saveMessage && <span style={{ color: '#1e7e34', marginRight: 10 }}>{saveMessage}</span>}
-          <button className="customize-save-btn" onClick={handleSave} disabled={saving}>
-            {saving ? 'Saving...' : 'Save'}
-          </button>
-          {/* <button className="add-cart-btn" onClick={handleAddToCart}>Add to Cart</button> */}
+          <button className="customize-save-btn" onClick={handleSave} disabled={saving}>{saving ? 'Saving...' : 'Save'}</button>
           {isPurchased ? (
-            <span className="add-cart-btn" style={{ background: '#e5e0f7', color: '#6d28d9', cursor: 'default' }}>
-              ✓ Already Purchased
-            </span>
+            <span className="add-cart-btn" style={{ background: '#e5e0f7', color: '#6d28d9', cursor: 'default' }}>✓ Already Purchased</span>
           ) : (
             <button className="add-cart-btn" onClick={handleAddToCart}>Add to Cart</button>
           )}
@@ -261,51 +206,86 @@ const Customize = () => {
 
       {error && <div style={{ color: '#c0392b', textAlign: 'center', padding: '8px' }}>{error}</div>}
 
-      {/* --- Main Workspace --- */}
       <div className="customize-workspace">
-
-        {/* 1. Left Toolbars */}
         <div className="left-toolbars">
           <div className="tab-bar">
-            <div className="tab-btn active">
-              <span className="tab-icon">T</span><span>Text</span>
-            </div>
+            <div className="tab-btn active"><span className="tab-icon">T</span><span>Text</span></div>
           </div>
 
           <div className="tools-panel">
+            {/* --- Text box list --- */}
+            <div className="tool-group">
+              <label>Text Boxes</label>
+              {textBoxes.map((box, i) => (
+                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
+                  <button
+                    type="button"
+                    onClick={() => setSelectedBoxIndex(i)}
+                    style={{
+                      flex: 1, textAlign: 'left', padding: '6px 10px', borderRadius: 6,
+                      border: i === selectedBoxIndex ? '2px solid #e83caa' : '1px solid #e83caa',
+                      background: '#fff', cursor: 'pointer', fontSize: 13, overflow: 'hidden',
+                      textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+                    }}
+                  >
+                    {box.content || `Text box ${i + 1}`}
+                  </button>
+                  {textBoxes.length > 1 && (
+                    <button type="button" onClick={() => handleDeleteBox(i)} style={{ border: 'none', background: 'none', color: '#c0392b', cursor: 'pointer' }}>
+                      <FaTrash size={13} />
+                    </button>
+                  )}
+                </div>
+              ))}
+              <button type="button" onClick={handleAddBox} className="format-btn" style={{ width: '100%', marginTop: 6 }}>
+                <FaPlus size={12} /> Add Text Box
+              </button>
+            </div>
+
+            {/* --- Editable text content for the selected box --- */}
+            <div className="tool-group">
+              <label>Text</label>
+              <textarea
+                value={selectedBox.content}
+                onChange={(e) => updateSelectedBox({ content: e.target.value })}
+                rows={2}
+                style={{ width: '100%', padding: 8, borderRadius: 6, border: '1px solid #e83caa' }}
+              />
+            </div>
+
             <div className="tool-group">
               <label>Font Style</label>
-              <select value={fontFamily} onChange={(e) => setFontFamily(e.target.value)} className="custom-select">
-                <option value="Playfair Display">Playfair Display</option>
-                <option value="Poppins">Poppins</option>
-                <option value="Arial">Arial</option>
-                <option value="Georgia">Georgia</option>
+              <select value={selectedBox.font_family} onChange={(e) => updateSelectedBox({ font_family: e.target.value })} className="custom-select">
+                {FONT_OPTIONS.map((f) => <option key={f} value={f}>{f}</option>)}
               </select>
             </div>
 
             <div className="tool-group row-group">
               <label>Font Size</label>
               <div className="slider-input-wrap">
-                <input type="range" min="12" max="120" value={fontSize} onChange={(e) => setFontSize(Number(e.target.value))} className="custom-slider" />
-                <input type="number" value={fontSize} onChange={(e) => setFontSize(Number(e.target.value))} className="small-input" />
+                <input type="range" min="12" max="120" value={selectedBox.font_size} onChange={(e) => updateSelectedBox({ font_size: Number(e.target.value) })} className="custom-slider" />
+                <input type="number" value={selectedBox.font_size} onChange={(e) => updateSelectedBox({ font_size: Number(e.target.value) })} className="small-input" />
                 <span className="unit">px</span>
               </div>
             </div>
 
             <div className="tool-group formatting-group">
-              <button className={`format-btn ${isBold ? 'active' : ''}`} onClick={() => toggleFormat('bold')}><FaBold /></button>
-              <button className={`format-btn ${isItalic ? 'active' : ''}`} onClick={() => toggleFormat('italic')}><FaItalic /></button>
-              <button className={`format-btn ${isUnderline ? 'active' : ''}`} onClick={() => toggleFormat('underline')}><FaUnderline /></button>
+              <button className={`format-btn ${selectedBox.bold ? 'active' : ''}`} onClick={() => toggleFormat('bold')}><FaBold /></button>
+              <button className={`format-btn ${selectedBox.italic ? 'active' : ''}`} onClick={() => toggleFormat('italic')}><FaItalic /></button>
+              <button className={`format-btn ${selectedBox.underline ? 'active' : ''}`} onClick={() => toggleFormat('underline')}><FaUnderline /></button>
             </div>
 
             <div className="tool-group row-group">
               <label>Text Color</label>
               <div className="color-input-wrap-custom">
-                <ColorSwatchPicker value={textColor} onChange={setTextColor} />
+                <ColorSwatchPicker
+                  value={selectedBox.font_color}
+                  onChange={(color) => updateSelectedBox({ font_color: color })}
+                />
                 <input
                   type="text"
-                  value={textColor}
-                  onChange={(e) => setTextColor(e.target.value)}
+                  value={selectedBox.font_color}
+                  onChange={(e) => updateSelectedBox({ font_color: e.target.value })}
                   className="color-text-input"
                 />
               </div>
@@ -314,17 +294,17 @@ const Customize = () => {
             <div className="tool-group">
               <label>Alignment</label>
               <div className="align-group">
-                <button className={`align-btn ${alignment === 'left' ? 'active' : ''}`} onClick={() => setAlignment('left')}><FaAlignLeft /></button>
-                <button className={`align-btn ${alignment === 'center' ? 'active' : ''}`} onClick={() => setAlignment('center')}><FaAlignCenter /></button>
-                <button className={`align-btn ${alignment === 'right' ? 'active' : ''}`} onClick={() => setAlignment('right')}><FaAlignRight /></button>
+                <button className={`align-btn ${selectedBox.alignment === 'left' ? 'active' : ''}`} onClick={() => updateSelectedBox({ alignment: 'left' })}><FaAlignLeft /></button>
+                <button className={`align-btn ${selectedBox.alignment === 'center' ? 'active' : ''}`} onClick={() => updateSelectedBox({ alignment: 'center' })}><FaAlignCenter /></button>
+                <button className={`align-btn ${selectedBox.alignment === 'right' ? 'active' : ''}`} onClick={() => updateSelectedBox({ alignment: 'right' })}><FaAlignRight /></button>
               </div>
             </div>
 
             <div className="tool-group row-group">
               <label>Letter Spacing</label>
               <div className="slider-input-wrap">
-                <input type="range" min="-5" max="20" value={letterSpacing} onChange={(e) => setLetterSpacing(Number(e.target.value))} className="custom-slider" />
-                <input type="number" value={letterSpacing} onChange={(e) => setLetterSpacing(Number(e.target.value))} className="small-input" />
+                <input type="range" min="-5" max="20" value={selectedBox.letter_spacing} onChange={(e) => updateSelectedBox({ letter_spacing: Number(e.target.value) })} className="custom-slider" />
+                <input type="number" value={selectedBox.letter_spacing} onChange={(e) => updateSelectedBox({ letter_spacing: Number(e.target.value) })} className="small-input" />
                 <span className="unit">px</span>
               </div>
             </div>
@@ -332,38 +312,28 @@ const Customize = () => {
             <div className="tool-group row-group">
               <label>Line Height</label>
               <div className="slider-input-wrap">
-                <input type="range" min="1" max="3" step="0.1" value={lineHeight} onChange={(e) => setLineHeight(Number(e.target.value))} className="custom-slider" />
-                <input type="number" step="0.1" value={lineHeight} onChange={(e) => setLineHeight(Number(e.target.value))} className="small-input" />
+                <input type="range" min="1" max="3" step="0.1" value={selectedBox.line_height} onChange={(e) => updateSelectedBox({ line_height: Number(e.target.value) })} className="custom-slider" />
+                <input type="number" step="0.1" value={selectedBox.line_height} onChange={(e) => updateSelectedBox({ line_height: Number(e.target.value) })} className="small-input" />
               </div>
             </div>
 
-            {/* NEW: Text Position control */}
             <div className="tool-group" style={{ marginTop: 20, paddingTop: 20, borderTop: '1px solid #eee' }}>
               <label>Text Position</label>
               <p style={{ fontSize: 12, color: '#888', margin: '4px 0 10px' }}>
-                Card par text ko drag handle (<FaArrowsAlt style={{ verticalAlign: 'middle' }} />) se ghaseet kar apni marzi ki jagah rakhein.
+                 Drag the text  (<FaArrowsAlt style={{ verticalAlign: 'middle' }} />)  to position it wherever you like on the card.
               </p>
-              <button type="button" className="format-btn" onClick={resetPosition} style={{ width: 'auto', padding: '6px 14px' }}>
+              <button type="button" className="format-btn" onClick={resetSelectedPosition} style={{ width: 'auto', padding: '6px 14px' }}>
                 Reset to Center
               </button>
             </div>
 
-            {/* Style picker — only shown if this card has more than one admin-provided template variant */}
             {templates.length > 1 && (
               <div className="tool-group" style={{ marginTop: 20, paddingTop: 20, borderTop: '1px solid #eee' }}>
                 <label>Style</label>
                 <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
                   {templates.map((t, i) => (
-                    <img
-                      key={t.id}
-                      src={assetUrl(t.preview_image)}
-                      alt={`Style ${i + 1}`}
-                      onClick={() => setActiveTemplateIndex(i)}
-                      style={{
-                        width: 48, height: 48, objectFit: 'cover', borderRadius: 6, cursor: 'pointer',
-                        border: i === activeTemplateIndex ? '2px solid #333' : '2px solid transparent',
-                      }}
-                    />
+                    <img key={t.id} src={assetUrl(t.preview_image)} alt={`Style ${i + 1}`} onClick={() => setActiveTemplateIndex(i)}
+                      style={{ width: 48, height: 48, objectFit: 'cover', borderRadius: 6, cursor: 'pointer', border: i === activeTemplateIndex ? '2px solid #333' : '2px solid transparent' }} />
                   ))}
                 </div>
               </div>
@@ -371,7 +341,6 @@ const Customize = () => {
           </div>
         </div>
 
-        {/* 2. Canvas / Preview Area */}
         <div className="canvas-area-wrapper">
           <div className="canvas-stage">
             <div className="canvas-viewport">
@@ -381,48 +350,29 @@ const Customize = () => {
                   className="canvas-card"
                   style={backgroundImage ? { backgroundImage: `url(${backgroundImage})`, backgroundSize: 'cover', backgroundPosition: 'center' } : undefined}
                 >
-                  {/* Draggable wrapper — positioned freely inside the card via % coords */}
-                  <div
-                    ref={dragWrapperRef}
-                    className={`text-drag-wrapper ${isDragging ? 'dragging' : ''}`}
-                    style={{
-                      left: `${positionX}%`,
-                      top: `${positionY}%`,
-                    }}
-                  >
+                  {textBoxes.map((box, i) => (
                     <div
-                      className="drag-handle"
-                      onMouseDown={handleDragStart}
-                      onTouchStart={handleDragStart}
-                      title="Drag to reposition"
+                      key={i}
+                      className={`text-drag-wrapper ${isDragging === i ? 'dragging' : ''} ${i === selectedBoxIndex ? 'selected' : ''}`}
+                      style={{ left: `${box.position_x}%`, top: `${box.position_y}%` }}
+                      onClick={() => setSelectedBoxIndex(i)}
                     >
-                      <FaArrowsAlt size={12} />
+                      <div className="drag-handle" onMouseDown={(e) => handleDragStart(e, i)} onTouchStart={(e) => handleDragStart(e, i)} title="Drag to reposition">
+                        <FaArrowsAlt size={12} />
+                      </div>
+                      <div
+                        className="editable-text"
+                        style={{
+                          fontFamily: box.font_family, fontSize: `${box.font_size}px`,
+                          fontWeight: box.bold ? 'bold' : 'normal', fontStyle: box.italic ? 'italic' : 'normal',
+                          textDecoration: box.underline ? 'underline' : 'none', color: box.font_color,
+                          textAlign: box.alignment, letterSpacing: `${box.letter_spacing}px`, lineHeight: box.line_height,
+                        }}
+                      >
+                        {box.content}
+                      </div>
                     </div>
-
-                    <div
-                      ref={textRef}
-                      className={`editable-text ${!greetingText ? 'editable-text-placeholder' : ''}`}
-                      style={{
-                        fontFamily,
-                        fontSize: `${fontSize}px`,
-                        fontWeight: isBold ? 'bold' : 'normal',
-                        fontStyle: isItalic ? 'italic' : 'normal',
-                        textDecoration: isUnderline ? 'underline' : 'none',
-                        color: textColor,
-                        textAlign: alignment,
-                        letterSpacing: `${letterSpacing}px`,
-                        lineHeight: lineHeight,
-                      }}
-                      contentEditable={true}
-                      suppressContentEditableWarning={true}
-                      onFocus={(e) => {
-                        if (!greetingText && e.currentTarget.innerText === PLACEHOLDER_TEXT) {
-                          e.currentTarget.innerText = '';
-                        }
-                      }}
-                      onInput={(e) => setGreetingText(e.currentTarget.innerText)}
-                    />
-                  </div>
+                  ))}
                 </div>
               </div>
             </div>
@@ -431,11 +381,7 @@ const Customize = () => {
           <div className="zoom-controls">
             <button className="zoom-btn" onClick={() => setZoomLevel(Math.max(0.5, zoomLevel - 0.1))}>−</button>
             <div className="zoom-slider-container">
-              <input
-                type="range" min="0.5" max="2.0" step="0.05"
-                value={zoomLevel} onChange={(e) => setZoomLevel(parseFloat(e.target.value))}
-                className="zoom-slider"
-              />
+              <input type="range" min="0.5" max="2.0" step="0.05" value={zoomLevel} onChange={(e) => setZoomLevel(parseFloat(e.target.value))} className="zoom-slider" />
             </div>
             <button className="zoom-btn" onClick={() => setZoomLevel(Math.min(2.0, zoomLevel + 0.1))}>+</button>
           </div>

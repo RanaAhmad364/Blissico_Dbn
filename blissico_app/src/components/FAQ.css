@@ -81,7 +81,7 @@
 @media (max-width: 768px) {
   .faq-section { padding: 60px 10%; }
   .faq-title { font-size: 2.2rem; }
-  .faq-question { font-size: 0.95rem; }
+  .faq-question { font-size: 1.23rem; font-weight: 600; }
   .faq-answer { padding-right: 0; }
 }
 
@@ -95,6 +95,7 @@
     }
         .faq-question {
         font-size: 1.4rem;
+        font-weight: 500;
     }
     .faq-answer{
       font-size: 0.9rem;

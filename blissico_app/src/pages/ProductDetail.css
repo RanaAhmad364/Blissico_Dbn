@@ -85,7 +85,7 @@
   margin-bottom: 25px;
 }
 .detail-customize-btn:hover {
-  background: #c86a89;
+  background: #e83caa;
 }
 .detail-action-buttons {
   display: flex; /* ✅ Dono buttons ek line mein */
@@ -110,7 +110,7 @@
   margin-bottom: 25px;
 }
 .detail-addcart-btn:hover {
-  background: #f3e7eb;
+  background: #e83caa;
   border-color: #d98ea5;
 }
 
@@ -249,7 +249,7 @@
   transition: all 0.3s;
 }
 .carousel-arrow:hover {
-  background: #f9f9f9;
+  background: #e83caa;
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
@@ -327,6 +327,6 @@
   width: 100%;
 }
 .share-menu-item:hover {
-  background: #f7f0f3;
+  background: #e83caa;
   color: #e83caa;
 }

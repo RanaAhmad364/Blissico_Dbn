@@ -191,8 +191,32 @@ class CardCustomization(BaseModel):
     )
     user = db.relationship("User",back_populates="customizations")
     card = db.relationship("Card",back_populates="customizations")
+    text_boxes = db.relationship(
+        "CustomizationTextBox", back_populates="customization",
+        cascade="all, delete-orphan", order_by="CustomizationTextBox.z_index"
+    )
     def __repr__(self):
         return f"<Customization {self.id}>"
+
+
+class CustomizationTextBox(BaseModel):
+    __tablename__ = "customization_text_boxes"
+    customization_id = db.Column(db.Integer, db.ForeignKey("card_customizations.id"), nullable=False)
+    content = db.Column(db.Text, nullable=False, default="")
+    font_family = db.Column(db.String(100), default="Poppins")
+    font_size = db.Column(db.Integer, default=24)
+    font_color = db.Column(db.String(20), default="#000000")
+    bold = db.Column(db.Boolean, default=False)
+    italic = db.Column(db.Boolean, default=False)
+    underline = db.Column(db.Boolean, default=False)
+    alignment = db.Column(db.String(20), default="center")
+    letter_spacing = db.Column(db.Float, default=0)
+    line_height = db.Column(db.Float, default=1.2)
+    position_x = db.Column(db.Float, default=50)
+    position_y = db.Column(db.Float, default=50)
+    z_index = db.Column(db.Integer, default=0)
+    customization = db.relationship("CardCustomization", back_populates="text_boxes")
+
 
 # Commerce Module (Order → Payment → Invoice)
 

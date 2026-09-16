@@ -69,7 +69,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  background: #333;
+  background: #fff;
   border-radius: 6px;
   padding: 4px 8px;
 }
@@ -97,7 +97,7 @@
 .swatch-custom-input {
   background: transparent;
   border: none;
-  color: #fff;
+  color: #000;
   font-size: 0.85rem;
   width: 80px;
   outline: none;
@@ -132,4 +132,28 @@
   .swatch-popover {
     width: min(280px, 80vw);
   }
+}
+
+.swatch-custom-preview {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px dashed rgba(0, 0, 0, 0.3);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.15s ease, border-color 0.15s ease;
+  position: relative;
+}
+.swatch-custom-preview:hover {
+  transform: scale(1.1);
+  border-color: #e83caa;
+}
+.swatch-custom-icon {
+  font-size: 12px;
+  color: #fff;
+  filter: drop-shadow(0 0 1px rgba(0,0,0,0.7));
+  pointer-events: none;
 }

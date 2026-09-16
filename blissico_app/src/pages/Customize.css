@@ -19,7 +19,10 @@
   align-items: center;
   gap: 8px;
   text-decoration: none;
+  border: none;
   color: #1a1a1a;
+  cursor: pointer;
+  background: white;
   font-weight: 500;
   font-size: 0.9rem;
   transition: color 0.3s;
@@ -34,13 +37,14 @@
 .customize-save-btn {
   background: transparent;
   border: 1px solid #e83caa;
-  color: #e83caa;
+  background: #e83caa;
+  color: #fff;
   padding: 8px 25px;
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.3s;
 }
-.customize-save-btn:hover { background: #fbe6f2; }
+.customize-save-btn:hover { background: #e83caa; }
 
 .add-cart-btn {
   background: #e83caa;
@@ -342,6 +346,7 @@
   gap: 15px;
   background: #f0f0f0;
   padding: 8px 20px;
+  margin-top: 30px;
   border-radius: 30px;
 }
 /* --- ADD THESE NEW CLASSES TO THE BOTTOM OF YOUR Customize.css --- */
@@ -414,7 +419,7 @@
 }
 /* --- NEW: Scaling viewport & Wrapper --- */
 .canvas-viewport {
-  width: 100%;
+  width: 70%;
   height: 100%;
   overflow: hidden;
   display: flex;
@@ -560,7 +565,7 @@
   width: 22px;
   height: 22px;
   border-radius: 6px;
-  background: #7c3aed;
+  background: #e83caa;
   color: #fff;
   touch-action: none; /* stop mobile browser's native scroll/pan from hijacking the drag */
   display: flex;
@@ -593,7 +598,7 @@
 }
 
 .editable-text:focus {
-  outline: 1px dashed #7c3aed;
+  outline: 1px dashed #e83caa;
 }
 
 .editable-text-placeholder {
@@ -611,3 +616,80 @@
 .editable-text-placeholder:focus::before {
   content: '';
 }
+.text-drag-wrapper.selected {
+  outline: 2px dashed #e83caa;
+  outline-offset: 4px;
+}
+.text-drag-wrapper {
+  max-width: min(320px, 85%);
+}
+.tools-panel textarea:focus,
+.tools-panel select:focus {
+  outline: none;
+  border-color: #e83caa;
+  box-shadow: 0 0 0 2px rgba(232, 60, 170, 0.15);
+}
+@font-face { font-family: 'Poppins'; src: url('/fonts/Poppins-Regular.otf'); }
+@font-face { font-family: 'Montserrat'; src: url('/fonts/Montserrat-Regular.ttf'); }
+@font-face { font-family: 'Montserrat'; src: url('/fonts/Montserrat-Medium.ttf'); font-weight: bold; }
+@font-face { font-family: 'Playfair Display'; src: url('/fonts/PlayfairDisplay-Regular.ttf'); }
+@font-face { font-family: 'Playfair Display'; src: url('/fonts/PlayfairDisplay-Italic.ttf'); font-style: italic; }
+@font-face { font-family: 'Open Sans'; src: url('/fonts/OpenSans-Regular.ttf'); }
+@font-face { font-family: 'Oswald'; src: url('/fonts/Oswald-Light.ttf'); }
+@font-face { font-family: 'Oswald'; src: url('/fonts/Oswald-Medium.ttf'); font-weight: bold; }
+@font-face { font-family: 'Pacifico'; src: url('/fonts/Pacifico.ttf'); }
+@font-face { font-family: 'Parisienne'; src: url('/fonts/Parisienne-Regular.ttf'); }
+@font-face { font-family: 'Patrick Hand'; src: url('/fonts/PatrickHand-Regular.ttf'); }
+@font-face { font-family: 'Pinyon Script'; src: url('/fonts/PinyonScript-Regular.ttf'); }
+@font-face { font-family: 'Prata'; src: url('/fonts/Prata-Regular.ttf'); }
+@font-face { font-family: 'Questrial'; src: url('/fonts/Questrial-Regular.ttf'); }
+@font-face { font-family: 'Raleway'; src: url('/fonts/Raleway Medium.ttf'); }
+@font-face { font-family: 'Satisfy'; src: url('/fonts/Satisfy-Regular.ttf'); }
+@font-face { font-family: 'Vidaloka'; src: url('/fonts/Vidaloka-Regular.ttf'); }
+@font-face { font-family: 'Work Sans'; src: url('/fonts/WorkSans-Medium.ttf'); }
+@font-face { font-family: 'Yellowtail'; src: url('/fonts/Yellowtail-Regular.ttf'); }
+@font-face { font-family: 'Alex Brush'; src: url('/fonts/AlexBrush-Regular.ttf'); }
+@font-face { font-family: 'Amatic SC'; src: url('/fonts/AmaticSC-Bold.ttf'); }
+@font-face { font-family: 'Caveat'; src: url('/fonts/Caveat-Regular.ttf'); }
+@font-face { font-family: 'Cinzel Decorative'; src: url('/fonts/CinzelDecorative-Regular.otf'); }
+@font-face { font-family: 'Comfortaa'; src: url('/fonts/Comfortaa-Regular.ttf'); }
+@font-face { font-family: 'Comfortaa'; src: url('/fonts/Comfortaa-Bold.ttf'); font-weight: bold; }
+@font-face { font-family: 'Comic Neue'; src: url('/fonts/ComicNeue-Angular-Regular.ttf'); }
+@font-face { font-family: 'Comic Neue'; src: url('/fonts/ComicNeue-Angular-Bold.ttf'); font-weight: bold; }
+@font-face { font-family: 'Cormorant Garamond'; src: url('/fonts/CormorantGaramond-Regular.ttf'); }
+@font-face { font-family: 'Cormorant Garamond'; src: url('/fonts/CormorantGaramond-Medium.ttf'); font-weight: bold; }
+@font-face { font-family: 'Cormorant Infant'; src: url('/fonts/CormorantInfant-SemiBold.ttf'); }
+@font-face { font-family: 'DM Sans'; src: url('/fonts/DMSans_36pt-Regular.ttf'); }
+@font-face { font-family: 'DM Serif Display'; src: url('/fonts/DMSerifDisplay-Regular.ttf'); }
+@font-face { font-family: 'Dancing Script'; src: url('/fonts/Dancing Script.ttf'); }
+@font-face { font-family: 'Gilda Display'; src: url('/fonts/GildaDisplay-Regular.ttf'); }
+@font-face { font-family: 'Grandstander'; src: url('/fonts/Grandstander-Medium.ttf'); }
+@font-face { font-family: 'Great Vibes'; src: url('/fonts/GreatVibes-Regular.ttf'); }
+@font-face { font-family: 'Helvetica'; src: url('/fonts/Helvetica.ttf'); }
+@font-face { font-family: 'Helvetica'; src: url('/fonts/Helvetica-Bold-Font.ttf'); font-weight: bold; }
+@font-face { font-family: 'Italiana'; src: url('/fonts/Italiana-Regular.ttf'); }
+@font-face { font-family: 'Kalam'; src: url('/fonts/Kalam-Regular.ttf'); }
+@font-face { font-family: 'Libre Baskerville'; src: url('/fonts/LibreBaskerville-Regular.ttf'); }
+@font-face { font-family: 'Libre Baskerville'; src: url('/fonts/LibreBaskerville-Medium.ttf'); font-weight: bold; }
+@font-face { font-family: 'Libre Baskerville'; src: url('/fonts/LibreBaskerville-Italic.ttf'); font-style: italic; }
+@font-face { font-family: 'Libre Caslon Display'; src: url('/fonts/LibreCaslonDisplay-Regular.ttf'); }
+@font-face { font-family: 'Lobster'; src: url('/fonts/Lobster.otf'); }
+@font-face { font-family: 'Lora'; src: url('/fonts/Lora-Regular.ttf'); }
+@font-face { font-family: 'Marcellus'; src: url('/fonts/Marcellus-Regular.ttf'); }
+@font-face { font-family: 'Newsreader'; src: url('/fonts/Newsreader_24pt-Regular.ttf'); }
+@font-face { font-family: 'Oleragie'; src: url('/fonts/Oleragie.otf'); }
+@font-face { font-family: 'Peristiwa'; src: url('/fonts/Peristiwa.otf'); }
+@font-face { font-family: 'Penna Swashes'; src: url('/fonts/Penna-Swashes.ttf'); }
+@font-face { font-family: 'Switzerland'; src: url('/fonts/Switzerland.ttf'); }
+@font-face { font-family: 'Times New Roman'; src: url('/fonts/times.ttf'); }
+@font-face { font-family: 'Times New Roman'; src: url('/fonts/timesi.ttf'); font-style: italic; }
+@font-face { font-family: 'Mitogen Signature'; src: url('/fonts/Mitogen Signature.ttf'); }
+@font-face { font-family: 'Paul Signature'; src: url('/fonts/Paul Signature.ttf'); }
+@font-face { font-family: 'Yustine Signature'; src: url('/fonts/Yustine Signature.ttf'); }
+@font-face { font-family: 'Brittany Signature'; src: url('/fonts/BrittanySignature.ttf'); }
+@font-face { font-family: 'Brush Signature'; src: url('/fonts/Brush Signature.ttf'); }
+@font-face { font-family: 'Creative Signature'; src: url('/fonts/CreativeSignature.ttf'); }
+@font-face { font-family: 'Geraldyne Signature'; src: url('/fonts/GeraldyneSignature-RpzpW.ttf'); }
+@font-face { font-family: 'Signatie'; src: url('/fonts/Signatie.ttf'); }
+@font-face { font-family: 'D Signature'; src: url('/fonts/dsignature.ttf'); }
+@font-face { font-family: 'Bright Mirage'; src: url('/fonts/BrightMirage-R91Ve.ttf'); }
