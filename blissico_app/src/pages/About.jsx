@@ -68,7 +68,12 @@ const About = () => {
         <div className="about-cta-content">
           <h3>Have Something More <span className="highlight">Personal</span> in Mind?</h3>
           <p>For celebrations that deserve a design created exclusively for you.</p>
-          <button className="cta-btn">Get Started</button>
+          {/* <button className="cta-btn">Get Started</button> */}
+          <a 
+            href="https://designsbynimrah.com/" 
+            target="_blank" rel="noopener noreferrer" className="cta-btn">
+            Get Started
+          </a>
         </div>
         <div className="about-cta-image"></div>
       </section>
