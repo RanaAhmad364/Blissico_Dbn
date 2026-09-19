@@ -357,12 +357,10 @@ FONT_FILES = {
         "bold_italic": "BlackSignature_PERSONAL_USE_ONLY.otf",
     },
 }
-
-
 class RenderService:
     """
     Composites a saved CardCustomization's text boxes onto its card template.
-
+ 
     KEY DESIGN NOTE — baseline-accurate positioning:
     Browsers position a line of text relative to its FONT BASELINE, with
     extra "leading" space split evenly above/below the font's own
@@ -370,21 +368,21 @@ class RenderService:
     Pillow's plain draw.text() with a top-left origin does NOT replicate
     this, which is why earlier versions of this renderer drifted out of
     sync with the browser editor (position AND underline placement).
-
+ 
     Every line here is now drawn using Pillow's anchor="ls" (left,
     baseline), with the baseline computed the same way a browser computes
     it — this is what keeps the download visually aligned with the editor.
     """
-
+ 
     EDITOR_CANVAS_WIDTH = 450
     EDITOR_TEXT_MAX_WIDTH = 320
-
+ 
     # ---- font loading ----------------------------------------------------
-
+ 
     @staticmethod
     def _font_path(font_family, bold=False, italic=False):
         variants = FONT_FILES.get(font_family, FONT_FILES["Poppins"])
-
+ 
         if bold and italic:
             filename = variants.get("bold_italic", variants["regular"])
         elif bold:
@@ -393,19 +391,19 @@ class RenderService:
             filename = variants.get("italic", variants["regular"])
         else:
             filename = variants["regular"]
-
+ 
         fonts_dir = os.path.join(current_app.root_path, "static", "fonts")
         path = os.path.join(fonts_dir, filename)
-
+ 
         if os.path.exists(path):
             return path
-
+ 
         current_app.logger.warning(
             f"[fonts] Missing font file '{filename}' for family "
             f"'{font_family}' (bold={bold}, italic={italic}) — "
             f"falling back to Poppins."
         )
-
+ 
         poppins = FONT_FILES["Poppins"]
         if bold and italic:
             fallback = poppins["bold_italic"]
@@ -415,10 +413,10 @@ class RenderService:
             fallback = poppins["italic"]
         else:
             fallback = poppins["regular"]
-
+ 
         fallback_path = os.path.join(fonts_dir, fallback)
         return fallback_path if os.path.exists(fallback_path) else None
-
+ 
     @staticmethod
     def _load_font(font_family, bold=False, italic=False, size=16):
         path = RenderService._font_path(font_family, bold, italic)
@@ -433,7 +431,7 @@ class RenderService:
                 f"[fonts] Could not load '{path}' for '{font_family}': {exc}"
             )
             return ImageFont.load_default()
-
+ 
     @staticmethod
     def _get_font_metrics(font):
         """(ascent, descent) in px, relative to this font's baseline.
@@ -443,18 +441,18 @@ class RenderService:
         except Exception:
             size = getattr(font, "size", 16)
             return size, 0
-
+ 
     # ---- measuring -----------------------------------------------------
-
+ 
     @staticmethod
     def _text_width(draw, text, font, letter_spacing=0):
         width = draw.textlength(text, font=font)
         if letter_spacing and len(text) > 1:
             width += letter_spacing * (len(text) - 1)
         return width
-
+ 
     # ---- drawing ---------------------------------------------------------
-
+ 
     @staticmethod
     def _draw_line(draw, x, baseline_y, text, font, fill, letter_spacing=0):
         """Draws one line anchored at its LEFT-BASELINE point (x, baseline_y)
@@ -467,7 +465,7 @@ class RenderService:
                 ascent, _ = RenderService._get_font_metrics(font)
                 draw.text((x, baseline_y - ascent), text, font=font, fill=fill)
             return draw.textlength(text, font=font)
-
+ 
         cursor = x
         for char in text:
             try:
@@ -476,39 +474,17 @@ class RenderService:
                 ascent, _ = RenderService._get_font_metrics(font)
                 draw.text((cursor, baseline_y - ascent), char, font=font, fill=fill)
             cursor += draw.textlength(char, font=font) + letter_spacing
-
+ 
         return (cursor - letter_spacing) - x
-
+ 
     @staticmethod
     def _wrap_text(draw, text, font, max_width, letter_spacing=0):
-        """Wraps only at spaces — never breaks inside a word — matching
-        the browser's `word-break: normal` behaviour used in the editor."""
-        lines = []
-
-        for raw_line in text.split("\n"):
-            words = raw_line.split(" ")
-
-            if not words:
-                lines.append("")
-                continue
-
-            current = words[0]
-
-            for word in words[1:]:
-                candidate = f"{current} {word}"
-
-                if RenderService._text_width(
-                    draw, candidate, font, letter_spacing
-                ) <= max_width:
-                    current = candidate
-                else:
-                    lines.append(current)
-                    current = word
-
-            lines.append(current)
-
-        return lines
-
+        """Only splits on the user's own line breaks (\\n) — matches the
+        editor's white-space: pre, where auto-wrap-by-width is intentionally
+        OFF and a line only ends where the user pressed Enter themselves.
+        `max_width` is accepted for call-site compatibility but unused."""
+        return text.split("\n")
+ 
     @staticmethod
     def _draw_text_on_frame(base, text_box):
         """Draw one text box onto an already-open Pillow image, using
@@ -516,64 +492,64 @@ class RenderService:
         base = base.convert("RGBA")
         draw = ImageDraw.Draw(base)
         img_w, img_h = base.size
-
+ 
         canvas_width = RenderService.EDITOR_CANVAS_WIDTH
         text_max_width = RenderService.EDITOR_TEXT_MAX_WIDTH
-
+ 
         scale = img_w / canvas_width
         scaled_font_size = max(1, round(text_box.font_size * scale))
-
+ 
         font = RenderService._load_font(
             text_box.font_family, text_box.bold, text_box.italic, scaled_font_size
         )
-
+ 
         text = text_box.content or ""
         if not text.strip():
             return base
-
+ 
         letter_spacing = (text_box.letter_spacing or 0) * scale
         max_width = text_max_width * scale
-
+ 
         lines = RenderService._wrap_text(draw, text, font, max_width, letter_spacing)
-
+ 
         ascent, descent = RenderService._get_font_metrics(font)
-
+ 
         # Same formula a browser uses for `line-height: N` — the line box
         # is font_size * N tall, and the leftover space (leading) is split
         # evenly above and below the font's own ascent+descent box.
         line_height = int(scaled_font_size * (text_box.line_height or 1.2))
         half_leading = (line_height - (ascent + descent)) / 2
         total_height = line_height * len(lines)
-
+ 
         anchor_x = img_w * (text_box.position_x / 100)
         anchor_y = img_h * (text_box.position_y / 100)
         start_y = anchor_y - (total_height / 2)  # top of the first line box
-
+ 
         color = text_box.font_color or "#000000"
         alignment = text_box.alignment or "center"
-
+ 
         line_widths = [
             RenderService._text_width(draw, line, font, letter_spacing)
             for line in lines
         ]
         box_w = max(line_widths) if line_widths else 0
         box_left = anchor_x - (box_w / 2)
-
+ 
         for i, line in enumerate(lines):
             line_w = line_widths[i]
-
+ 
             if alignment == "left":
                 x = box_left
             elif alignment == "right":
                 x = box_left + box_w - line_w
             else:
                 x = box_left + (box_w - line_w) / 2
-
+ 
             line_box_top = start_y + i * line_height
             baseline_y = line_box_top + half_leading + ascent
-
+ 
             RenderService._draw_line(draw, x, baseline_y, line, font, color, letter_spacing)
-
+ 
             if text_box.underline:
                 # ~8% of the font size below the baseline — matches how
                 # browsers place text-decoration: underline in practice.
@@ -584,46 +560,46 @@ class RenderService:
                     fill=color,
                     width=max(1, scaled_font_size // 20),
                 )
-
+ 
         return base
-
+ 
     # ---- public entry points ------------------------------------------
-
+ 
     @staticmethod
     def render(template_path, customization):
         """Render all text boxes onto a static image."""
         from app.Card_Cutomization.services import CustomizationService
-
+ 
         base = Image.open(template_path).convert("RGBA")
-
+ 
         for box in CustomizationService._effective_boxes(customization):
             base = RenderService._draw_text_on_frame(base, box)
-
+ 
         return base
-
+ 
     @staticmethod
     def render_gif(gif_path, customization):
         """Render all text boxes onto every GIF frame."""
         from app.Card_Cutomization.services import CustomizationService
-
+ 
         boxes = CustomizationService._effective_boxes(customization)
         im = Image.open(gif_path)
-
+ 
         composited_frames = []
         durations = []
-
+ 
         for frame in ImageSequence.Iterator(im):
             composited = frame.copy().convert("RGBA")
-
+ 
             for box in boxes:
                 composited = RenderService._draw_text_on_frame(composited, box)
-
+ 
             composited_frames.append(composited.convert("P", palette=Image.ADAPTIVE))
             durations.append(frame.info.get("duration", 100))
-
+ 
         if not composited_frames:
             return b""
-
+ 
         buf = io.BytesIO()
         composited_frames[0].save(
             buf,
@@ -635,6 +611,283 @@ class RenderService:
             disposal=2,
         )
         return buf.getvalue()
+# update only render service
+# class RenderService:
+#     """
+#     Composites a saved CardCustomization's text boxes onto its card template.
+
+#     KEY DESIGN NOTE — baseline-accurate positioning:
+#     Browsers position a line of text relative to its FONT BASELINE, with
+#     extra "leading" space split evenly above/below the font's own
+#     ascent+descent box (this is exactly how CSS `line-height` works).
+#     Pillow's plain draw.text() with a top-left origin does NOT replicate
+#     this, which is why earlier versions of this renderer drifted out of
+#     sync with the browser editor (position AND underline placement).
+
+#     Every line here is now drawn using Pillow's anchor="ls" (left,
+#     baseline), with the baseline computed the same way a browser computes
+#     it — this is what keeps the download visually aligned with the editor.
+#     """
+
+#     EDITOR_CANVAS_WIDTH = 450
+#     EDITOR_TEXT_MAX_WIDTH = 320
+
+#     # ---- font loading ----------------------------------------------------
+
+#     @staticmethod
+#     def _font_path(font_family, bold=False, italic=False):
+#         variants = FONT_FILES.get(font_family, FONT_FILES["Poppins"])
+
+#         if bold and italic:
+#             filename = variants.get("bold_italic", variants["regular"])
+#         elif bold:
+#             filename = variants.get("bold", variants["regular"])
+#         elif italic:
+#             filename = variants.get("italic", variants["regular"])
+#         else:
+#             filename = variants["regular"]
+
+#         fonts_dir = os.path.join(current_app.root_path, "static", "fonts")
+#         path = os.path.join(fonts_dir, filename)
+
+#         if os.path.exists(path):
+#             return path
+
+#         current_app.logger.warning(
+#             f"[fonts] Missing font file '{filename}' for family "
+#             f"'{font_family}' (bold={bold}, italic={italic}) — "
+#             f"falling back to Poppins."
+#         )
+
+#         poppins = FONT_FILES["Poppins"]
+#         if bold and italic:
+#             fallback = poppins["bold_italic"]
+#         elif bold:
+#             fallback = poppins["bold"]
+#         elif italic:
+#             fallback = poppins["italic"]
+#         else:
+#             fallback = poppins["regular"]
+
+#         fallback_path = os.path.join(fonts_dir, fallback)
+#         return fallback_path if os.path.exists(fallback_path) else None
+
+#     @staticmethod
+#     def _load_font(font_family, bold=False, italic=False, size=16):
+#         path = RenderService._font_path(font_family, bold, italic)
+#         try:
+#             return (
+#                 ImageFont.truetype(path, size)
+#                 if path
+#                 else ImageFont.load_default()
+#             )
+#         except Exception as exc:
+#             current_app.logger.warning(
+#                 f"[fonts] Could not load '{path}' for '{font_family}': {exc}"
+#             )
+#             return ImageFont.load_default()
+
+#     @staticmethod
+#     def _get_font_metrics(font):
+#         """(ascent, descent) in px, relative to this font's baseline.
+#         Falls back gracefully for the rare bitmap default font."""
+#         try:
+#             return font.getmetrics()
+#         except Exception:
+#             size = getattr(font, "size", 16)
+#             return size, 0
+
+#     # ---- measuring -----------------------------------------------------
+
+#     @staticmethod
+#     def _text_width(draw, text, font, letter_spacing=0):
+#         width = draw.textlength(text, font=font)
+#         if letter_spacing and len(text) > 1:
+#             width += letter_spacing * (len(text) - 1)
+#         return width
+
+#     # ---- drawing ---------------------------------------------------------
+
+#     @staticmethod
+#     def _draw_line(draw, x, baseline_y, text, font, fill, letter_spacing=0):
+#         """Draws one line anchored at its LEFT-BASELINE point (x, baseline_y)
+#         — this is what makes vertical placement match the browser."""
+#         if not letter_spacing:
+#             try:
+#                 draw.text((x, baseline_y), text, font=font, fill=fill, anchor="ls")
+#             except TypeError:
+#                 # Very old Pillow without anchor support.
+#                 ascent, _ = RenderService._get_font_metrics(font)
+#                 draw.text((x, baseline_y - ascent), text, font=font, fill=fill)
+#             return draw.textlength(text, font=font)
+
+#         cursor = x
+#         for char in text:
+#             try:
+#                 draw.text((cursor, baseline_y), char, font=font, fill=fill, anchor="ls")
+#             except TypeError:
+#                 ascent, _ = RenderService._get_font_metrics(font)
+#                 draw.text((cursor, baseline_y - ascent), char, font=font, fill=fill)
+#             cursor += draw.textlength(char, font=font) + letter_spacing
+
+#         return (cursor - letter_spacing) - x
+
+#     @staticmethod
+#     def _wrap_text(draw, text, font, max_width, letter_spacing=0):
+#         """Wraps only at spaces — never breaks inside a word — matching
+#         the browser's `word-break: normal` behaviour used in the editor."""
+#         lines = []
+
+#         for raw_line in text.split("\n"):
+#             words = raw_line.split(" ")
+
+#             if not words:
+#                 lines.append("")
+#                 continue
+
+#             current = words[0]
+
+#             for word in words[1:]:
+#                 candidate = f"{current} {word}"
+
+#                 if RenderService._text_width(
+#                     draw, candidate, font, letter_spacing
+#                 ) <= max_width:
+#                     current = candidate
+#                 else:
+#                     lines.append(current)
+#                     current = word
+
+#             lines.append(current)
+
+#         return lines
+
+#     @staticmethod
+#     def _draw_text_on_frame(base, text_box):
+#         """Draw one text box onto an already-open Pillow image, using
+#         baseline-accurate positioning so it matches the browser editor."""
+#         base = base.convert("RGBA")
+#         draw = ImageDraw.Draw(base)
+#         img_w, img_h = base.size
+
+#         canvas_width = RenderService.EDITOR_CANVAS_WIDTH
+#         text_max_width = RenderService.EDITOR_TEXT_MAX_WIDTH
+
+#         scale = img_w / canvas_width
+#         scaled_font_size = max(1, round(text_box.font_size * scale))
+
+#         font = RenderService._load_font(
+#             text_box.font_family, text_box.bold, text_box.italic, scaled_font_size
+#         )
+
+#         text = text_box.content or ""
+#         if not text.strip():
+#             return base
+
+#         letter_spacing = (text_box.letter_spacing or 0) * scale
+#         max_width = text_max_width * scale
+
+#         lines = RenderService._wrap_text(draw, text, font, max_width, letter_spacing)
+
+#         ascent, descent = RenderService._get_font_metrics(font)
+
+#         # Same formula a browser uses for `line-height: N` — the line box
+#         # is font_size * N tall, and the leftover space (leading) is split
+#         # evenly above and below the font's own ascent+descent box.
+#         line_height = int(scaled_font_size * (text_box.line_height or 1.2))
+#         half_leading = (line_height - (ascent + descent)) / 2
+#         total_height = line_height * len(lines)
+
+#         anchor_x = img_w * (text_box.position_x / 100)
+#         anchor_y = img_h * (text_box.position_y / 100)
+#         start_y = anchor_y - (total_height / 2)  # top of the first line box
+
+#         color = text_box.font_color or "#000000"
+#         alignment = text_box.alignment or "center"
+
+#         line_widths = [
+#             RenderService._text_width(draw, line, font, letter_spacing)
+#             for line in lines
+#         ]
+#         box_w = max(line_widths) if line_widths else 0
+#         box_left = anchor_x - (box_w / 2)
+
+#         for i, line in enumerate(lines):
+#             line_w = line_widths[i]
+
+#             if alignment == "left":
+#                 x = box_left
+#             elif alignment == "right":
+#                 x = box_left + box_w - line_w
+#             else:
+#                 x = box_left + (box_w - line_w) / 2
+
+#             line_box_top = start_y + i * line_height
+#             baseline_y = line_box_top + half_leading + ascent
+
+#             RenderService._draw_line(draw, x, baseline_y, line, font, color, letter_spacing)
+
+#             if text_box.underline:
+#                 # ~8% of the font size below the baseline — matches how
+#                 # browsers place text-decoration: underline in practice.
+#                 underline_offset = max(1, round(scaled_font_size * 0.08))
+#                 underline_y = baseline_y + underline_offset
+#                 draw.line(
+#                     [(x, underline_y), (x + line_w, underline_y)],
+#                     fill=color,
+#                     width=max(1, scaled_font_size // 20),
+#                 )
+
+#         return base
+
+#     # ---- public entry points ------------------------------------------
+
+#     @staticmethod
+#     def render(template_path, customization):
+#         """Render all text boxes onto a static image."""
+#         from app.Card_Cutomization.services import CustomizationService
+
+#         base = Image.open(template_path).convert("RGBA")
+
+#         for box in CustomizationService._effective_boxes(customization):
+#             base = RenderService._draw_text_on_frame(base, box)
+
+#         return base
+
+#     @staticmethod
+#     def render_gif(gif_path, customization):
+#         """Render all text boxes onto every GIF frame."""
+#         from app.Card_Cutomization.services import CustomizationService
+
+#         boxes = CustomizationService._effective_boxes(customization)
+#         im = Image.open(gif_path)
+
+#         composited_frames = []
+#         durations = []
+
+#         for frame in ImageSequence.Iterator(im):
+#             composited = frame.copy().convert("RGBA")
+
+#             for box in boxes:
+#                 composited = RenderService._draw_text_on_frame(composited, box)
+
+#             composited_frames.append(composited.convert("P", palette=Image.ADAPTIVE))
+#             durations.append(frame.info.get("duration", 100))
+
+#         if not composited_frames:
+#             return b""
+
+#         buf = io.BytesIO()
+#         composited_frames[0].save(
+#             buf,
+#             format="GIF",
+#             save_all=True,
+#             append_images=composited_frames[1:],
+#             duration=durations,
+#             loop=im.info.get("loop", 0),
+#             disposal=2,
+#         )
+#         return buf.getvalue()
 
 # second code check 
 
