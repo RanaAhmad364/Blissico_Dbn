@@ -160,7 +160,7 @@
 /* --- NEW IMAGE STYLES --- */
 .product-image-wrapper {
   width: 100%;
-  aspect-ratio: 3 / 4; /* Keeps the exact 5x7 card proportions */
+  /* No fixed aspect-ratio — CardDesignOverlay measures each image and sets its own ratio dynamically. */
   overflow: hidden;
   border-radius: 4px;
   background: #d1d1d1; /* Placeholder color before image loads */

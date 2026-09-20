@@ -332,7 +332,12 @@
   justify-content: center;
   color: #1a1a1a;
   padding: 40px;
-  overflow: hidden !important; /* 100% stops text/images from spilling out */
+  /* Text does not auto-wrap (white-space: pre on .editable-text), so a long
+     single line can run past the card's edge. overflow:hidden clips that
+     excess instead of letting it spill into the page — matching Pillow,
+     which naturally never draws pixels past the image's own bounds, so the
+     download already looks the same as this without any backend changes. */
+  overflow: hidden !important;
   position: relative;
   box-sizing: border-box;
 }
@@ -590,9 +595,10 @@
   outline: none;
   width: auto;
   height: auto;
-  max-width: 100%;
-  white-space: pre-wrap;
-  word-break: break-word;
+  max-width: none;
+  /* white-space: pre (not pre-wrap) — text stays on one line no matter how
+     long, and only breaks where the user themselves presses Enter. */
+  white-space: pre;
   min-width: 20px;
   padding: 2px 4px;
 }
@@ -621,7 +627,15 @@
   outline-offset: 4px;
 }
 .text-drag-wrapper {
-  max-width: min(320px, 85%);
+  /* width: max-content forces the box to size itself from its own content
+     up to max-width, instead of the browser using the leftover space
+     between `left` and the container's right edge as a hard cap — that's
+     what was squeezing text near the right edge into a single-letter-per-line
+     stack even though there was plenty of room to overflow into.
+     max-width: none — text no longer auto-wraps by width at all (see
+     .editable-text's white-space: pre), so nothing left to cap here either. */
+  width: max-content;
+  max-width: none;
 }
 .tools-panel textarea:focus,
 .tools-panel select:focus {

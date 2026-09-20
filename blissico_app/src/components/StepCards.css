@@ -20,14 +20,14 @@
   object-fit: contain;
 }
 @media (max-width: 425px) {
-.card h3 {
+/* .card h3 {
     font-size: 1.5rem;
-}
+} */
 .card {
     padding: 5px;
 }
 .card p {
-    font-size: 1.2rem;
+    font-size: 1.23rem;
 }
 .step-cards-section{
     padding: 60px 10%;

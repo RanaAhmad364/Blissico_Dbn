@@ -293,6 +293,445 @@
   border-radius: 4px;
   position: relative;
   box-sizing: border-box;
+  /* See Customize.css .canvas-card for why this is back — clips a long
+     single line at the card edge instead of letting it spill out, matching
+     Pillow's natural per-pixel clipping in the download. */
+  overflow: hidden;
+}
+
+.cde-text-drag-wrapper {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  touch-action: none;
+  cursor: default;
+  /* width: max-content forces the box to size from its own content instead
+     of the leftover space between `left` and the container's edge — that
+     leftover-space quirk was squeezing text near the right edge into a
+     single-letter-per-line stack even though there was room to overflow. */
+  width: max-content;
+  max-width: none;
+}
+.cde-text-drag-wrapper.dragging { cursor: grabbing; }
+.cde-text-drag-wrapper.dragging .cde-editable-text {
+  outline: 1px dashed #c9a7ff;
+}
+.cde-text-drag-wrapper.selected {
+  outline: 2px dashed #e83caa;
+  outline-offset: 4px;
+}
+
+.cde-drag-handle {
+  position: absolute;
+  top: -22px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  background: #e83caa;
+  color: #fff;
+  touch-action: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  z-index: 5;
+}
+.cde-text-drag-wrapper:hover .cde-drag-handle,
+.cde-text-drag-wrapper.dragging .cde-drag-handle {
+  opacity: 1;
+}
+.cde-drag-handle:active { cursor: grabbing; }
+
+.cde-editable-text {
+  outline: none;
+  width: auto;
+  height: auto;
+  max-width: none;
+  /* white-space: pre (not pre-wrap) — text stays on one line no matter how
+     long, and only breaks where the user themselves presses Enter. This was
+     requested specifically: auto-wrap-by-width is off; manual line breaks
+     are the only line breaks. */
+  white-space: pre;
+  min-width: 20px;
+  padding: 2px 4px;
+}
+
+.cde-zoom-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #f0f0f0;
+  padding: 8px 20px;
+  border-radius: 30px;
+}
+.cde-zoom-btn {
+  border: none;
+  background: transparent;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: #555;
+  padding: 0 5px;
+}
+.cde-zoom-btn:hover { color: #1a1a1a; }
+.cde-zoom-slider-container {
+  width: 120px;
+  height: 4px;
+  background: #d1d1d1;
+  border-radius: 2px;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.cde-zoom-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  position: absolute;
+  top: 0;
+  left: 0;
+  cursor: pointer;
+  z-index: 2;
+}
+.cde-zoom-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 1px solid #ccc;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  cursor: grab;
+  margin-top: -5px;
+}
+.cde-zoom-slider:active::-webkit-slider-thumb { cursor: grabbing; }
+.cde-zoom-slider::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 1px solid #ccc;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  cursor: grab;
+}
+.cde-zoom-slider::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 4px;
+  background: transparent;
+}
+
+@media (max-width: 1024px) {
+  .cde-left-toolbars { width: 300px; }
+  .cde-canvas-card { width: 350px; height: 480px; }
+}
+@media (max-width: 768px) {
+  .cde-workspace { flex-direction: column; }
+  .cde-left-toolbars { width: 100%; flex-direction: column; }
+  .cde-tab-bar { flex-direction: row; width: 100%; }
+  .cde-tools-panel { width: 100%; box-sizing: border-box; }
+  .cde-canvas-area-wrapper { width: 100%; }
+  .cde-canvas-card { width: min(100%, 350px); height: auto; aspect-ratio: 3 / 4; padding: 20px; }
+}
+
+
+/*
+.cde-workspace {
+  display: flex;
+  gap: 30px;
+  align-items: flex-start;
+}
+
+.cde-left-toolbars {
+  display: flex;
+  gap: 15px;
+  width: 380px;
+  flex-shrink: 0;
+}
+
+.cde-tab-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 60px;
+}
+.cde-tab-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  background: #f7e2e8;
+  color: #1a1a1a;
+  border-radius: 8px;
+  font-size: 0.65rem;
+}
+.cde-tab-icon { font-size: 1.5rem; margin-bottom: 2px; }
+
+.cde-tools-panel {
+  flex: 1;
+  height: 100vh;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background: #fff;
+  overflow-y: auto;
+}
+
+.cde-tool-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.cde-tool-group label {
+  font-size: 0.75rem;
+  color: #555;
+  font-weight: 500;
+}
+.cde-tool-group.cde-row-group {
+  align-items: flex-start;
+}
+
+.cde-box-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+.cde-box-select-btn {
+  flex: 1;
+  text-align: left;
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid #e83caa;
+  background: #fff;
+  cursor: pointer;
+  font-size: 13px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.cde-box-select-btn.active {
+  border: 2px solid #e83caa;
+}
+.cde-box-delete-btn {
+  border: none;
+  background: none;
+  color: #c0392b;
+  cursor: pointer;
+}
+
+.cde-textarea {
+  width: 100%;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #e83caa;
+  font-family: inherit;
+  resize: vertical;
+}
+.cde-textarea:focus {
+  outline: none;
+  border-color: #e83caa;
+  box-shadow: 0 0 0 2px rgba(232, 60, 170, 0.15);
+}
+
+.cde-select {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: #fff;
+  font-family: inherit;
+  outline: none;
+  cursor: pointer;
+}
+.cde-select:focus {
+  outline: none;
+  border-color: #e83caa;
+  box-shadow: 0 0 0 2px rgba(232, 60, 170, 0.15);
+}
+
+.cde-slider-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  width: 100%;
+}
+.cde-slider {
+  flex: 1;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  background: #e5e5e5;
+  border-radius: 2px;
+  outline: none;
+}
+.cde-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #e83caa;
+  cursor: pointer;
+}
+.cde-slider::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #e83caa;
+  cursor: pointer;
+  border: none;
+}
+.cde-small-input {
+  width: 50px;
+  padding: 6px 4px;
+  text-align: center;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  outline: none;
+}
+.cde-small-input:focus { border-color: #e83caa; }
+.cde-unit { font-size: 0.8rem; color: #888; width: 15px; }
+
+.cde-formatting-group {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 10px;
+  width: 100%;
+}
+.cde-format-btn {
+  width: 36px;
+  height: 36px;
+  min-width: 34px;
+  flex: 0 0 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: #fff;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: #1a1a1a;
+  white-space: nowrap;
+}
+.cde-format-btn:hover, .cde-format-btn.active {
+  border-color: #e83caa;
+  background: #fcf6f8;
+}
+.cde-format-btn-wide {
+  width: 100%;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: #fff;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: #1a1a1a;
+}
+.cde-format-btn-wide:hover {
+  border-color: #e83caa;
+  background: #fcf6f8;
+}
+
+.cde-color-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+.cde-color-text-input {
+  flex: 1;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 6px 10px;
+  outline: none;
+  font-size: 0.85rem;
+}
+
+.cde-align-group {
+  display: flex;
+  gap: 8px;
+}
+.cde-align-btn {
+  flex: 1;
+  padding: 8px 0;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: #fff;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  transition: all 0.2s;
+  color: #1a1a1a;
+}
+.cde-align-btn:hover, .cde-align-btn.active {
+  border-color: #e83caa;
+  background: #fcf6f8;
+}
+
+.cde-save-btn {
+  width: 100%;
+  margin-top: 10px;
+  background: #e83caa;
+  border: none;
+  color: #fff;
+  padding: 10px 25px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: opacity 0.3s;
+}
+.cde-save-btn:hover { opacity: 0.9; }
+.cde-save-btn:disabled { opacity: 0.6; cursor: default; }
+
+.cde-canvas-area-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+.cde-canvas-stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+.cde-canvas-viewport {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.cde-canvas-card-wrapper {
+  transform-origin: center center;
+  transition: transform 0.15s ease-out;
+}
+.cde-canvas-card {
+  width: 450px;
+  height: 600px;
+  background: #b3b3b3;
+  border-radius: 4px;
+  position: relative;
+  box-sizing: border-box;
   overflow: hidden;
 }
 
@@ -428,4 +867,4 @@
   .cde-tools-panel { width: 100%; box-sizing: border-box; }
   .cde-canvas-area-wrapper { width: 100%; }
   .cde-canvas-card { width: min(100%, 350px); height: auto; aspect-ratio: 3 / 4; padding: 20px; }
-}
+} */

@@ -71,7 +71,7 @@
   .occ-links a {
     max-width: 100%;
     justify-content: space-evenly;
-    font-size: 1rem;
+    font-size: 1.23rem;
     padding: 6px 0;
     gap: 15px;
   }

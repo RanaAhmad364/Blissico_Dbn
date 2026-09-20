@@ -94,13 +94,13 @@
       margin-bottom: 20px;
     }
         .faq-question {
-        font-size: 1.4rem;
-        font-weight: 500;
+        font-size: 1.23rem;
+        font-weight: 600;
     }
-    .faq-answer{
+    /* .faq-answer{
       font-size: 0.9rem;
     line-height: 1.4;
-    }
+    } */
   }
 /* --- Professional FAQ Section --- */
 /* .faq-section {
