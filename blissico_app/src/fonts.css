@@ -1,458 +1,568 @@
 /* AUTO-GENERATED — Blissico font pack.
-   Browsers only download a font file when text actually uses it,
-   so declaring the whole pack here does not slow the page down. */
+   Regenerated directly from the backend's FONT_FILES map
+   (app/utils/render_services.py) so every family the backend
+   can render onto a card also has a matching @font-face here,
+   pointing at the SAME file in /public/fonts (mirrors
+   app/static/fonts on the backend). Browsers only download a
+   font file when text actually uses it, so declaring the whole
+   pack here does not slow the page down. */
+
+@font-face {
+  font-family: 'SaolDisplay';
+  src: url('/fonts/SaolDisplay-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'NeueMontreal';
+  src: url('/fonts/NeueMontreal-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'NeueMontreal';
+  src: url('/fonts/NeueMontreal-Medium.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'NeueMontreal';
+  src: url('/fonts/NeueMontreal-MediumItalic.otf') format('opentype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
 
 @font-face {
   font-family: 'Playfair Display';
-  src: url('/fonts/PlayfairDisplay-regular.ttf') format('truetype');
+  src: url('/fonts/PlayfairDisplay-Regular.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Playfair Display';
-  src: url('/fonts/PlayfairDisplay-italic.ttf') format('truetype');
+  src: url('/fonts/PlayfairDisplay-Italic.ttf') format('truetype');
   font-weight: 400;
   font-style: italic;
   font-display: swap;
 }
+
 @font-face {
   font-family: 'Cinzel Decorative';
-  src: url('/fonts/CinzelDecorative-regular.otf') format('opentype');
+  src: url('/fonts/CinzelDecorative-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Cormorant Garamond';
+  src: url('/fonts/CormorantGaramond-Regular.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Cormorant Garamond';
-  src: url('/fonts/CormorantGaramond-regular.ttf') format('truetype');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Cormorant Garamond';
-  src: url('/fonts/CormorantGaramond-bold.ttf') format('truetype');
+  src: url('/fonts/CormorantGaramond-Medium.ttf') format('truetype');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
+
 @font-face {
   font-family: 'Cormorant Infant';
-  src: url('/fonts/CormorantInfant-regular.ttf') format('truetype');
+  src: url('/fonts/CormorantInfant-SemiBold.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
+
 @font-face {
   font-family: 'DM Serif Display';
-  src: url('/fonts/DMSerifDisplay-regular.ttf') format('truetype');
+  src: url('/fonts/DMSerifDisplay-Regular.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
+
 @font-face {
   font-family: 'Gilda Display';
-  src: url('/fonts/GildaDisplay-regular.ttf') format('truetype');
+  src: url('/fonts/GildaDisplay-Regular.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
+
 @font-face {
   font-family: 'Italiana';
-  src: url('/fonts/Italiana-regular.ttf') format('truetype');
+  src: url('/fonts/Italiana-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Libre Baskerville';
+  src: url('/fonts/LibreBaskerville-Regular.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Libre Baskerville';
-  src: url('/fonts/LibreBaskerville-regular.ttf') format('truetype');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Libre Baskerville';
-  src: url('/fonts/LibreBaskerville-bold.ttf') format('truetype');
+  src: url('/fonts/LibreBaskerville-Medium.ttf') format('truetype');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Libre Baskerville';
-  src: url('/fonts/LibreBaskerville-italic.ttf') format('truetype');
+  src: url('/fonts/LibreBaskerville-Italic.ttf') format('truetype');
   font-weight: 400;
   font-style: italic;
   font-display: swap;
 }
+
 @font-face {
   font-family: 'Libre Caslon Display';
-  src: url('/fonts/LibreCaslonDisplay-regular.ttf') format('truetype');
+  src: url('/fonts/LibreCaslonDisplay-Regular.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
+
 @font-face {
   font-family: 'Lora';
-  src: url('/fonts/Lora-regular.ttf') format('truetype');
+  src: url('/fonts/Lora-Regular.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
+
 @font-face {
   font-family: 'Marcellus';
-  src: url('/fonts/Marcellus-regular.ttf') format('truetype');
+  src: url('/fonts/Marcellus-Regular.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
+
 @font-face {
   font-family: 'Newsreader';
-  src: url('/fonts/Newsreader-regular.ttf') format('truetype');
+  src: url('/fonts/Newsreader_24pt-Regular.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
+
 @font-face {
   font-family: 'Prata';
-  src: url('/fonts/Prata-regular.ttf') format('truetype');
+  src: url('/fonts/Prata-Regular.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
+
 @font-face {
   font-family: 'Vidaloka';
-  src: url('/fonts/Vidaloka-regular.ttf') format('truetype');
+  src: url('/fonts/Vidaloka-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Times New Roman';
+  src: url('/fonts/times.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Times New Roman';
-  src: url('/fonts/TimesNewRoman-regular.ttf') format('truetype');
+  src: url('/fonts/timesi.ttf') format('truetype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Poppins';
+  src: url('/fonts/Poppins-Regular.otf') format('opentype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: 'Times New Roman';
-  src: url('/fonts/TimesNewRoman-italic.ttf') format('truetype');
+  font-family: 'Poppins';
+  src: url('/fonts/Poppins-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Poppins';
+  src: url('/fonts/Poppins-Italic.ttf') format('truetype');
   font-weight: 400;
   font-style: italic;
   font-display: swap;
 }
 @font-face {
   font-family: 'Poppins';
-  src: url('/fonts/Poppins-regular.otf') format('opentype');
+  src: url('/fonts/Poppins-BoldItalic.ttf') format('truetype');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url('/fonts/Montserrat-Regular.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Montserrat';
-  src: url('/fonts/Montserrat-regular.ttf') format('truetype');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Montserrat';
-  src: url('/fonts/Montserrat-bold.ttf') format('truetype');
+  src: url('/fonts/Montserrat-Medium.ttf') format('truetype');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
+
 @font-face {
   font-family: 'Open Sans';
-  src: url('/fonts/OpenSans-regular.ttf') format('truetype');
+  src: url('/fonts/OpenSans-Regular.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
+
 @font-face {
   font-family: 'DM Sans';
-  src: url('/fonts/DMSans-regular.ttf') format('truetype');
+  src: url('/fonts/DMSans_36pt-Regular.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
+
 @font-face {
   font-family: 'Work Sans';
-  src: url('/fonts/WorkSans-regular.ttf') format('truetype');
+  src: url('/fonts/WorkSans-Medium.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
+
 @font-face {
   font-family: 'Raleway';
-  src: url('/fonts/Raleway-regular.ttf') format('truetype');
+  src: url('/fonts/Raleway Medium.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
+
 @font-face {
   font-family: 'Questrial';
-  src: url('/fonts/Questrial-regular.ttf') format('truetype');
+  src: url('/fonts/Questrial-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Oswald';
+  src: url('/fonts/Oswald-Light.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Oswald';
-  src: url('/fonts/Oswald-regular.ttf') format('truetype');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Oswald';
-  src: url('/fonts/Oswald-bold.ttf') format('truetype');
+  src: url('/fonts/Oswald-Medium.ttf') format('truetype');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
+
 @font-face {
   font-family: 'Comfortaa';
-  src: url('/fonts/Comfortaa-regular.ttf') format('truetype');
+  src: url('/fonts/Comfortaa-Regular.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Comfortaa';
-  src: url('/fonts/Comfortaa-bold.ttf') format('truetype');
+  src: url('/fonts/Comfortaa-Bold.ttf') format('truetype');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
+
 @font-face {
   font-family: 'Comic Neue';
-  src: url('/fonts/ComicNeue-regular.ttf') format('truetype');
+  src: url('/fonts/ComicNeue-Angular-Regular.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Comic Neue';
-  src: url('/fonts/ComicNeue-bold.ttf') format('truetype');
+  src: url('/fonts/ComicNeue-Angular-Bold.ttf') format('truetype');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
+
 @font-face {
   font-family: 'Grandstander';
-  src: url('/fonts/Grandstander-regular.ttf') format('truetype');
+  src: url('/fonts/Grandstander-Medium.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
+
 @font-face {
   font-family: 'Switzerland';
-  src: url('/fonts/Switzerland-regular.ttf') format('truetype');
+  src: url('/fonts/Switzerland.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Helvetica';
+  src: url('/fonts/Helvetica.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Helvetica';
-  src: url('/fonts/Helvetica-regular.ttf') format('truetype');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Helvetica';
-  src: url('/fonts/Helvetica-bold.ttf') format('truetype');
+  src: url('/fonts/Helvetica-Bold-Font.ttf') format('truetype');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
+
 @font-face {
   font-family: 'Caveat';
-  src: url('/fonts/Caveat-regular.ttf') format('truetype');
+  src: url('/fonts/Caveat-Regular.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
+
 @font-face {
   font-family: 'Kalam';
-  src: url('/fonts/Kalam-regular.ttf') format('truetype');
+  src: url('/fonts/Kalam-Regular.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
+
 @font-face {
   font-family: 'Patrick Hand';
-  src: url('/fonts/PatrickHand-regular.ttf') format('truetype');
+  src: url('/fonts/PatrickHand-Regular.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
+
 @font-face {
   font-family: 'Amatic SC';
-  src: url('/fonts/AmaticSC-regular.ttf') format('truetype');
+  src: url('/fonts/AmaticSC-Bold.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
+
 @font-face {
   font-family: 'Alex Brush';
-  src: url('/fonts/AlexBrush-regular.ttf') format('truetype');
+  src: url('/fonts/AlexBrush-Regular.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
+
 @font-face {
   font-family: 'Great Vibes';
-  src: url('/fonts/GreatVibes-regular.ttf') format('truetype');
+  src: url('/fonts/GreatVibes-Regular.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
+
 @font-face {
   font-family: 'Dancing Script';
-  src: url('/fonts/DancingScript-regular.ttf') format('truetype');
+  src: url('/fonts/Dancing Script.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
+
 @font-face {
   font-family: 'Parisienne';
-  src: url('/fonts/Parisienne-regular.ttf') format('truetype');
+  src: url('/fonts/Parisienne-Regular.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
+
 @font-face {
   font-family: 'Pinyon Script';
-  src: url('/fonts/PinyonScript-regular.ttf') format('truetype');
+  src: url('/fonts/PinyonScript-Regular.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
+
 @font-face {
   font-family: 'Satisfy';
-  src: url('/fonts/Satisfy-regular.ttf') format('truetype');
+  src: url('/fonts/Satisfy-Regular.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
+
 @font-face {
   font-family: 'Yellowtail';
-  src: url('/fonts/Yellowtail-regular.ttf') format('truetype');
+  src: url('/fonts/Yellowtail-Regular.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
+
 @font-face {
   font-family: 'Pacifico';
-  src: url('/fonts/Pacifico-regular.ttf') format('truetype');
+  src: url('/fonts/Pacifico.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
+
 @font-face {
   font-family: 'Lobster';
-  src: url('/fonts/Lobster-regular.otf') format('opentype');
+  src: url('/fonts/Lobster.otf') format('opentype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
+
 @font-face {
   font-family: 'Bright Mirage';
-  src: url('/fonts/BrightMirage-regular.ttf') format('truetype');
+  src: url('/fonts/BrightMirage-R91Ve.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
+
 @font-face {
   font-family: 'Brittany Signature';
-  src: url('/fonts/BrittanySignature-regular.ttf') format('truetype');
+  src: url('/fonts/BrittanySignature.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
+
 @font-face {
   font-family: 'Brush Signature';
-  src: url('/fonts/BrushSignature-regular.ttf') format('truetype');
+  src: url('/fonts/Brush Signature.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
+
 @font-face {
   font-family: 'Creative Signature';
-  src: url('/fonts/CreativeSignature-regular.ttf') format('truetype');
+  src: url('/fonts/CreativeSignature.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
+
 @font-face {
   font-family: 'Geraldyne Signature';
-  src: url('/fonts/GeraldyneSignature-regular.ttf') format('truetype');
+  src: url('/fonts/GeraldyneSignature-RpzpW.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
+
 @font-face {
   font-family: 'Mitogen Signature';
-  src: url('/fonts/MitogenSignature-regular.ttf') format('truetype');
+  src: url('/fonts/Mitogen Signature.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
+
 @font-face {
   font-family: 'Paul Signature';
-  src: url('/fonts/PaulSignature-regular.ttf') format('truetype');
+  src: url('/fonts/Paul Signature.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
+
 @font-face {
   font-family: 'Yustine Signature';
-  src: url('/fonts/YustineSignature-regular.ttf') format('truetype');
+  src: url('/fonts/Yustine Signature.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
+
 @font-face {
   font-family: 'Penna Swashes';
-  src: url('/fonts/PennaSwashes-regular.ttf') format('truetype');
+  src: url('/fonts/Penna-Swashes.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
+
 @font-face {
   font-family: 'Oleragie';
-  src: url('/fonts/Oleragie-regular.otf') format('opentype');
+  src: url('/fonts/Oleragie.otf') format('opentype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
+
 @font-face {
   font-family: 'Peristiwa';
-  src: url('/fonts/Peristiwa-regular.otf') format('opentype');
+  src: url('/fonts/Peristiwa.otf') format('opentype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
+
 @font-face {
   font-family: 'Signatie';
-  src: url('/fonts/Signatie-regular.ttf') format('truetype');
+  src: url('/fonts/Signatie.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
+
 @font-face {
   font-family: 'D Signature';
-  src: url('/fonts/DSignature-regular.ttf') format('truetype');
+  src: url('/fonts/dsignature.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
+
 @font-face {
   font-family: 'Black Signature';
-  src: url('/fonts/BlackSignature-regular.otf') format('opentype');
+  src: url('/fonts/BlackSignature_PERSONAL_USE_ONLY.otf') format('opentype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;

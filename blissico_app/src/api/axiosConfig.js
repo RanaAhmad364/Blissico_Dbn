@@ -1,7 +1,10 @@
 import axios from 'axios';
 
 // export const BASE_URL = 'http://127.0.0.1:5000';
-export const API_BASE = 'https://blissico-dbn.onrender.com';
+
+// export const API_BASE = 'https://blissico-dbn.onrender.com';
+export const API_BASE = 'https://api.blissicobynimrah.com';
+
 
 const api = axios.create({
   baseURL: API_BASE,

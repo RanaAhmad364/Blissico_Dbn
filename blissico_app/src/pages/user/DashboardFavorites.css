@@ -24,7 +24,7 @@
 
 .dashboard-favorites-browse-link,
 .dashboard-favorites-browse-button {
-  background: #7c3aed;
+  background: #e83caa;
   border-radius: 6px;
   color: #fff;
   font-size: 14px;
@@ -34,7 +34,7 @@
 
 .dashboard-favorites-browse-link:hover,
 .dashboard-favorites-browse-button:hover {
-  background: #6d28d9;
+  background: #e83caa;
 }
 
 .dashboard-favorites-grid {

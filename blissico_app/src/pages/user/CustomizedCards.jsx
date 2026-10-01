@@ -51,12 +51,12 @@ const CustomizedCards = () => {
                       <button
                         onClick={() => handleDownload(c.card_id)}
                         disabled={downloadingId === c.card_id}
-                        style={{ flex: 1, padding: '8px 0', borderRadius: 6, border: 'none', background: '#7c3aed', color: '#fff', cursor: 'pointer' }}
+                        style={{ flex: 1, padding: '8px 0', borderRadius: 6, border: 'none', background: '#e83caa', color: '#fff', cursor: 'pointer' }}
                       >
                         <FiDownload /> {downloadingId === c.card_id ? '...' : 'Download'}
                       </button>
                     ) : (
-                      <Link to="/cart" style={{ flex: 1, textAlign: 'center', padding: '8px 0', borderRadius: 6, background: '#f3e8ff', color: '#7c3aed', textDecoration: 'none' }}>
+                      <Link to="/cart" style={{ flex: 1, textAlign: 'center', padding: '8px 0', borderRadius: 6, background: '#f3e8ff', color: '#e83caa', textDecoration: 'none' }}>
                         Purchase
                       </Link>
                     )}

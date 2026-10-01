@@ -238,10 +238,10 @@ html, body {
 
 .dropdown-menu {
   position: fixed;
-  top: var(--nav-height);
+  top: var(--real-nav-height, var(--nav-height));
   left: 0;
   width: 100%;
-  max-height: calc(100vh - var(--nav-height));
+  max-height: calc(100vh - var(--real-nav-height, var(--nav-height)));
   background: white;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
   padding: 40px 0;

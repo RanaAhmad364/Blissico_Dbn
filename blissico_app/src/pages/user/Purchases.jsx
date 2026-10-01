@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import UserLayout from '../../components/user/UserLayout';
 import { getMyOrders } from '../../api/orders';
-import { downloadCard } from '../../api/downloads';
+import { downloadCardFile } from '../../api/downloads';
 import { assetUrl } from '../../api/catalog';
 import { FiDownload } from 'react-icons/fi';
 
@@ -34,8 +34,13 @@ const Purchases = () => {
   const handleDownload = async (cardId) => {
     setDownloadingId(cardId);
     try {
-      const res = await downloadCard(cardId);
-      window.open(assetUrl(res.file_url), '_blank');
+      // BUG FIX: this used to call downloadCard(), which just returns the
+      // blank template's file_url with no customization composited onto
+      // it — the backend function behind it never renders the user's saved
+      // text at all. downloadCardFile() hits the same properly-rendering
+      // endpoint ProductDetail's download links already use, so a
+      // dashboard download now looks exactly like what the user designed.
+      await downloadCardFile(cardId, 'image');
     } catch (err) {
       alert(err.response?.data?.message || 'Could not download this card.');
     } finally {
@@ -74,7 +79,7 @@ const Purchases = () => {
                   style={{
                     display: 'flex', alignItems: 'center', gap: 6, width: '100%',
                     justifyContent: 'center', padding: '8px 0', borderRadius: 6,
-                    border: 'none', background: '#7c3aed', color: '#fff', cursor: 'pointer',
+                    border: 'none', background: '#e83caa', color: '#fff', cursor: 'pointer',
                   }}
                 >
                   <FiDownload /> {downloadingId === item.card_id ? 'Preparing...' : 'Download'}

@@ -122,11 +122,11 @@
 
 .user-nav-link.user-active {
   background: #f5f3ff;
-  color: #7c3aed;
+  color: #efb1db;
 }
 
 .user-nav-link.user-active .user-nav-icon {
-  color: #7c3aed;
+  color: #efb1db;
 }
 
 .user-nav-icon {
@@ -135,7 +135,7 @@
 }
 
 .user-nav-link.user-active .user-nav-icon {
-  color: #7c3aed;
+  color: #efb1db;
 }
 
 /* ===== FOOTER - LOGOUT ===== */

@@ -52,7 +52,7 @@ const UserNotificationsPage = () => {
             onClick={handleMarkAllRead}
             style={{
               border: 'none',
-              background: '#7c3aed',
+              background: '#e83caa',
               color: '#fff',
               padding: '10px 16px',
               borderRadius: 10,
@@ -95,7 +95,7 @@ const UserNotificationsPage = () => {
                       style={{
                         border: '1px solid #ddd6fe',
                         background: '#fff',
-                        color: '#7c3aed',
+                        color: '#e83caa',
                         borderRadius: 8,
                         padding: '8px 10px',
                         cursor: 'pointer',
@@ -108,7 +108,7 @@ const UserNotificationsPage = () => {
                 </div>
                 {item.redirect_url && (
                   <div style={{ marginTop: 12 }}>
-                    <Link to={item.redirect_url} style={{ color: '#7c3aed', fontWeight: 600 }}>Open related page</Link>
+                    <Link to={item.redirect_url} style={{ color: '#e83caa', fontWeight: 600 }}>Open related page</Link>
                   </div>
                 )}
               </div>

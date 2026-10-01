@@ -14,20 +14,10 @@ import Marquee from '../components/Marquee';
 import Navbar from '../components/Navbar';
 import ColorSwatchPicker from '../components/customize/ColorSwatchPicker';
 import useScreenshotProtection from '../hooks/useScreenshotProtection';
+import { getFontsByCategory } from '../data/fontCatalog';
 import './Customize.css';
 
-const FONT_OPTIONS = [
-  'Poppins', 'Montserrat', 'Playfair Display', 'Open Sans', 'Oswald', 'Pacifico',
-  'Parisienne', 'Patrick Hand', 'Pinyon Script', 'Prata', 'Questrial', 'Raleway',
-  'Satisfy', 'Vidaloka', 'Work Sans', 'Yellowtail', 'Alex Brush', 'Amatic SC',
-  'Caveat', 'Cinzel Decorative', 'Comfortaa', 'Comic Neue', 'Cormorant Garamond',
-  'Cormorant Infant', 'DM Sans', 'DM Serif Display', 'Dancing Script', 'Gilda Display',
-  'Grandstander', 'Great Vibes', 'Helvetica', 'Italiana', 'Kalam', 'Libre Baskerville',
-  'Libre Caslon Display', 'Lobster', 'Lora', 'Marcellus', 'Newsreader', 'Oleragie',
-  'Peristiwa', 'Penna Swashes', 'Switzerland', 'Times New Roman', 'Mitogen Signature',
-  'Paul Signature', 'Yustine Signature', 'Brittany Signature', 'Brush Signature',
-  'Creative Signature', 'Geraldyne Signature', 'Signatie', 'D Signature', 'Bright Mirage',
-];
+const FONT_GROUPS = getFontsByCategory();
 
 const newBox = () => ({
   content: 'New text', font_family: 'Poppins', font_size: 24, font_color: '#000000',
@@ -283,7 +273,15 @@ useEffect(() => {
             <div className="tool-group">
               <label>Font Style</label>
               <select value={selectedBox.font_family} onChange={(e) => updateSelectedBox({ font_family: e.target.value })} className="custom-select">
-                {FONT_OPTIONS.map((f) => <option key={f} value={f}>{f}</option>)}
+                {FONT_GROUPS.map(({ category, fonts }) => (
+                  <optgroup key={category} label={category}>
+                    {fonts.map(({ family }) => (
+                      <option key={family} value={family} style={{ fontFamily: `'${family}'` }}>
+                        {family}
+                      </option>
+                    ))}
+                  </optgroup>
+                ))}
               </select>
             </div>
 
@@ -814,3 +812,4 @@ export default Customize;
 // };
 
 // export default Customize;
+

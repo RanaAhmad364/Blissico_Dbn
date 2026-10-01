@@ -72,6 +72,25 @@ const Navbar = () => {
   const [occasionCategories, setOccasionCategories] = useState([]);  
   const [collectionCategories, setCollectionCategories] = useState([]); 
 
+  // BUG FIX: dropdown-menu used top: var(--nav-height), a hardcoded 80px.
+  // The navbar has min-height (not height), so if its real content — logo,
+  // search bar, icons — ever needs more than 80px, the navbar grows taller
+  // but the dropdown still starts at the old 80px, overlapping the bottom
+  // of the navbar instead of sitting right below it. Measuring the navbar's
+  // ACTUAL rendered height and exposing it as --real-nav-height keeps the
+  // dropdown correctly positioned no matter how tall the navbar ends up.
+  const navRef = useRef(null);
+  const [navHeight, setNavHeight] = useState(80);
+  useEffect(() => {
+    const el = navRef.current;
+    if (!el) return undefined;
+    const recalc = () => setNavHeight(el.offsetHeight);
+    recalc();
+    const observer = new ResizeObserver(recalc);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   useEffect(() => {
     getCategories().then(setCardCategories).catch(() => {});
     getOccasions().then(setOccasionCategories).catch(() => {});    
@@ -269,7 +288,12 @@ const Navbar = () => {
   };
 
   return (
-    <nav className={`navbar ${isScrolled ? 'navbar-scrolled' : ''}`} aria-label="Main navigation">
+    <nav
+      ref={navRef}
+      className={`navbar ${isScrolled ? 'navbar-scrolled' : ''}`}
+      aria-label="Main navigation"
+      style={{ '--real-nav-height': `${navHeight}px` }}
+    >
       <div className="logo">
         <Link to="/" className="logo-link">
           <img src={logo} alt="Blissico by Nimrah" className="logo-img" />
