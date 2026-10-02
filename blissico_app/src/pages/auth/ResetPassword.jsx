@@ -17,8 +17,8 @@ const ResetPassword = () => {
   const [loading, setLoading] = useState(false);
   const [resendLoading, setResendLoading] = useState(false);
 
-  // 1 minute = 60 seconds
-  const [timeLeft, setTimeLeft] = useState(60);
+  // 10 minute = 600 seconds
+  const [timeLeft, setTimeLeft] = useState(600);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -136,7 +136,7 @@ const handleResendOTP = async () => {
   try {
     await resendPasswordResetOTP(email);
 
-    setTimeLeft(60);
+    setTimeLeft(600);
     setOtp('');
 
     setMessage('A new password reset OTP has been sent to your email.');

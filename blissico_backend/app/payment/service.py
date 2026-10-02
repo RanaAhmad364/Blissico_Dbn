@@ -1,5 +1,5 @@
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 from app import db
 from app.models import Order, Payment, Invoice
 from app.notifications.service import create_notification, notify_all_admins
@@ -23,7 +23,7 @@ class PaymentService:
             payment_gateway=payment_gateway,
             amount=order.total_amount,
             status="successful",
-            paid_at=datetime.utcnow(),
+            paid_at=datetime.now(timezone.utc),
         )
         db.session.add(payment)
         order.status = "paid"
@@ -31,7 +31,7 @@ class PaymentService:
 
         invoice = Invoice(
             payment_id=payment.id,
-            invoice_number=f"INV-{datetime.utcnow().strftime('%Y%m%d')}-{uuid.uuid4().hex[:6].upper()}",
+            invoice_number=f"INV-{datetime.now(timezone.utc).strftime('%Y%m%d')}-{uuid.uuid4().hex[:6].upper()}",
         )
         db.session.add(invoice)
         db.session.commit()

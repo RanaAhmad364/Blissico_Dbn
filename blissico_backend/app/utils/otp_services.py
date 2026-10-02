@@ -1,5 +1,5 @@
 import random
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from werkzeug.security import (
     generate_password_hash,
     check_password_hash
@@ -50,7 +50,7 @@ class OTPService:
         """
         Return OTP expiry datetime.
         """
-        return datetime.utcnow() + timedelta(
+        return datetime.now(timezone.utc) + timedelta(
             minutes=OTPService.OTP_EXPIRY_MINUTES
         )
 
@@ -59,7 +59,7 @@ class OTPService:
         """
         Check whether OTP has expired.
         """
-        return datetime.utcnow() > expires_at
+        return datetime.now(timezone.utc) > expires_at
 
 
 

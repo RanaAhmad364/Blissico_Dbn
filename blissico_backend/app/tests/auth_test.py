@@ -6,6 +6,7 @@ from flask_jwt_extended import create_access_token
 from app import create_app
 from app import db
 
+from datetime import datetime, timezone
 from app.models import Role
 from app.models import User
 from app.models import EmailOTP, Notification, ContactMessage
@@ -644,7 +645,7 @@ def test_expired_otp(client, app, monkeypatch):
         from datetime import datetime, timedelta
 
         otp.expires_at = (
-            datetime.utcnow() - timedelta(minutes=1)
+            datetime.now(timezone.utc) - timedelta(minutes=1)
         )
 
         db.session.commit()

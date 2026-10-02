@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 
 from flask import Blueprint, current_app, request, jsonify
 
@@ -304,7 +304,7 @@ def reply_to_contact_message(message_id):
     message.admin_reply = reply
     message.is_replied = True
     message.status = "replied"
-    message.replied_at = datetime.utcnow()
+    message.replied_at = datetime.now(timezone.utc)
 
     email_sent = False
     delivery_method = "email_only"

@@ -17,8 +17,8 @@ const VerifyOTP = () => {
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // 1 minute = 60 seconds
-  const [timeLeft, setTimeLeft] = useState(60);
+  // 10 minute = 600 seconds
+  const [timeLeft, setTimeLeft] = useState(600);
 
   const { verifyOTP, resendOTP } = useAuth();
 
@@ -106,7 +106,7 @@ const VerifyOTP = () => {
     await resendOTP(email);
 
     // New OTP ke liye timer restart
-    setTimeLeft(60);
+    setTimeLeft(600);
 
     // Old OTP clear
     setOtp('');

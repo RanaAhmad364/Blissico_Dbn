@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from sqlalchemy import func
 from app import db
 from app.models import Order, OrderItem, Payment, Download, Card, User,Favorite
@@ -22,7 +22,7 @@ class AnalyticsService:
 
     @staticmethod
     def get_overview():
-        now = datetime.utcnow()
+        now = datetime.now(timezone.utc)
         today_start = now.replace(hour=0, minute=0, second=0, microsecond=0)
         week_start = now - timedelta(days=7)
         month_start = now - timedelta(days=30)
@@ -97,7 +97,7 @@ class AnalyticsService:
 
     @staticmethod
     def revenue_chart(days=14):
-        now = datetime.utcnow()
+        now = datetime.now(timezone.utc)
         start = (now - timedelta(days=days - 1)).replace(hour=0, minute=0, second=0, microsecond=0)
         rows = (
             db.session.query(func.date(Payment.paid_at).label("day"), func.coalesce(func.sum(Payment.amount), 0).label("total"))
@@ -113,7 +113,7 @@ class AnalyticsService:
 
     @staticmethod
     def download_chart(days=14):
-        now = datetime.utcnow()
+        now = datetime.now(timezone.utc)
         start = (now - timedelta(days=days - 1)).replace(hour=0, minute=0, second=0, microsecond=0)
         rows = (
             db.session.query(func.date(Download.downloaded_at).label("day"), func.count(Download.id).label("count"))
@@ -141,7 +141,7 @@ class AnalyticsService:
 
     @staticmethod
     def _series(model, timestamp_field, amount_field, period):
-        now = datetime.utcnow()
+        now = datetime.now(timezone.utc)
         if period == "today":
             buckets, delta = 24, timedelta(hours=1)
             current_start = now.replace(hour=0, minute=0, second=0, microsecond=0)

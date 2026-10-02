@@ -1,5 +1,5 @@
 import uuid
-from datetime import datetime
+from datetime import datetime , timezone, timedelta
 from app import db
 from app.models import Order, OrderItem, Card,User,Payment
 from app.payment.service import PaymentService
@@ -9,7 +9,7 @@ class OrderService:
 
     @staticmethod
     def _generate_order_number():
-        return f"ORD-{datetime.utcnow().strftime('%Y%m%d%H%M%S')}-{uuid.uuid4().hex[:6].upper()}"
+        return f"ORD-{datetime.now(timezone.utc).strftime('%Y%m%d%H%M%S')}-{uuid.uuid4().hex[:6].upper()}"
 
     @staticmethod
     def create_order(user_id, card_ids):
