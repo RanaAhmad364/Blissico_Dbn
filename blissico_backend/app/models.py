@@ -75,7 +75,20 @@ class EmailOTP(BaseModel):
     user = db.relationship("User",back_populates="otps")
     @property
     def is_expired(self):
-        return datetime.now(timezone.utc) > self.expires_at
+        expires_at = self.expires_at
+
+        if expires_at is None:
+            return True
+
+        # Some database drivers/configurations may return a naive datetime
+        # even when the SQLAlchemy column uses timezone=True.
+        if expires_at.tzinfo is None:
+            expires_at = expires_at.replace(tzinfo=timezone.utc)
+
+        return datetime.now(timezone.utc) > expires_at
+    # @property
+    # def is_expired(self):
+    #     return datetime.now(timezone.utc) > self.expires_at
 
 
 # Catalogue Module

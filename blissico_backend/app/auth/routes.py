@@ -30,7 +30,8 @@ def register():
             "errors": error.errors
         }), 400
 
-    except Exception:
+    # except Exception:
+    except Exception as error:
         return jsonify({
             "success": False,
             "message": str(error)
@@ -59,7 +60,8 @@ def verify_otp():
             "errors": error.errors
         }), 400
 
-    except Exception:
+    # except Exception:
+    except Exception as error:
         return jsonify({
             "success": False,
             "message": str(error)
@@ -88,7 +90,8 @@ def resend_otp():
             "errors": error.errors
         }), 400
 
-    except Exception:
+    # except Exception:
+    except Exception as error:
         return jsonify({
             "success": False,
             "message": str(error)
@@ -117,7 +120,8 @@ def login():
             "errors": error.errors
         }), 400
 
-    except Exception:
+    # except Exception:
+    except Exception as error:
         return jsonify({
             "success": False,
             "message": str(error)
@@ -146,7 +150,8 @@ def forgot_password():
             "errors": error.errors
         }), 400
 
-    except Exception:
+    # except Exception:
+    except Exception as error:
         return jsonify({
             "success": False,
             "message": str(error)
@@ -174,7 +179,8 @@ def resend_password_reset_otp():
             "errors": error.errors
         }), 400
 
-    except Exception:
+    # except Exception:
+    except Exception as error:
         return jsonify({
             "success": False,
             "message": str(error)
@@ -203,7 +209,8 @@ def reset_password():
             "errors": error.errors
         }), 400
 
-    except Exception:
+    # except Exception:
+    except Exception as error:
         return jsonify({
             "success": False,
             "message": str(error)
