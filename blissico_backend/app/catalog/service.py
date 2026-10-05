@@ -17,6 +17,7 @@ class CatalogService:
                 "name": cat.name,
                 "slug": cat.slug,
                 "icon": cat.icon,
+                "mega_menu_image": cat.mega_menu_image,
                 "subcategories": [
                     serialize(c, all_cats) for c in all_cats if c.parent_id == cat.id
                 ],
@@ -32,6 +33,7 @@ class CatalogService:
         def serialize(col, all_cols):
             return {
                 "id": col.id, "name": col.name, "slug": col.slug,
+                "mega_menu_image": col.mega_menu_image,
                 "subcategories": [serialize(c, all_cols) for c in all_cols if c.parent_id == col.id],
             }
         return [serialize(c, all_collections) for c in top_level]
@@ -44,6 +46,7 @@ class CatalogService:
         def serialize(occ, all_occs):
             return {
                 "id": occ.id, "name": occ.name, "slug": occ.slug,
+                "mega_menu_image": occ.mega_menu_image,
                 "subcategories": [serialize(o, all_occs) for o in all_occs if o.parent_id == occ.id],
             }
         return [serialize(o, all_occasions) for o in top_level]

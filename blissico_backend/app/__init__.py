@@ -74,7 +74,12 @@ def create_app(config_class=Config):
     jwt.init_app(app)
     # cor.init_app(app, resources={r"/api/*": {"origins": "*"}})
     # cor.init_app(app, resources={r"/api/*": {"origins": "*"}}, expose_headers=["Content-Disposition"])
-    cor.init_app(app, resources={r"/api/*": {"origins": ["https://blissicobynimrah.com", "https://www.blissicobynimrah.com"]}}, expose_headers=["Content-Disposition"])
+    cor.init_app(app, resources={r"/api/*": {"origins": [
+    "https://blissicobynimrah.com",
+    "https://www.blissicobynimrah.com",
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+]}}, expose_headers=["Content-Disposition"])
     migrate.init_app(app,db)
     ensure_notification_schema(app)
     ensure_contact_schema(app)

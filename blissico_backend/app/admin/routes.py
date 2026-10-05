@@ -367,6 +367,18 @@ def reply_to_contact_message(message_id):
     }), 200
 
 
+def _get_taxonomy_request_data():
+    data = request.get_json(silent=True)
+    if data is None and request.form:
+        data = request.form.to_dict()
+    if data is None:
+        data = {}
+    file_obj = request.files.get("mega_menu_image") if request.files else None
+    if file_obj and hasattr(file_obj, "filename") and file_obj.filename == "":
+        file_obj = None
+    return data, file_obj
+
+
 # =========================================================
 # CATEGORIES
 # =========================================================
@@ -380,19 +392,19 @@ def list_categories():
 @admin_bp.post("/categories")
 @admin_required
 def create_category():
-    data = request.get_json(silent=True) or {}
+    data, mega_menu_image_file = _get_taxonomy_request_data()
     error_response = _handle_validation(CatalogValidator.validate_taxonomy, data)
     if error_response:
         return error_response
-    response, status_code = AdminCatalogService.create_category(data)
+    response, status_code = AdminCatalogService.create_category(data, mega_menu_image_file)
     return jsonify(response), status_code
 
 
 @admin_bp.put("/categories/<int:category_id>")
 @admin_required
 def update_category(category_id):
-    data = request.get_json(silent=True) or {}
-    response, status_code = AdminCatalogService.update_category(category_id, data)
+    data, mega_menu_image_file = _get_taxonomy_request_data()
+    response, status_code = AdminCatalogService.update_category(category_id, data, mega_menu_image_file)
     return jsonify(response), status_code
 
 
@@ -416,19 +428,19 @@ def list_collections():
 @admin_bp.post("/collections")
 @admin_required
 def create_collection():
-    data = request.get_json(silent=True) or {}
+    data, mega_menu_image_file = _get_taxonomy_request_data()
     error_response = _handle_validation(CatalogValidator.validate_taxonomy, data)
     if error_response:
         return error_response
-    response, status_code = AdminCatalogService.create_collection(data)
+    response, status_code = AdminCatalogService.create_collection(data, mega_menu_image_file)
     return jsonify(response), status_code
 
 
 @admin_bp.put("/collections/<int:collection_id>")
 @admin_required
 def update_collection(collection_id):
-    data = request.get_json(silent=True) or {}
-    response, status_code = AdminCatalogService.update_collection(collection_id, data)
+    data, mega_menu_image_file = _get_taxonomy_request_data()
+    response, status_code = AdminCatalogService.update_collection(collection_id, data, mega_menu_image_file)
     return jsonify(response), status_code
 
 
@@ -452,19 +464,19 @@ def list_occasions():
 @admin_bp.post("/occasions")
 @admin_required
 def create_occasion():
-    data = request.get_json(silent=True) or {}
+    data, mega_menu_image_file = _get_taxonomy_request_data()
     error_response = _handle_validation(CatalogValidator.validate_taxonomy, data)
     if error_response:
         return error_response
-    response, status_code = AdminCatalogService.create_occasion(data)
+    response, status_code = AdminCatalogService.create_occasion(data, mega_menu_image_file)
     return jsonify(response), status_code
 
 
 @admin_bp.put("/occasions/<int:occasion_id>")
 @admin_required
 def update_occasion(occasion_id):
-    data = request.get_json(silent=True) or {}
-    response, status_code = AdminCatalogService.update_occasion(occasion_id, data)
+    data, mega_menu_image_file = _get_taxonomy_request_data()
+    response, status_code = AdminCatalogService.update_occasion(occasion_id, data, mega_menu_image_file)
     return jsonify(response), status_code
 
 

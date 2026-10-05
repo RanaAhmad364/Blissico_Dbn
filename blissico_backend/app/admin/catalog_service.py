@@ -7,6 +7,37 @@ from flask import current_app
 
 class AdminCatalogService:
 
+    @staticmethod
+    def _normalize_bool(value):
+        if isinstance(value, bool):
+            return value
+        if value is None:
+            return False
+        return str(value).lower() in {"true", "1", "yes", "on"}
+
+    @staticmethod
+    def _save_mega_menu_image(existing_image, image_file, remove_requested=False):
+        if remove_requested:
+            if existing_image:
+                FileService.delete_file(existing_image)
+            return None
+
+        if image_file and getattr(image_file, "filename", ""):
+            try:
+                new_image = FileService.save_file(
+                    image_file,
+                    "mega-menu",
+                    current_app.config["ALLOWED_IMAGE_EXTENSIONS"],
+                )
+            except ValueError as exc:
+                raise exc
+
+            if existing_image and new_image and existing_image != new_image:
+                FileService.delete_file(existing_image)
+            return new_image
+
+        return existing_image
+
     # =====================================================
     # CATEGORIES
     # =====================================================
@@ -17,7 +48,7 @@ class AdminCatalogService:
         return [AdminCatalogService._serialize_taxonomy(c) for c in categories]
 
     @staticmethod
-    def create_category(data):
+    def create_category(data, mega_menu_image_file=None):
         name = data["name"].strip()
         slug = AdminCatalogService._slugify(name)
 
@@ -32,12 +63,18 @@ class AdminCatalogService:
             if parent.parent_id is not None:
                 return {"success": False, "message": "A subcategory cannot itself have a parent — only one level of nesting is allowed."}, 400
 
+        try:
+            mega_menu_image = AdminCatalogService._save_mega_menu_image(None, mega_menu_image_file)
+        except ValueError as exc:
+            return {"success": False, "message": str(exc)}, 400
+
         category = Category(
             name=name,
             slug=slug,
             description=data.get("description"),
             icon=data.get("icon"),
-            is_active=data.get("is_active", True),
+            is_active=AdminCatalogService._normalize_bool(data.get("is_active", True)),
+            mega_menu_image=mega_menu_image,
             parent_id=parent_id,
         )
         db.session.add(category)
@@ -46,7 +83,7 @@ class AdminCatalogService:
         return {"success": True, "message": "Category created.", "data": AdminCatalogService._serialize_taxonomy(category)}, 201
 
     @staticmethod
-    def update_category(category_id, data):
+    def update_category(category_id, data, mega_menu_image_file=None):
         category = Category.query.get(category_id)
         if not category:
             return {"success": False, "message": "Category not found."}, 404
@@ -59,7 +96,7 @@ class AdminCatalogService:
         if "icon" in data:
             category.icon = data["icon"]
         if "is_active" in data:
-            category.is_active = data["is_active"]
+            category.is_active = AdminCatalogService._normalize_bool(data["is_active"])
         if "parent_id" in data:
             parent_id = data["parent_id"] or None
             if parent_id:
@@ -73,6 +110,17 @@ class AdminCatalogService:
                 if category.subcategories:
                     return {"success": False, "message": "This category already has subcategories of its own — it can't also become a subcategory."}, 400
             category.parent_id = parent_id
+
+        remove_requested = AdminCatalogService._normalize_bool(data.get("remove_mega_menu_image", False))
+        if remove_requested or mega_menu_image_file and getattr(mega_menu_image_file, "filename", ""):
+            try:
+                category.mega_menu_image = AdminCatalogService._save_mega_menu_image(
+                    category.mega_menu_image,
+                    mega_menu_image_file,
+                    remove_requested=remove_requested,
+                )
+            except ValueError as exc:
+                return {"success": False, "message": str(exc)}, 400
 
         db.session.commit()
         return {"success": True, "message": "Category updated.", "data": AdminCatalogService._serialize_taxonomy(category)}, 200
@@ -88,6 +136,9 @@ class AdminCatalogService:
         if category.subcategories:
             return {"success": False, "message": "Cannot delete a category that still has subcategories."}, 409
 
+        if category.mega_menu_image:
+            FileService.delete_file(category.mega_menu_image)
+
         db.session.delete(category)
         db.session.commit()
         return {"success": True, "message": "Category deleted."}, 200
@@ -101,7 +152,7 @@ class AdminCatalogService:
         return [AdminCatalogService._serialize_taxonomy(c) for c in Collection.query.order_by(Collection.name).all()]
 
     @staticmethod
-    def create_collection(data):
+    def create_collection(data, mega_menu_image_file=None):
         name = data["name"].strip()
         slug = AdminCatalogService._slugify(name)
         if Collection.query.filter_by(slug=slug).first():
@@ -115,13 +166,25 @@ class AdminCatalogService:
             if parent.parent_id is not None:
                 return {"success": False, "message": "A subcategory cannot itself have a parent — only one level of nesting is allowed."}, 400
 
-        collection = Collection(name=name, slug=slug, description=data.get("description"), is_active=data.get("is_active", True), parent_id=parent_id)
+        try:
+            mega_menu_image = AdminCatalogService._save_mega_menu_image(None, mega_menu_image_file)
+        except ValueError as exc:
+            return {"success": False, "message": str(exc)}, 400
+
+        collection = Collection(
+            name=name,
+            slug=slug,
+            description=data.get("description"),
+            is_active=AdminCatalogService._normalize_bool(data.get("is_active", True)),
+            mega_menu_image=mega_menu_image,
+            parent_id=parent_id,
+        )
         db.session.add(collection)
         db.session.commit()
         return {"success": True, "message": "Collection created.", "data": AdminCatalogService._serialize_taxonomy(collection)}, 201
 
     @staticmethod
-    def update_collection(collection_id, data):
+    def update_collection(collection_id, data, mega_menu_image_file=None):
         collection = Collection.query.get(collection_id)
         if not collection:
             return {"success": False, "message": "Collection not found."}, 404
@@ -132,7 +195,7 @@ class AdminCatalogService:
         if "description" in data:
             collection.description = data["description"]
         if "is_active" in data:
-            collection.is_active = data["is_active"]
+            collection.is_active = AdminCatalogService._normalize_bool(data["is_active"])
         if "parent_id" in data:
             parent_id = data["parent_id"] or None
             if parent_id:
@@ -146,6 +209,17 @@ class AdminCatalogService:
                 if collection.subcategories:
                     return {"success": False, "message": "This collection already has subcategories of its own — it can't also become a subcategory."}, 400
             collection.parent_id = parent_id
+
+        remove_requested = AdminCatalogService._normalize_bool(data.get("remove_mega_menu_image", False))
+        if remove_requested or mega_menu_image_file and getattr(mega_menu_image_file, "filename", ""):
+            try:
+                collection.mega_menu_image = AdminCatalogService._save_mega_menu_image(
+                    collection.mega_menu_image,
+                    mega_menu_image_file,
+                    remove_requested=remove_requested,
+                )
+            except ValueError as exc:
+                return {"success": False, "message": str(exc)}, 400
 
         db.session.commit()
         return {"success": True, "message": "Collection updated.", "data": AdminCatalogService._serialize_taxonomy(collection)}, 200
@@ -161,6 +235,9 @@ class AdminCatalogService:
         if collection.subcategories:   
             return {"success": False, "message": "Cannot delete a collection that still has subcategories."}, 409
 
+        if collection.mega_menu_image:
+            FileService.delete_file(collection.mega_menu_image)
+
         db.session.delete(collection)
         db.session.commit()
         return {"success": True, "message": "Collection deleted."}, 200
@@ -174,7 +251,7 @@ class AdminCatalogService:
         return [AdminCatalogService._serialize_taxonomy(o) for o in Occasion.query.order_by(Occasion.name).all()]
 
     @staticmethod
-    def create_occasion(data):
+    def create_occasion(data, mega_menu_image_file=None):
         name = data["name"].strip()
         slug = AdminCatalogService._slugify(name)
         if Occasion.query.filter_by(slug=slug).first():
@@ -188,13 +265,25 @@ class AdminCatalogService:
             if parent.parent_id is not None:
                 return {"success": False, "message": "A subcategory cannot itself have a parent — only one level of nesting is allowed."}, 400
 
-        occasion = Occasion(name=name, slug=slug, description=data.get("description"), is_active=data.get("is_active", True), parent_id=parent_id)
+        try:
+            mega_menu_image = AdminCatalogService._save_mega_menu_image(None, mega_menu_image_file)
+        except ValueError as exc:
+            return {"success": False, "message": str(exc)}, 400
+
+        occasion = Occasion(
+            name=name,
+            slug=slug,
+            description=data.get("description"),
+            is_active=AdminCatalogService._normalize_bool(data.get("is_active", True)),
+            mega_menu_image=mega_menu_image,
+            parent_id=parent_id,
+        )
         db.session.add(occasion)
         db.session.commit()
         return {"success": True, "message": "Occasion created.", "data": AdminCatalogService._serialize_taxonomy(occasion)}, 201
 
     @staticmethod
-    def update_occasion(occasion_id, data):
+    def update_occasion(occasion_id, data, mega_menu_image_file=None):
         occasion = Occasion.query.get(occasion_id)
         if not occasion:
             return {"success": False, "message": "Occasion not found."}, 404
@@ -205,7 +294,7 @@ class AdminCatalogService:
         if "description" in data:
             occasion.description = data["description"]
         if "is_active" in data:
-            occasion.is_active = data["is_active"]
+            occasion.is_active = AdminCatalogService._normalize_bool(data["is_active"])
         if "parent_id" in data:
             parent_id = data["parent_id"] or None
             if parent_id:
@@ -220,6 +309,17 @@ class AdminCatalogService:
                     return {"success": False, "message": "This occasion already has subcategories of its own — it can't also become a subcategory."}, 400
             occasion.parent_id = parent_id
 
+        remove_requested = AdminCatalogService._normalize_bool(data.get("remove_mega_menu_image", False))
+        if remove_requested or mega_menu_image_file and getattr(mega_menu_image_file, "filename", ""):
+            try:
+                occasion.mega_menu_image = AdminCatalogService._save_mega_menu_image(
+                    occasion.mega_menu_image,
+                    mega_menu_image_file,
+                    remove_requested=remove_requested,
+                )
+            except ValueError as exc:
+                return {"success": False, "message": str(exc)}, 400
+
         db.session.commit()
         return {"success": True, "message": "Occasion updated.", "data": AdminCatalogService._serialize_taxonomy(occasion)}, 200
 
@@ -232,6 +332,9 @@ class AdminCatalogService:
             return {"success": False, "message": "Cannot delete an occasion that still has cards assigned to it."}, 409
         if occasion.subcategories:   
             return {"success": False, "message": "Cannot delete a occasion that still has subcategories."}, 409
+
+        if occasion.mega_menu_image:
+            FileService.delete_file(occasion.mega_menu_image)
 
         db.session.delete(occasion)
         db.session.commit()
@@ -444,6 +547,8 @@ class AdminCatalogService:
             data["slug"] = obj.slug
         if hasattr(obj, "icon"):
             data["icon"] = obj.icon
+        if hasattr(obj, "mega_menu_image"):
+            data["mega_menu_image"] = obj.mega_menu_image
         if hasattr(obj, "parent_id"):
             data["parent_id"] = obj.parent_id
         return data
