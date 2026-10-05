@@ -10,19 +10,23 @@ export const updateUserStatus = (id, is_active) => api.patch(`/api/admin/users/$
 export const verifyUser = (id, is_verified) => api.patch(`/api/admin/users/${id}/verify`, { is_verified }).then(r => r.data);
 
 // --- Categories / Collections / Occasions ---
+const taxonomyRequestConfig = (data) => data instanceof FormData
+  ? { headers: { 'Content-Type': 'multipart/form-data' } }
+  : undefined;
+
 export const getCategories = () => api.get('/api/admin/categories').then(r => r.data.data);
-export const createCategory = (data) => api.post('/api/admin/categories', data).then(r => r.data);
-export const updateCategory = (id, data) => api.put(`/api/admin/categories/${id}`, data).then(r => r.data);
+export const createCategory = (data) => api.post('/api/admin/categories', data, taxonomyRequestConfig(data)).then(r => r.data);
+export const updateCategory = (id, data) => api.put(`/api/admin/categories/${id}`, data, taxonomyRequestConfig(data)).then(r => r.data);
 export const deleteCategory = (id) => api.delete(`/api/admin/categories/${id}`).then(r => r.data);
 
 export const getCollections = () => api.get('/api/admin/collections').then(r => r.data.data);
-export const createCollection = (data) => api.post('/api/admin/collections', data).then(r => r.data);
-export const updateCollection = (id, data) => api.put(`/api/admin/collections/${id}`, data).then(r => r.data);
+export const createCollection = (data) => api.post('/api/admin/collections', data, taxonomyRequestConfig(data)).then(r => r.data);
+export const updateCollection = (id, data) => api.put(`/api/admin/collections/${id}`, data, taxonomyRequestConfig(data)).then(r => r.data);
 export const deleteCollection = (id) => api.delete(`/api/admin/collections/${id}`).then(r => r.data);
 
 export const getOccasions = () => api.get('/api/admin/occasions').then(r => r.data.data);
-export const createOccasion = (data) => api.post('/api/admin/occasions', data).then(r => r.data);
-export const updateOccasion = (id, data) => api.put(`/api/admin/occasions/${id}`, data).then(r => r.data);
+export const createOccasion = (data) => api.post('/api/admin/occasions', data, taxonomyRequestConfig(data)).then(r => r.data);
+export const updateOccasion = (id, data) => api.put(`/api/admin/occasions/${id}`, data, taxonomyRequestConfig(data)).then(r => r.data);
 export const deleteOccasion = (id) => api.delete(`/api/admin/occasions/${id}`).then(r => r.data);
 
 

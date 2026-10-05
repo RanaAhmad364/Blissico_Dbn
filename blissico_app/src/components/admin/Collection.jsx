@@ -2,10 +2,11 @@
 import React, { useState, useEffect } from 'react';
 import AdminLayout from '../../components/admin/AdminLayout';
 import { getCollections, createCollection, updateCollection, deleteCollection } from '../../api/admin';
+import { assetUrl } from '../../api/catalog';
 import { FiPlus, FiEdit2, FiTrash2, FiX } from 'react-icons/fi';
 import '../../pages/admin/Categories.css'; // Same CSS file reuse karein
 
-const emptyForm = { id: null, name: '', description: '', parent_id: '' };
+const emptyForm = { id: null, name: '', description: '', parent_id: '', mega_menu_image: '' };
 
 const Collections = () => {
   const [collections, setCollections] = useState([]);
@@ -13,6 +14,9 @@ const Collections = () => {
   const [error, setError] = useState('');
   const [saving, setSaving] = useState(false);
   const [showForm, setShowForm] = useState(false);
+  const [megaMenuImage, setMegaMenuImage] = useState(null);
+  const [megaMenuImagePreview, setMegaMenuImagePreview] = useState('');
+  const [removeMegaMenuImage, setRemoveMegaMenuImage] = useState(false);
 
   const load = () => getCollections().then(setCollections).catch(() => setError('Could not load collections.'));
 
@@ -21,8 +25,15 @@ const Collections = () => {
   const topLevel = collections.filter((c) => !c.parent_id);
   const childrenOf = (id) => collections.filter((c) => c.parent_id === id);
 
+  const resetMegaMenuImageState = (existingImage = '') => {
+    setMegaMenuImage(null);
+    setRemoveMegaMenuImage(false);
+    setMegaMenuImagePreview(existingImage ? assetUrl(existingImage) : '');
+  };
+
   const openAddForm = () => {
     setForm(emptyForm);
+    resetMegaMenuImageState();
     setError('');
     setShowForm(true);
   };
@@ -31,15 +42,22 @@ const Collections = () => {
     e.preventDefault();
     setError('');
     setSaving(true);
-    const payload = { name: form.name, description: form.description, parent_id: form.parent_id || null };
+    const fd = new FormData();
+    fd.append('name', form.name);
+    fd.append('description', form.description || '');
+    if (form.parent_id) fd.append('parent_id', form.parent_id);
+    if (removeMegaMenuImage) fd.append('remove_mega_menu_image', 'true');
+    if (megaMenuImage) fd.append('mega_menu_image', megaMenuImage);
+
     try {
       if (form.id) {
-        await updateCollection(form.id, payload);
+        await updateCollection(form.id, fd);
       } else {
-        await createCollection(payload);
+        await createCollection(fd);
       }
       setForm(emptyForm);
-      setShowForm(false); // ✅ Save k baad wapis table par redirect
+      resetMegaMenuImageState();
+      setShowForm(false);
       load();
     } catch (err) {
       setError(err.response?.data?.message || 'Could not save collection.');
@@ -49,7 +67,8 @@ const Collections = () => {
   };
 
   const handleEdit = (col) => {
-    setForm({ id: col.id, name: col.name, description: col.description || '', parent_id: col.parent_id || '' });
+    setForm({ id: col.id, name: col.name, description: col.description || '', parent_id: col.parent_id || '', mega_menu_image: col.mega_menu_image || '' });
+    resetMegaMenuImageState(col.mega_menu_image || '');
     setShowForm(true);
   };
 
@@ -112,7 +131,7 @@ const Collections = () => {
           <div className="category-form-card">
             <div className="form-card-header">
               <h3>{form.id ? 'Edit Collection' : 'Add New Collection'}</h3>
-              <button className="close-form-btn" onClick={() => { setShowForm(false); setForm(emptyForm); }}>
+              <button className="close-form-btn" onClick={() => { setShowForm(false); setForm(emptyForm); resetMegaMenuImageState(); }}>
                 <FiX size={18} />
               </button>
             </div>
@@ -145,13 +164,47 @@ const Collections = () => {
                     placeholder="Short description (optional)"
                   />
                 </div>
+                <div className="form-group full-width">
+                  <label>Mega Menu Image (Optional)</label>
+                  <div className="mega-menu-upload-box">
+                    {megaMenuImagePreview ? (
+                      <img src={megaMenuImagePreview} alt="Mega menu preview" className="mega-menu-preview" />
+                    ) : (
+                      <div className="mega-menu-placeholder">No image selected</div>
+                    )}
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0] || null;
+                        setMegaMenuImage(file);
+                        setRemoveMegaMenuImage(false);
+                        setMegaMenuImagePreview(file ? URL.createObjectURL(file) : (form.mega_menu_image ? assetUrl(form.mega_menu_image) : ''));
+                      }}
+                    />
+                    {(form.mega_menu_image || megaMenuImagePreview) && !removeMegaMenuImage && (
+                      <button
+                        type="button"
+                        className="text-btn danger"
+                        onClick={() => {
+                          setRemoveMegaMenuImage(true);
+                          setMegaMenuImage(null);
+                          setMegaMenuImagePreview('');
+                        }}
+                      >
+                        Remove Image
+                      </button>
+                    )}
+                  </div>
+                  <small className="helper-text">Upload an image to show it in the navbar mega menu. The collection name will be used as the caption.</small>
+                </div>
               </div>
 
               <div className="form-actions">
                 <button type="submit" className="save-btn" disabled={saving}>
                   {saving ? 'Saving...' : form.id ? 'Update Collection' : 'Add Collection'}
                 </button>
-                <button type="button" className="cancel-btn" onClick={() => { setShowForm(false); setForm(emptyForm); }}>
+                <button type="button" className="cancel-btn" onClick={() => { setShowForm(false); setForm(emptyForm); resetMegaMenuImageState(); }}>
                   Cancel
                 </button>
               </div>

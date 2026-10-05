@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react'
 import { Link, useLocation } from 'react-router-dom';
 import { FaUser, FaSearch, FaShoppingCart, FaBars, FaTimes, FaChevronDown , FaHeart  } from 'react-icons/fa';
 import logo from '../assets/images/Website main logo.png';
-import { getCategories, getCollections, getOccasions } from '../api/catalog';
+import { getCategories, getCollections, getOccasions, assetUrl } from '../api/catalog';
 import { useAuth } from '../context/AuthContext';
 import { useFavorites } from '../context/FavoritesContext';
 import { useCart } from '../context/CartContext';
@@ -14,52 +14,39 @@ import './Navbar.css';
 // a column heading, in the same order admin added them, and its subcategories
 // become that column's links — so a new parent/child added in the admin panel
 // shows up here automatically, no code change needed.
+const buildTaxonomyLinks = (items, basePath) => (items && items.length > 0
+  ? items.map((item) => ({
+      label: item.name,
+      path: `${basePath}/${item.slug}`,
+      image: item.mega_menu_image ? assetUrl(item.mega_menu_image) : null,
+    }))
+  : []);
+
 const buildCardsDropdown = (cardCategories) => ({
   type: '4col',
   columns: cardCategories.map((cat) => ({
     heading: cat.name.toUpperCase(),
-    links:
-      cat.subcategories && cat.subcategories.length > 0
-        ? cat.subcategories.map((sub) => ({ label: sub.name, path: `/cards/${sub.slug}` }))
-        : [{ label: `Shop ${cat.name}`, path: `/cards/${cat.slug}` }],
+    links: buildTaxonomyLinks(cat.subcategories && cat.subcategories.length > 0 ? cat.subcategories : [{ ...cat, slug: cat.slug, name: `Shop ${cat.name}` }], `/cards`),
   })),
-  image: {
-    // src: 'https://via.placeholder.com/200x280/666666/ffffff?text=Best+Sellers',
-    // alt: 'Best Sellers',
-    // label: 'Best Sellers',
-  },
+  image: { src: '', alt: '', label: '' },
 });
 
 const buildOccasionsDropdown = (occasionCategories) => ({
   type: '5col',
   columns: occasionCategories.map((occ) => ({
     heading: occ.name.toUpperCase(),
-    links:
-      occ.subcategories && occ.subcategories.length > 0
-        ? occ.subcategories.map((sub) => ({ label: sub.name, path: `/occasions/${sub.slug}` }))
-        : [{ label: `Shop ${occ.name}`, path: `/occasions/${occ.slug}` }],
+    links: buildTaxonomyLinks(occ.subcategories && occ.subcategories.length > 0 ? occ.subcategories : [{ ...occ, slug: occ.slug, name: `Shop ${occ.name}` }], `/occasions`),
   })),
-  image: {
-    // src: 'https://via.placeholder.com/200x280/666666/ffffff?text=Best+Sellers',
-    // alt: 'Best Sellers',
-    // label: 'Best Sellers',
-  },
+  image: { src: '', alt: '', label: '' },
 });
 
 const buildCollectionsDropdown = (collectionCategories) => ({
   type: '4col',
   columns: collectionCategories.map((col) => ({
     heading: col.name.toUpperCase(),
-    links:
-      col.subcategories && col.subcategories.length > 0
-        ? col.subcategories.map((sub) => ({ label: sub.name, path: `/collections/${sub.slug}` }))
-        : [{ label: `Shop ${col.name}`, path: `/collections/${col.slug}` }],
+    links: buildTaxonomyLinks(col.subcategories && col.subcategories.length > 0 ? col.subcategories : [{ ...col, slug: col.slug, name: `Shop ${col.name}` }], `/collections`),
   })),
-  image: {
-    // src: 'https://via.placeholder.com/200x280/666666/ffffff?text=Best+Sellers',
-    // alt: 'Best Sellers',
-    // label: 'Best Sellers',
-  },
+  image: { src: '', alt: '', label: '' },
 });
 
 const Navbar = () => {
@@ -249,14 +236,25 @@ const Navbar = () => {
           <div className="dropdown-column" key={col.heading}>
             <h4>{col.heading}</h4>
             {col.links.map((l) => (
-              <Link to={l.path} key={l.path}>{l.label}</Link>
+              l.image ? (
+                <Link to={l.path} key={l.path} className="dropdown-image-link">
+                  <div className="dropdown-image-item">
+                    <img src={l.image} alt={l.label} loading="lazy" />
+                    <span>{l.label}</span>
+                  </div>
+                </Link>
+              ) : (
+                <Link to={l.path} key={l.path}>{l.label}</Link>
+              )
             ))}
           </div>
         ))}
-        <div className="dropdown-column image-col">
-          <img src={dropdown.image.src} alt={dropdown.image.alt} loading="lazy" />
-          <span>{dropdown.image.label}</span>
-        </div>
+        {dropdown.image?.src && (
+          <div className="dropdown-column image-col">
+            <img src={dropdown.image.src} alt={dropdown.image.alt} loading="lazy" />
+            <span>{dropdown.image.label}</span>
+          </div>
+        )}
       </div>
     );
   };
@@ -279,7 +277,14 @@ const Navbar = () => {
           <div className="mobile-dropdown-column" key={col.heading}>
             <h5>{col.heading}</h5>
             {col.links.map((l) => (
-              <Link to={l.path} key={l.path}>{l.label}</Link>
+              l.image ? (
+                <Link to={l.path} key={l.path} className="mobile-dropdown-image-link">
+                  <img src={l.image} alt={l.label} loading="lazy" />
+                  <span>{l.label}</span>
+                </Link>
+              ) : (
+                <Link to={l.path} key={l.path}>{l.label}</Link>
+              )
             ))}
           </div>
         ))}

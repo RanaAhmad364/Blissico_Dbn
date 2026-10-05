@@ -150,6 +150,61 @@
 }
 .cancel-btn:hover { background: #f1eef8; }
 
+.mega-menu-upload-box {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid #e5e2f0;
+  border-radius: 10px;
+  background: #faf9ff;
+}
+
+.mega-menu-preview {
+  width: 100%;
+  max-width: 220px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #eee;
+  background: #fff;
+}
+
+.mega-menu-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 220px;
+  height: 120px;
+  border: 1px dashed #d8d2ec;
+  border-radius: 8px;
+  color: #94a3b8;
+  font-size: 12px;
+  background: #fff;
+}
+
+.helper-text {
+  display: block;
+  margin-top: 6px;
+  color: #64748b;
+  font-size: 12px;
+}
+
+.text-btn {
+  align-self: flex-start;
+  border: none;
+  background: transparent;
+  color: #e11d48;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.text-btn.danger {
+  color: #c0392b;
+}
+
 /* ---- Table card ---- */
 .categories-table-card {
   background: #fff;
