@@ -12,83 +12,64 @@ class BaseModel(db.Model):
     __abstract__ = True
 
     id = db.Column(db.Integer, primary_key=True)
-    # BUG FIX: plain db.DateTime (no timezone=True) stores/returns a NAIVE
-    # datetime — even though the app writes a UTC value, reading it back
-    # loses the "this is UTC" marker, so isoformat() sends the frontend a
-    # string with no timezone suffix, and JS's `new Date()` misreads a
-    # timezone-less string as LOCAL time — shifting every displayed date/
-    # time by the browser's UTC offset (5 hours for Pakistan), and shifting
-    # the calendar DATE too for anything near midnight. timezone=True tells
-    # Postgres to store/return TIMESTAMP WITH TIME ZONE so this round-trips
-    # correctly; the lambda (not the bare function) ensures a tz-AWARE
-    # value is generated in the first place.
     created_at = db.Column(db.DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), nullable=False)
     updated_at = db.Column(db.DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc), nullable=False)
 
 
 class Role(BaseModel):
-
     __tablename__ = "roles"
 
-    name = db.Column(db.String(50),unique=True,nullable=False)
+    name = db.Column(db.String(50), unique=True, nullable=False)
     description = db.Column(db.String(255))
-    users = db.relationship("User",back_populates="role",lazy=True)
+    users = db.relationship("User", back_populates="role", lazy=True)
+
     def __repr__(self):
         return f"<Role {self.name}>"
 
 
 class User(BaseModel):
-
     __tablename__ = "users"
 
-    role_id = db.Column(db.Integer,db.ForeignKey("roles.id"),nullable=False)
-    first_name = db.Column(db.String(100),nullable=False)
-    last_name = db.Column(db.String(100),nullable=False)
-    email = db.Column(db.String(150),unique=True,nullable=False,index=True)
-    password_hash = db.Column(db.String(255),nullable=False)
+    role_id = db.Column(db.Integer, db.ForeignKey("roles.id"), nullable=False)
+    first_name = db.Column(db.String(100), nullable=False)
+    last_name = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String(150), unique=True, nullable=False, index=True)
+    password_hash = db.Column(db.String(255), nullable=False)
     profile_picture = db.Column(db.String(255))
-    is_verified = db.Column(db.Boolean,default=False)
-    is_active = db.Column(db.Boolean,default=True)
-    role = db.relationship("Role",back_populates="users")
-    otps = db.relationship("EmailOTP",back_populates="user",cascade="all, delete-orphan")
-    orders = db.relationship("Order",back_populates="user")
-    favorites = db.relationship("Favorite",back_populates="user")
-    downloads = db.relationship("Download",back_populates="user")
-    customizations = db.relationship("CardCustomization",back_populates="user")
-    notifications = db.relationship("Notification",back_populates="user")
+    is_verified = db.Column(db.Boolean, default=False)
+    is_active = db.Column(db.Boolean, default=True)
+    role = db.relationship("Role", back_populates="users")
+    otps = db.relationship("EmailOTP", back_populates="user", cascade="all, delete-orphan")
+    orders = db.relationship("Order", back_populates="user")
+    favorites = db.relationship("Favorite", back_populates="user")
+    downloads = db.relationship("Download", back_populates="user")
+    customizations = db.relationship("CardCustomization", back_populates="user")
+    notifications = db.relationship("Notification", back_populates="user")
     contact_messages = db.relationship("ContactMessage", back_populates="user")
-    subscriptions = db.relationship("Subscription",back_populates="user")
-    activity_logs = db.relationship("ActivityLog",back_populates="user")
+    subscriptions = db.relationship("Subscription", back_populates="user")
+    activity_logs = db.relationship("ActivityLog", back_populates="user")
+
     def __repr__(self):
         return f"<User {self.email}>"
 
 
-
 class EmailOTP(BaseModel):
-
     __tablename__ = "email_otps"
 
-    user_id = db.Column(db.Integer,db.ForeignKey("users.id"),nullable=False)
-    otp_hash = db.Column(db.String(255),nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    otp_hash = db.Column(db.String(255), nullable=False)
     expires_at = db.Column(db.DateTime(timezone=True), nullable=False)
-    verified = db.Column(db.Boolean,default=False)
-    user = db.relationship("User",back_populates="otps")
+    verified = db.Column(db.Boolean, default=False)
+    user = db.relationship("User", back_populates="otps")
+
     @property
     def is_expired(self):
         expires_at = self.expires_at
-
         if expires_at is None:
             return True
-
-        # Some database drivers/configurations may return a naive datetime
-        # even when the SQLAlchemy column uses timezone=True.
         if expires_at.tzinfo is None:
             expires_at = expires_at.replace(tzinfo=timezone.utc)
-
         return datetime.now(timezone.utc) > expires_at
-    # @property
-    # def is_expired(self):
-    #     return datetime.now(timezone.utc) > self.expires_at
 
 
 # Catalogue Module
@@ -96,16 +77,18 @@ class EmailOTP(BaseModel):
 class Category(BaseModel):
     __tablename__ = "categories"
 
-    name = db.Column(db.String(100),nullable=False,unique=True) 
-    slug = db.Column(db.String(120),nullable=False,unique=True,index=True) 
-    icon = db.Column(db.String(255)) 
-    description = db.Column(db.Text) 
-    is_active = db.Column(db.Boolean,default=True,nullable=False)
+    name = db.Column(db.String(100), nullable=False, unique=True)
+    slug = db.Column(db.String(120), nullable=False, unique=True, index=True)
+    icon = db.Column(db.String(255))
+    description = db.Column(db.Text)
+    is_active = db.Column(db.Boolean, default=True, nullable=False)
+    mega_menu_image = db.Column(db.String(255), nullable=True)
     parent_id = db.Column(db.Integer, db.ForeignKey("categories.id"), nullable=True)
-    subcategories = db.relationship(                                                    
+    subcategories = db.relationship(
         "Category", backref=db.backref("parent", remote_side="Category.id"), lazy=True
-    ) 
-    cards = db.relationship("Card",back_populates="category",lazy=True) 
+    )
+    cards = db.relationship("Card", back_populates="category", lazy=True)
+
     def __repr__(self):
         return f"<Category {self.name}>"
 
@@ -113,30 +96,35 @@ class Category(BaseModel):
 class Collection(BaseModel):
     __tablename__ = "collections"
 
-    name = db.Column(db.String(100),nullable=False,unique=True)
-    slug = db.Column(db.String(120),nullable=False,unique=True,index=True)
+    name = db.Column(db.String(100), nullable=False, unique=True)
+    slug = db.Column(db.String(120), nullable=False, unique=True, index=True)
     description = db.Column(db.Text)
-    is_active = db.Column(db.Boolean,default=True,nullable=False)
-    cards = db.relationship("Card",back_populates="collection",lazy=True)
-    parent_id = db.Column(db.Integer, db.ForeignKey("collections.id"), nullable=True)   # NEW
-    subcategories = db.relationship(                                                     # NEW
+    is_active = db.Column(db.Boolean, default=True, nullable=False)
+    mega_menu_image = db.Column(db.String(255), nullable=True)
+    cards = db.relationship("Card", back_populates="collection", lazy=True)
+    parent_id = db.Column(db.Integer, db.ForeignKey("collections.id"), nullable=True)
+    subcategories = db.relationship(
         "Collection", backref=db.backref("parent", remote_side="Collection.id"), lazy=True
     )
+
     def __repr__(self):
         return f"<Collection {self.name}>"
+
 
 class Occasion(BaseModel):
     __tablename__ = "occasions"
 
-    name = db.Column(db.String(100),nullable=False,unique=True)
-    slug = db.Column(db.String(120),nullable=False,unique=True,index=True)
+    name = db.Column(db.String(100), nullable=False, unique=True)
+    slug = db.Column(db.String(120), nullable=False, unique=True, index=True)
     description = db.Column(db.Text)
-    is_active = db.Column(db.Boolean,default=True,nullable=False)
-    cards = db.relationship("Card",back_populates="occasion",lazy=True)
-    parent_id = db.Column(db.Integer, db.ForeignKey("occasions.id"), nullable=True)   # NEW
-    subcategories = db.relationship(                                                   # NEW
+    is_active = db.Column(db.Boolean, default=True, nullable=False)
+    mega_menu_image = db.Column(db.String(255), nullable=True)
+    cards = db.relationship("Card", back_populates="occasion", lazy=True)
+    parent_id = db.Column(db.Integer, db.ForeignKey("occasions.id"), nullable=True)
+    subcategories = db.relationship(
         "Occasion", backref=db.backref("parent", remote_side="Occasion.id"), lazy=True
     )
+
     def __repr__(self):
         return f"<Occasion {self.name}>"
 
@@ -144,65 +132,92 @@ class Occasion(BaseModel):
 class Card(BaseModel):
     __tablename__ = "cards"
 
-    category_id = db.Column(db.Integer,db.ForeignKey("categories.id"),nullable=True)
-    collection_id = db.Column(db.Integer,db.ForeignKey("collections.id"),nullable=True)
-    occasion_id = db.Column(db.Integer,db.ForeignKey("occasions.id"),nullable=True)
-    title = db.Column(db.String(200),nullable=False)
+    category_id = db.Column(db.Integer, db.ForeignKey("categories.id"), nullable=True)
+    collection_id = db.Column(db.Integer, db.ForeignKey("collections.id"), nullable=True)
+    occasion_id = db.Column(db.Integer, db.ForeignKey("occasions.id"), nullable=True)
+    title = db.Column(db.String(200), nullable=False)
     description = db.Column(db.Text)
 
-    thumbnail = db.Column(db.String(255),nullable=False)
+    thumbnail = db.Column(db.String(255), nullable=False)
     animated_gif = db.Column(db.String(255), nullable=True)
-    price = db.Column(db.Numeric(10, 2),default=0.00,nullable=False)
-    is_free = db.Column(db.Boolean,default=False,nullable=False)
-    is_active = db.Column(db.Boolean,default=True,nullable=False)
-    # Relationships
-    category = db.relationship("Category",back_populates="cards")
-    collection = db.relationship("Collection",back_populates="cards")
-    occasion = db.relationship("Occasion",back_populates="cards")
-    order_items = db.relationship("OrderItem",back_populates="card")
-    templates = db.relationship("CardTemplate",back_populates="card",cascade="all, delete-orphan")
+    price = db.Column(db.Numeric(10, 2), default=0.00, nullable=False)
+    is_free = db.Column(db.Boolean, default=False, nullable=False)
+    is_active = db.Column(db.Boolean, default=True, nullable=False)
     
+    # Relationships
+    category = db.relationship("Category", back_populates="cards")
+    collection = db.relationship("Collection", back_populates="cards")
+    occasion = db.relationship("Occasion", back_populates="cards")
+    
+    # ✅ FIXED: Cascade delete for template
+    templates = db.relationship(
+        "CardTemplate",
+        back_populates="card",
+        cascade="all, delete-orphan"
+    )
+    
+    # ✅ FIXED: Cascade delete for customizations
+    customizations = db.relationship(
+        "CardCustomization",
+        back_populates="card",
+        cascade="all, delete-orphan"
+    )
+    
+    # ✅ FIXED: Cascade delete for favorites
+    favorites = db.relationship(
+        "Favorite",
+        back_populates="card",
+        cascade="all, delete-orphan"
+    )
+    
+    # ✅ FIXED: Cascade delete for downloads
+    downloads = db.relationship(
+        "Download",
+        back_populates="card",
+        cascade="all, delete-orphan"
+    )
+    
+    # Order items should NOT cascade — preserve order history
+    order_items = db.relationship("OrderItem", back_populates="card")
 
-    customizations = db.relationship("CardCustomization",back_populates="card")
-    favorites = db.relationship("Favorite",back_populates="card")
-    downloads = db.relationship("Download",back_populates="card")
-    order_items = db.relationship("OrderItem",back_populates="card")
     def __repr__(self):
         return f"<Card {self.title}>"
 
 
 class CardTemplate(BaseModel):
     __tablename__ = "card_templates"
-    card_id = db.Column(db.Integer,db.ForeignKey("cards.id"),nullable=False)
-    template_file = db.Column(db.String(255),nullable=False)
-    preview_image = db.Column(db.String(255),nullable=False)
-    animated_file = db.Column(db.String(255),nullable=True)
-    width = db.Column(db.Integer,nullable=False)
-    height = db.Column(db.Integer,nullable=False)
-    card = db.relationship("Card",back_populates="templates")
+    card_id = db.Column(db.Integer, db.ForeignKey("cards.id"), nullable=False)
+    template_file = db.Column(db.String(255), nullable=False)
+    preview_image = db.Column(db.String(255), nullable=False)
+    animated_file = db.Column(db.String(255), nullable=True)
+    width = db.Column(db.Integer, nullable=False)
+    height = db.Column(db.Integer, nullable=False)
+    card = db.relationship("Card", back_populates="templates")
 
     def __repr__(self):
         return f"<CardTemplate {self.id}>"
+
 
 # Card Customization Module
 class CardCustomization(BaseModel):
     __tablename__ = "card_customizations"
 
-    user_id = db.Column(db.Integer,db.ForeignKey("users.id"),nullable=True)
-    card_id = db.Column(db.Integer,db.ForeignKey("cards.id"),nullable=False)
-    is_default = db.Column(db.Boolean,default=False,nullable=False)
-    greeting_text = db.Column(db.Text,nullable=False)
-    font_family = db.Column(db.String(100),default="Poppins",nullable=False)
-    font_size = db.Column(db.Integer,default=24,nullable=False)
-    font_color = db.Column(db.String(20),default="#000000",nullable=False)
-    bold = db.Column(db.Boolean,default=False)
-    italic = db.Column(db.Boolean,default=False)
-    underline = db.Column(db.Boolean,default=False)
-    alignment = db.Column(db.String(20),default="center")
-    letter_spacing = db.Column(db.Float,default=0)
-    line_height = db.Column(db.Float,default=1.2)
-    position_x = db.Column(db.Float,default=50,nullable=False)
-    position_y = db.Column(db.Float,default=50,nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=True)
+    card_id = db.Column(db.Integer, db.ForeignKey("cards.id"), nullable=False)
+    is_default = db.Column(db.Boolean, default=False, nullable=False)
+    greeting_text = db.Column(db.Text, nullable=False)
+    font_family = db.Column(db.String(100), default="Poppins", nullable=False)
+    font_size = db.Column(db.Integer, default=24, nullable=False)
+    font_color = db.Column(db.String(20), default="#000000", nullable=False)
+    bold = db.Column(db.Boolean, default=False)
+    italic = db.Column(db.Boolean, default=False)
+    underline = db.Column(db.Boolean, default=False)
+    alignment = db.Column(db.String(20), default="center")
+    letter_spacing = db.Column(db.Float, default=0)
+    line_height = db.Column(db.Float, default=1.2)
+    position_x = db.Column(db.Float, default=50, nullable=False)
+    position_y = db.Column(db.Float, default=50, nullable=False)
+    
     __table_args__ = (
         db.Index(
             "uq_card_customizations_default_card",
@@ -212,12 +227,18 @@ class CardCustomization(BaseModel):
             postgresql_where=db.text("is_default = true"),
         ),
     )
-    user = db.relationship("User",back_populates="customizations")
-    card = db.relationship("Card",back_populates="customizations")
+    
+    user = db.relationship("User", back_populates="customizations")
+    card = db.relationship("Card", back_populates="customizations")
+    
+    # ✅ Cascade delete for text boxes
     text_boxes = db.relationship(
-        "CustomizationTextBox", back_populates="customization",
-        cascade="all, delete-orphan", order_by="CustomizationTextBox.z_index"
+        "CustomizationTextBox",
+        back_populates="customization",
+        cascade="all, delete-orphan",
+        order_by="CustomizationTextBox.z_index"
     )
+
     def __repr__(self):
         return f"<Customization {self.id}>"
 
@@ -241,25 +262,26 @@ class CustomizationTextBox(BaseModel):
     customization = db.relationship("CardCustomization", back_populates="text_boxes")
 
 
-# Commerce Module (Order → Payment → Invoice)
+# Commerce Module
 
 class Order(BaseModel):
     __tablename__ = "orders"
 
-    user_id = db.Column(db.Integer,db.ForeignKey("users.id"),nullable=False)
-    order_number = db.Column(db.String(50),unique=True,nullable=False)
-    total_amount = db.Column(db.Numeric(10, 2),nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    order_number = db.Column(db.String(50), unique=True, nullable=False)
+    total_amount = db.Column(db.Numeric(10, 2), nullable=False)
     status = db.Column(
         db.Enum(
-            "pending",
-            "paid",
-            "cancelled",
-            "failed",
-            name="order_status_enum"),default="pending",nullable=False)
+            "pending", "paid", "cancelled", "failed",
+            name="order_status_enum"
+        ),
+        default="pending", nullable=False
+    )
 
-    user = db.relationship("User",back_populates="orders")
-    order_items = db.relationship("OrderItem",back_populates="order",cascade="all, delete-orphan")
-    payment = db.relationship("Payment",back_populates="order",uselist=False,cascade="all, delete-orphan")
+    user = db.relationship("User", back_populates="orders")
+    order_items = db.relationship("OrderItem", back_populates="order", cascade="all, delete-orphan")
+    payment = db.relationship("Payment", back_populates="order", uselist=False, cascade="all, delete-orphan")
+
     def __repr__(self):
         return f"<Order {self.order_number}>"
 
@@ -267,34 +289,29 @@ class Order(BaseModel):
 class OrderItem(BaseModel):
     __tablename__ = "order_items"
 
-    order_id = db.Column(db.Integer,db.ForeignKey("orders.id"),nullable=False)
-    card_id = db.Column(db.Integer,db.ForeignKey("cards.id"),nullable=False)
-    price = db.Column(db.Numeric(10, 2),nullable=False)
-    order = db.relationship("Order",back_populates="order_items")
-    card = db.relationship("Card",back_populates="order_items")
+    order_id = db.Column(db.Integer, db.ForeignKey("orders.id"), nullable=False)
+    card_id = db.Column(db.Integer, db.ForeignKey("cards.id"), nullable=False)
+    price = db.Column(db.Numeric(10, 2), nullable=False)
+    order = db.relationship("Order", back_populates="order_items")
+    card = db.relationship("Card", back_populates="order_items")
+
     def __repr__(self):
         return f"<OrderItem {self.id}>"
 
 
 class Payment(BaseModel):
     __tablename__ = "payments"
-    order_id = db.Column(db.Integer,db.ForeignKey("orders.id"),unique=True,nullable=False)
-    transaction_id = db.Column(
-        db.String(150),
-        unique=True)
-    payment_gateway = db.Column(db.String(50),nullable=False)
-    amount = db.Column(db.Numeric(10, 2),nullable=False)
+    order_id = db.Column(db.Integer, db.ForeignKey("orders.id"), unique=True, nullable=False)
+    transaction_id = db.Column(db.String(150), unique=True)
+    payment_gateway = db.Column(db.String(50), nullable=False)
+    amount = db.Column(db.Numeric(10, 2), nullable=False)
     status = db.Column(
-        db.Enum(
-            "pending",
-            "successful",
-            "failed",
-            "refunded",
-            name="payment_status_enum"
-        ),default="pending",nullable=False)
+        db.Enum("pending", "successful", "failed", "refunded", name="payment_status_enum"),
+        default="pending", nullable=False
+    )
     paid_at = db.Column(db.DateTime(timezone=True))
-    order = db.relationship("Order",back_populates="payment")
-    invoice = db.relationship("Invoice",back_populates="payment",uselist=False,cascade="all, delete-orphan")
+    order = db.relationship("Order", back_populates="payment")
+    invoice = db.relationship("Invoice", back_populates="payment", uselist=False, cascade="all, delete-orphan")
 
     def __repr__(self):
         return f"<Payment {self.transaction_id}>"
@@ -303,10 +320,11 @@ class Payment(BaseModel):
 class Invoice(BaseModel):
     __tablename__ = "invoices"
 
-    payment_id = db.Column(db.Integer,db.ForeignKey("payments.id"),unique=True,nullable=False)
-    invoice_number = db.Column(db.String(100),unique=True,nullable=False)
+    payment_id = db.Column(db.Integer, db.ForeignKey("payments.id"), unique=True, nullable=False)
+    invoice_number = db.Column(db.String(100), unique=True, nullable=False)
     pdf_path = db.Column(db.String(255))
-    payment = db.relationship("Payment",back_populates="invoice")
+    payment = db.relationship("Payment", back_populates="invoice")
+
     def __repr__(self):
         return f"<Invoice {self.invoice_number}>"
 
@@ -314,45 +332,43 @@ class Invoice(BaseModel):
 class Favorite(BaseModel):
     __tablename__ = "favorites"
 
-    user_id = db.Column(db.Integer,db.ForeignKey("users.id"),nullable=False)
-    card_id = db.Column(db.Integer,db.ForeignKey("cards.id"),nullable=False)
-    user = db.relationship("User",back_populates="favorites")
-    card = db.relationship("Card",back_populates="favorites")
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    card_id = db.Column(db.Integer, db.ForeignKey("cards.id"), nullable=False)
+    user = db.relationship("User", back_populates="favorites")
+    card = db.relationship("Card", back_populates="favorites")
+    
     __table_args__ = (
-        db.UniqueConstraint(
-            "user_id",
-            "card_id",
-            name="uq_user_favorite"
-        ),
+        db.UniqueConstraint("user_id", "card_id", name="uq_user_favorite"),
     )
 
     def __repr__(self):
         return f"<Favorite User:{self.user_id} Card:{self.card_id}>"
 
+
 class Download(BaseModel):
     __tablename__ = "downloads"
 
-    user_id = db.Column(db.Integer,db.ForeignKey("users.id"),nullable=False)
-    card_id = db.Column(db.Integer,db.ForeignKey("cards.id"),nullable=False)
-    customization_id = db.Column(db.Integer,db.ForeignKey("card_customizations.id"),nullable=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    card_id = db.Column(db.Integer, db.ForeignKey("cards.id"), nullable=False)
+    customization_id = db.Column(db.Integer, db.ForeignKey("card_customizations.id"), nullable=True)
     downloaded_at = db.Column(db.DateTime(timezone=True), nullable=False)
-    file_path = db.Column(db.String(255),nullable=False)
-    user = db.relationship("User",back_populates="downloads")
-    card = db.relationship("Card",back_populates="downloads")
+    file_path = db.Column(db.String(255), nullable=False)
+    user = db.relationship("User", back_populates="downloads")
+    card = db.relationship("Card", back_populates="downloads")
     customization = db.relationship("CardCustomization")
 
 
 class Notification(BaseModel):
     __tablename__ = "notifications"
 
-    user_id = db.Column(db.Integer,db.ForeignKey("users.id"),nullable=False)
-    title = db.Column(db.String(200),nullable=False)
-    message = db.Column(db.Text,nullable=False)
-    is_read = db.Column(db.Boolean,default=False,nullable=False)
-    notification_type = db.Column(db.String(50),nullable=True)
-    related_id = db.Column(db.Integer,nullable=True)
-    redirect_url = db.Column(db.String(255),nullable=True)
-    user = db.relationship("User",back_populates="notifications")
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    title = db.Column(db.String(200), nullable=False)
+    message = db.Column(db.Text, nullable=False)
+    is_read = db.Column(db.Boolean, default=False, nullable=False)
+    notification_type = db.Column(db.String(50), nullable=True)
+    related_id = db.Column(db.Integer, nullable=True)
+    redirect_url = db.Column(db.String(255), nullable=True)
+    user = db.relationship("User", back_populates="notifications")
 
 
 class ContactMessage(BaseModel):
@@ -374,37 +390,38 @@ class ContactMessage(BaseModel):
 class Coupon(BaseModel):
     __tablename__ = "coupons"
 
-    code = db.Column(db.String(50),unique=True,nullable=False)
-    discount = db.Column(db.Numeric(10,2),nullable=False)
+    code = db.Column(db.String(50), unique=True, nullable=False)
+    discount = db.Column(db.Numeric(10, 2), nullable=False)
     expiry_date = db.Column(db.DateTime(timezone=True), nullable=False)
-    is_active = db.Column(db.Boolean,default=True)
+    is_active = db.Column(db.Boolean, default=True)
+
 
 class Subscription(BaseModel):
     __tablename__ = "subscriptions"
 
-    user_id = db.Column(db.Integer,db.ForeignKey("users.id"),nullable=False)
-    plan = db.Column(db.String(50),nullable=False)
-    start_date = db.Column(db.Date,nullable=False)
-    end_date = db.Column(db.Date,nullable=False)
-    is_active = db.Column(db.Boolean,default=True)
-    user = db.relationship("User",back_populates="subscriptions")
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    plan = db.Column(db.String(50), nullable=False)
+    start_date = db.Column(db.Date, nullable=False)
+    end_date = db.Column(db.Date, nullable=False)
+    is_active = db.Column(db.Boolean, default=True)
+    user = db.relationship("User", back_populates="subscriptions")
 
 
 class ActivityLog(BaseModel):
     __tablename__ = "activity_logs"
 
-    user_id = db.Column(db.Integer,db.ForeignKey("users.id"),nullable=False)
-    action = db.Column(db.String(255),nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    action = db.Column(db.String(255), nullable=False)
     ip_address = db.Column(db.String(45))
-    user = db.relationship("User",back_populates="activity_logs")
+    user = db.relationship("User", back_populates="activity_logs")
 
 
 class Setting(BaseModel):
     __tablename__ = "settings"
 
-    site_name = db.Column(db.String(100),nullable=False)
-    support_email = db.Column(db.String(150),nullable=False)
-    currency = db.Column(db.String(20),default="USD")
+    site_name = db.Column(db.String(100), nullable=False)
+    support_email = db.Column(db.String(150), nullable=False)
+    currency = db.Column(db.String(20), default="USD")
     logo = db.Column(db.String(255))
 
 
