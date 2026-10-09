@@ -378,6 +378,101 @@ class RenderService:
  
     EDITOR_CANVAS_WIDTH = 450
     EDITOR_TEXT_MAX_WIDTH = 320
+
+    @staticmethod
+    def watermark_preview(image_bytes):
+        with Image.open(io.BytesIO(image_bytes)) as source:
+            image_format = source.format or "PNG"
+            frames = []
+            durations = []
+            width, height = source.size
+            preview_scale = min(1, 480 / max(width, height))
+            output_size = (
+                max(1, round(width * preview_scale)),
+                max(1, round(height * preview_scale)),
+            )
+            width, height = output_size
+            font_size = max(18, round(min(width, height) * 0.075))
+            font = RenderService._load_font("Cormorant Garamond", size=font_size)
+            spacing_x = max(180, round(width * 0.58))
+            spacing_y = max(120, round(height * 0.43))
+
+            overlay = Image.new("RGBA", (width, height), (0, 0, 0, 0))
+            draw = ImageDraw.Draw(overlay)
+            for y in range(-height, height * 2, spacing_y):
+                for x in range(-width, width * 2, spacing_x):
+                    draw.text(
+                        (x, y),
+                        "Blissico",
+                        font=font,
+                        fill=(255, 255, 255, 105),
+                        stroke_width=max(1, font_size // 24),
+                        stroke_fill=(35, 25, 35, 80),
+                    )
+            overlay = overlay.rotate(32, resample=Image.Resampling.BICUBIC)
+
+            palette = None
+            frame_count = getattr(source, "n_frames", 1)
+            sample_count = min(frame_count, 8)
+            if image_format == "GIF" and sample_count:
+                sample_width = min(width, 120)
+                sample_height = min(height, 150)
+                columns = min(sample_count, 4)
+                rows = (sample_count + columns - 1) // columns
+                palette_samples = Image.new(
+                    "RGB",
+                    (sample_width * columns, sample_height * rows),
+                )
+                for index in range(sample_count):
+                    frame_index = round(index * (frame_count - 1) / max(1, sample_count - 1))
+                    source.seek(frame_index)
+                    sample = source.convert("RGBA")
+                    if sample.size != output_size:
+                        sample = sample.resize(output_size, Image.Resampling.BILINEAR)
+                    sample = Image.alpha_composite(sample, overlay)
+                    sample = sample.resize(
+                        (sample_width, sample_height),
+                        Image.Resampling.BILINEAR,
+                    )
+                    x = (index % columns) * sample_width
+                    y = (index // columns) * sample_height
+                    palette_samples.paste(sample.convert("RGB"), (x, y))
+                palette = palette_samples.quantize(
+                    colors=255,
+                    method=Image.Quantize.MEDIANCUT,
+                    dither=Image.Dither.NONE,
+                )
+
+            for source_frame in ImageSequence.Iterator(source):
+                frame = source_frame.convert("RGBA")
+                if frame.size != output_size:
+                    frame = frame.resize(output_size, Image.Resampling.BILINEAR)
+                frames.append(Image.alpha_composite(frame, overlay))
+                durations.append(source_frame.info.get("duration", source.info.get("duration", 100)))
+
+            output = io.BytesIO()
+            if image_format == "GIF":
+                palette_frames = [
+                    frame.convert("RGB").quantize(palette=palette, dither=Image.Dither.NONE)
+                    for frame in frames
+                ]
+                palette_frames[0].save(
+                    output,
+                    format="GIF",
+                    save_all=True,
+                    append_images=palette_frames[1:],
+                    duration=durations,
+                    loop=source.info.get("loop", 0),
+                    disposal=1,
+                    optimize=False,
+                )
+            else:
+                output_frame = frames[0]
+                if image_format in ("JPEG", "JPG"):
+                    output_frame = output_frame.convert("RGB")
+                output_frame.save(output, format=image_format)
+
+        return output.getvalue()
  
     # ---- font loading ----------------------------------------------------
  

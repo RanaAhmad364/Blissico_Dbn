@@ -21,18 +21,24 @@ class PayPalService:
         return response.json()["access_token"]
 
     @staticmethod
-    def create_order(amount, currency="USD"):
+    def create_order(amount, currency="USD", reference_id=None):
         """
         `amount` must come from our own Order.total_amount in the database —
         never from anything the frontend sends.
         """
         access_token = PayPalService.get_access_token()
+        purchase_unit = {
+            "amount": {"currency_code": currency, "value": f"{amount:.2f}"}
+        }
+        if reference_id:
+            purchase_unit["reference_id"] = reference_id
+
         response = requests.post(
             f"{PayPalService._base_url()}/v2/checkout/orders",
             headers={"Content-Type": "application/json", "Authorization": f"Bearer {access_token}"},
             json={
                 "intent": "CAPTURE",
-                "purchase_units": [{"amount": {"currency_code": currency, "value": f"{amount:.2f}"}}],
+                "purchase_units": [purchase_unit],
             },
             timeout=10,
         )
@@ -48,7 +54,6 @@ class PayPalService:
             timeout=10,
         )
         return response.json(), response.status_code
-
 
 
 

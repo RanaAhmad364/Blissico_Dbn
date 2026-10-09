@@ -5,18 +5,14 @@ from flask import current_app
 import os,io
 from app.notifications.service import create_notification, notify_all_admins
 from app.utils.render_services import RenderService
+from app.utils.preview_service import PreviewService
+from app.utils.purchase_access import has_valid_purchase
 
 class DownloadService:
 
     @staticmethod
     def _has_paid_for(user_id, card_id):
-        return (
-            db.session.query(OrderItem)
-            .join(Order, OrderItem.order_id == Order.id)
-            .filter(Order.user_id == user_id, Order.status == "paid", OrderItem.card_id == card_id)
-            .first()
-            is not None
-        )
+        return has_valid_purchase(user_id, card_id)
 
     @staticmethod
     def download_card(user_id, card_id):
@@ -61,7 +57,7 @@ class DownloadService:
                 redirect_url=f"/admin/downloads",
             )
 
-        return {"success": True, "message": "Download ready.", "data": {"file_url": file_path, "downloaded_at": download.downloaded_at.isoformat()}}, 200
+        return {"success": True, "message": "Download ready.", "data": {"file_url": PreviewService.preview_url(card_id), "downloaded_at": download.downloaded_at.isoformat()}}, 200
 
     @staticmethod
     def list_user_downloads(user_id): # for user side to show downloaded cards
@@ -71,8 +67,8 @@ class DownloadService:
                 "id": d.id,
                 "card_id": d.card_id,
                 "card_title": d.card.title if d.card else None,
-                "thumbnail": d.card.thumbnail if d.card else None,
-                "file_path": d.file_path,
+                "thumbnail": PreviewService.preview_url(d.card_id) if d.card else None,
+                "file_path": PreviewService.preview_url(d.card_id) if d.card else None,
                 "downloaded_at": d.downloaded_at.isoformat(),
             }
             for d in downloads

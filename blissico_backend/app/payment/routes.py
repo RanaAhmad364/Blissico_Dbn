@@ -1,3 +1,4 @@
+from decimal import Decimal, InvalidOperation
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.models import Order
@@ -38,7 +39,10 @@ def paypal_create_order(order_id):
         return jsonify({"success": False, "message": f"Order is already '{order.status}'."}), 409
 
     try:
-        paypal_order = PayPalService.create_order(float(order.total_amount))
+        paypal_order = PayPalService.create_order(
+            float(order.total_amount),
+            reference_id=order.order_number,
+        )
     except Exception as e:
         return jsonify({"success": False, "message": f"Could not create PayPal order: {e}"}), 502
 
@@ -65,13 +69,44 @@ def paypal_capture_order(order_id):
     except Exception as e:
         return jsonify({"success": False, "message": f"Could not reach PayPal: {e}"}), 502
 
-    if result.get("status") != "COMPLETED":
+    if not isinstance(result, dict) or result.get("status") != "COMPLETED":
         PaymentService.mark_failed(order_id, user_id)
         return jsonify({"success": False, "message": "PayPal payment was not completed.", "paypal_response": result}), 400
 
-    capture_id = (
-        result.get("purchase_units", [{}])[0]
-        .get("payments", {}).get("captures", [{}])[0].get("id")
-    )
+    purchase_units = result.get("purchase_units") or []
+    purchase_unit = purchase_units[0] if purchase_units else {}
+    if not isinstance(purchase_unit, dict):
+        PaymentService.mark_failed(order_id, user_id)
+        return jsonify({"success": False, "message": "PayPal returned an invalid capture response."}), 400
+    payments = purchase_unit.get("payments")
+    captures = payments.get("captures") if isinstance(payments, dict) else None
+    if not isinstance(captures, list) or not captures:
+        PaymentService.mark_failed(order_id, user_id)
+        return jsonify({"success": False, "message": "PayPal returned no completed capture."}), 400
+    capture = captures[0] if captures else {}
+    if not isinstance(capture, dict):
+        PaymentService.mark_failed(order_id, user_id)
+        return jsonify({"success": False, "message": "PayPal returned an invalid capture response."}), 400
+    if purchase_unit.get("reference_id") != order.order_number:
+        PaymentService.mark_failed(order_id, user_id)
+        return jsonify({"success": False, "message": "PayPal payment did not match this order."}), 400
+
+    captured_amount = capture.get("amount", {})
+    try:
+        if not isinstance(captured_amount, dict):
+            raise InvalidOperation
+        amount_matches = Decimal(str(captured_amount.get("value"))) == Decimal(order.total_amount)
+    except (InvalidOperation, TypeError):
+        amount_matches = False
+
+    if not amount_matches or captured_amount.get("currency_code") != "USD":
+        PaymentService.mark_failed(order_id, user_id)
+        return jsonify({"success": False, "message": "PayPal payment amount did not match this order."}), 400
+
+    capture_id = capture.get("id")
+    if not capture_id:
+        PaymentService.mark_failed(order_id, user_id)
+        return jsonify({"success": False, "message": "PayPal did not return a verified capture reference."}), 400
+
     response, status = PaymentService.pay_order(order_id, user_id, payment_gateway="paypal", transaction_id=capture_id)
     return jsonify(response), status

@@ -1,5 +1,6 @@
 from app import db
 from app.models import Card, CardCustomization, CustomizationTextBox
+from app.utils.preview_service import PreviewService
 
 
 class CustomizationService:
@@ -182,7 +183,7 @@ class CustomizationService:
             result.append({
                 "card_id": c.card_id,
                 "title": c.card.title,
-                "thumbnail": c.card.thumbnail,
+                "thumbnail": PreviewService.preview_url(c.card_id),
                 "greeting_text": boxes[0].content if boxes else "",
                 "can_download": c.card.is_free or DownloadService._has_paid_for(user_id, c.card_id),
             })

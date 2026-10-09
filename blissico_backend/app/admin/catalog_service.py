@@ -44,7 +44,7 @@ class AdminCatalogService:
 
     @staticmethod
     def list_categories():
-        categories = Category.query.order_by(Category.name).all()
+        categories = Category.query.order_by(Category.created_at, Category.id).all()
         return [AdminCatalogService._serialize_taxonomy(c) for c in categories]
 
     @staticmethod
@@ -149,7 +149,7 @@ class AdminCatalogService:
 
     @staticmethod
     def list_collections():
-        return [AdminCatalogService._serialize_taxonomy(c) for c in Collection.query.order_by(Collection.name).all()]
+        return [AdminCatalogService._serialize_taxonomy(c) for c in Collection.query.order_by(Collection.created_at, Collection.id).all()]
 
     @staticmethod
     def create_collection(data, mega_menu_image_file=None):
@@ -248,7 +248,7 @@ class AdminCatalogService:
 
     @staticmethod
     def list_occasions():
-        return [AdminCatalogService._serialize_taxonomy(o) for o in Occasion.query.order_by(Occasion.name).all()]
+        return [AdminCatalogService._serialize_taxonomy(o) for o in Occasion.query.order_by(Occasion.created_at, Occasion.id).all()]
 
     @staticmethod
     def create_occasion(data, mega_menu_image_file=None):
@@ -579,6 +579,5 @@ class AdminCatalogService:
             "width": template.width,
             "height": template.height,
         }
-
 
 

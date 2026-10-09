@@ -16,6 +16,12 @@ class PaymentService:
             return {"success": False, "message": "Order has already been paid."}, 409
         if order.status == "cancelled":
             return {"success": False, "message": "This order was cancelled."}, 409
+        if payment_gateway not in {"paypal", "free"}:
+            return {"success": False, "message": "Payment must be verified by the configured payment gateway."}, 403
+        if payment_gateway == "free" and order.total_amount != 0:
+            return {"success": False, "message": "Free payment is only available for zero-value orders."}, 403
+        if payment_gateway == "paypal" and not transaction_id:
+            return {"success": False, "message": "A verified payment transaction is required."}, 400
 
         payment = Payment(
             order_id=order.id,

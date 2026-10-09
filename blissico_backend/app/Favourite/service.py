@@ -1,5 +1,6 @@
 from app import db
 from app.models import Favorite, Card
+from app.utils.preview_service import PreviewService
 
 
 class FavoriteService:
@@ -32,13 +33,12 @@ class FavoriteService:
                 "id": f.id,
                 "card_id": f.card_id,
                 "title": f.card.title if f.card else None,
-                "thumbnail": f.card.thumbnail if f.card else None,
+                "thumbnail": PreviewService.preview_url(f.card_id) if f.card else None,
                 "price": float(f.card.price) if f.card else None,
                 "is_free": f.card.is_free if f.card else None,
             }
             for f in favorites
         ]
-
 
 
 

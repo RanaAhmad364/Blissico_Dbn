@@ -3,6 +3,7 @@ from datetime import datetime , timezone, timedelta
 from app import db
 from app.models import Order, OrderItem, Card,User,Payment
 from app.payment.service import PaymentService
+from app.utils.preview_service import PreviewService
 
 
 class OrderService:
@@ -92,7 +93,7 @@ class OrderService:
             "status": order.status,
             "total_amount": float(order.total_amount),
             "items": [
-                {"card_id": item.card_id, "title": item.card.title if item.card else None, "price": float(item.price),"thumbnail": item.card.thumbnail if item.card else None}
+                {"card_id": item.card_id, "title": item.card.title if item.card else None, "price": float(item.price),"thumbnail": PreviewService.preview_url(item.card_id) if item.card else None}
                 for item in order.order_items
             ],
             "payment": {

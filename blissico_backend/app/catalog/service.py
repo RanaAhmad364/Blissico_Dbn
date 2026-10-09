@@ -1,5 +1,7 @@
 from app.models import Category, Collection, Occasion, Card,CardCustomization
 from app.Card_Cutomization.services import CustomizationService
+from app.utils.preview_service import PreviewService
+from app.utils.purchase_access import valid_purchase_card_ids
 
 
 class CatalogService:
@@ -8,7 +10,7 @@ class CatalogService:
 
     @staticmethod
     def list_categories():
-        all_categories = Category.query.filter_by(is_active=True).order_by(Category.name).all()
+        all_categories = Category.query.filter_by(is_active=True).order_by(Category.created_at, Category.id).all()
         top_level = [c for c in all_categories if c.parent_id is None]
 
         def serialize(cat, all_cats):
@@ -27,7 +29,7 @@ class CatalogService:
 
     @staticmethod
     def list_collections():
-        all_collections = Collection.query.filter_by(is_active=True).order_by(Collection.name).all()
+        all_collections = Collection.query.filter_by(is_active=True).order_by(Collection.created_at, Collection.id).all()
         top_level = [c for c in all_collections if c.parent_id is None]
 
         def serialize(col, all_cols):
@@ -40,7 +42,7 @@ class CatalogService:
 
     @staticmethod
     def list_occasions():
-        all_occasions = Occasion.query.filter_by(is_active=True).order_by(Occasion.name).all()
+        all_occasions = Occasion.query.filter_by(is_active=True).order_by(Occasion.created_at, Occasion.id).all()
         top_level = [o for o in all_occasions if o.parent_id is None]
 
         def serialize(occ, all_occs):
@@ -52,7 +54,7 @@ class CatalogService:
         return [serialize(o, all_occasions) for o in top_level]
 
     @staticmethod
-    def list_cards(filters, page=1, per_page=12):
+    def list_cards(filters, page=1, per_page=12, user_id=None):
         query = Card.query.filter_by(is_active=True)
 
         if filters.get("category"):
@@ -105,6 +107,7 @@ class CatalogService:
             error_out=False
         )
         card_ids = [card.id for card in pagination.items]
+        purchased_ids = valid_purchase_card_ids(user_id, card_ids)
         defaults = {
             customization.card_id: CustomizationService._serialize(customization)
             for customization in CardCustomization.query.filter(
@@ -120,7 +123,11 @@ class CatalogService:
 
         return {
             "items": [
-                CatalogService._serialize_card_summary(c,defaults.get(c.id,None))
+                CatalogService._serialize_card_summary(
+                    c,
+                    defaults.get(c.id, None),
+                    is_purchased=c.id in purchased_ids,
+                )
                 for c in pagination.items
             ],
             "total": pagination.total,
@@ -129,29 +136,33 @@ class CatalogService:
         }
 
     @staticmethod
-    def get_card(card_id):
+    def get_card(card_id, user_id=None):
         card = Card.query.filter_by(
             id=card_id,
             is_active=True
         ).first()
 
         return (
-            CatalogService._serialize_card_detail(card)
+            CatalogService._serialize_card_detail(
+                card,
+                is_purchased=card.id in valid_purchase_card_ids(user_id, [card.id]) if card else False,
+            )
             if card
             else None
         )
 
     @staticmethod
-    def _serialize_card_summary(card, default_design=_NO_BATCH_DEFAULT):
+    def _serialize_card_summary(card, default_design=_NO_BATCH_DEFAULT, is_purchased=False):
         if default_design is CatalogService._NO_BATCH_DEFAULT:
             customization = CardCustomization.query.filter_by(card_id=card.id, is_default=True).first()
             default_design = CustomizationService._serialize(customization) if customization else None
         return {
             "id": card.id,
             "title": card.title,
-            "thumbnail": card.thumbnail,
+            "thumbnail": PreviewService.preview_url(card.id),
             "price": float(card.price),
             "is_free": card.is_free,
+            "is_purchased": is_purchased,
             "category": card.category.name if card.category else None,
             "collection": card.collection.name if card.collection else None,
             "occasion": card.occasion.name if card.occasion else None,
@@ -159,15 +170,15 @@ class CatalogService:
         }
 
     @staticmethod
-    def _serialize_card_detail(card):
-        data = CatalogService._serialize_card_summary(card)
+    def _serialize_card_detail(card, is_purchased=False):
+        data = CatalogService._serialize_card_summary(card, is_purchased=is_purchased)
 
         data["description"] = card.description
 
         data["templates"] = [
             {
                 "id": t.id,
-                "preview_image": t.preview_image,
+                "preview_image": PreviewService.preview_url(card.id, "template", t.id),
                 "width": t.width,
                 "height": t.height, "has_animated": bool(t.animated_file)
             }
