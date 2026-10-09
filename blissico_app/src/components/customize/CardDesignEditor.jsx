@@ -6,6 +6,7 @@ import {
 } from 'react-icons/fa';
 import ColorSwatchPicker from './ColorSwatchPicker';
 import { assetUrl } from '../../api/catalog';
+import ProtectedPreviewImage from '../ProtectedPreviewImage';
 import { getFontsByCategory } from '../../data/fontCatalog';
 import './CardDesignEditor.css';
 
@@ -223,7 +224,7 @@ const CardDesignEditor = ({ card, initialValues, onSave, saving }) => {
               <label>Style</label>
               <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
                 {templates.map((t, i) => (
-                  <img key={t.id} src={assetUrl(t.preview_image)} alt={`Style ${i + 1}`}
+                  <ProtectedPreviewImage key={t.id} src={assetUrl(t.preview_image)} alt={`Style ${i + 1}`}
                     style={{ width: 48, height: 48, objectFit: 'cover', borderRadius: 6 }} />
                 ))}
               </div>
@@ -248,8 +249,15 @@ const CardDesignEditor = ({ card, initialValues, onSave, saving }) => {
               <div
                 ref={stageRef}
                 className="cde-canvas-card"
-                style={backgroundImage ? { backgroundImage: `url(${backgroundImage})`, backgroundSize: 'cover', backgroundPosition: 'center' } : undefined}
               >
+                {backgroundImage && (
+                  <ProtectedPreviewImage
+                    src={backgroundImage}
+                    alt=""
+                    aria-hidden="true"
+                    style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', pointerEvents: 'none', zIndex: 0 }}
+                  />
+                )}
                 {textBoxes.map((box, i) => (
                   <div
                     key={i}

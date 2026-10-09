@@ -4,6 +4,7 @@ import { FaHeart, FaHeartBroken } from 'react-icons/fa';
 import { useAuth } from '../../context/AuthContext';
 import { useFavorites } from '../../context/FavoritesContext';
 import { assetUrl } from '../../api/catalog';
+import ProtectedPreviewImage from '../../components/ProtectedPreviewImage';
 import UserLayout from '../../components/user/UserLayout';
 import './DashboardFavorites.css';
 
@@ -66,7 +67,7 @@ const DashboardFavorites = () => {
                   <Link to={`/product/${favorite.card_id}`} className="dashboard-favorite-card-link">
                     <div className="dashboard-favorite-image-wrap">
                       {favorite.thumbnail ? (
-                        <img
+                        <ProtectedPreviewImage
                           src={assetUrl(favorite.thumbnail)}
                           alt={title}
                           className="dashboard-favorite-image"

@@ -34,7 +34,7 @@ const Terms = () => {
 
         <h3>Signature Design Services</h3>
         <p>
-          Custom Signature Design projects require full payment before work begins. Please submit your request at least 15 days before your event. A confirmation email will be sent within 24–48 hours, and final files will be delivered via blissicobynimrah@gmail.com. If you do not receive our email, please check your spam or junk folder.
+          Custom Signature Design projects require full payment before work begins. Please submit your request at least 15 days before your event. A confirmation email will be sent within 24–48 hours, and final files will be delivered via hello@blissicobynimrah.com. If you do not receive our email, please check your spam or junk folder.
         </p>
 
         <h3>Customer Responsibility</h3>
@@ -61,7 +61,7 @@ const Terms = () => {
         <p>
           For any questions regarding your order or these terms, please contact us at:<br />
           Blissico by Nimrah<br />
-          Email: blissicobynimrah@gmail.com
+          Email: hello@blissicobynimrah.com
         </p>
       </section>
 

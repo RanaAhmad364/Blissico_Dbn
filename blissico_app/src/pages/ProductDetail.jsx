@@ -11,7 +11,7 @@ import Marquee from '../components/Marquee';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import CardDesignOverlay from '../components/customize/CardDesignOverlay';
-import { downloadCardFile, checkOwnership } from '../api/downloads';
+import { downloadCardFile } from '../api/downloads';
 import useScreenshotProtection from '../hooks/useScreenshotProtection';
 import './ProductDetail.css';
 
@@ -33,7 +33,6 @@ const ProductDetail = () => {
   const { addToCart } = useCart();
   const navigate = useNavigate(); 
   const [downloadError, setDownloadError] = useState('');
-  const [isPurchased, setIsPurchased] = useState(false);
 
   // Share menu state
   const shareRef = useRef(null);
@@ -48,15 +47,7 @@ const ProductDetail = () => {
       .then(setProduct)
       .catch(() => setProduct(null))
       .finally(() => setLoading(false));
-  }, [id]);
-  useEffect(() => {
-    if (!user || !product) {
-      setIsPurchased(false);
-      return;
-    }
-    checkOwnership(product.id).then((r) => setIsPurchased(r.is_purchased)).catch(() => {});
-  }, [user, product]);
-
+  }, [id, user]);
   // Fetch "You May Also Like" products once we have the main product
   useEffect(() => {
     if (!product) {

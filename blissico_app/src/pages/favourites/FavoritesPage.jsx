@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { FaArrowLeft, FaHeartBroken } from 'react-icons/fa';
 import { useFavorites } from '../../context/FavoritesContext';
 import { assetUrl } from '../../api/catalog';
+import ProtectedPreviewImage from '../../components/ProtectedPreviewImage';
 import './FavoritesPage.css';
 
 const FavoritesPage = () => {
@@ -52,7 +53,7 @@ const FavoritesPage = () => {
 								<div className="favorite-item-card" key={item.id || cardId}>
 									<div className="favorite-item-image">
 										{item.thumbnail && (
-											<img src={assetUrl(item.thumbnail)} alt={title} />
+											<ProtectedPreviewImage src={assetUrl(item.thumbnail)} alt={title} />
 										)}
 									</div>
 

@@ -4,6 +4,7 @@ import { FaTrashAlt, FaArrowLeft, FaShoppingBag } from 'react-icons/fa';
 import { useCart } from '../../context/CartContext';
 import { assetUrl } from '../../api/catalog';
 import api from '../../api/axiosConfig';
+import ProtectedPreviewImage from '../../components/ProtectedPreviewImage';
 import './AddToCart.css';
 
 const AddToCart = () => {
@@ -52,7 +53,7 @@ const AddToCart = () => {
             items.map((item) => (
               <div className="cart-item-card" key={item.id}>
                 <div className="cart-item-image">
-                  <img src={assetUrl(item.thumbnail)} alt={item.title} />
+                  <ProtectedPreviewImage src={assetUrl(item.thumbnail)} alt={item.title} />
                 </div>
                 <div className="cart-item-details">
                   <h4>{item.title}</h4>

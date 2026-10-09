@@ -3,6 +3,7 @@ import UserLayout from '../../components/user/UserLayout';
 import { getMyOrders } from '../../api/orders';
 import { downloadCardFile } from '../../api/downloads';
 import { assetUrl } from '../../api/catalog';
+import ProtectedPreviewImage from '../../components/ProtectedPreviewImage';
 import { FiDownload } from 'react-icons/fi';
 
 const Purchases = () => {
@@ -66,7 +67,7 @@ const Purchases = () => {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: 20 }}>
           {cards.map((item) => (
             <div key={item.card_id} style={{ border: '1px solid #eee', borderRadius: 10, overflow: 'hidden' }}>
-              <img
+              <ProtectedPreviewImage
                 src={assetUrl(item.thumbnail)}
                 alt={item.title}
                 style={{ width: '100%', height: 160, objectFit: 'cover' }}
@@ -94,6 +95,5 @@ const Purchases = () => {
 };
 
 export default Purchases;
-
 
 

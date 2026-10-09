@@ -4,6 +4,7 @@ import UserLayout from '../../components/user/UserLayout';
 import { getMyCustomizations } from '../../api/customization';
 import { downloadCardFile } from '../../api/downloads';
 import { assetUrl } from '../../api/catalog';
+import ProtectedPreviewImage from '../../components/ProtectedPreviewImage';
 import { FiDownload, FiEdit2 } from 'react-icons/fi';
 
 const CustomizedCards = () => {
@@ -40,7 +41,7 @@ const CustomizedCards = () => {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: 20 }}>
             {cards.map((c) => (
               <div key={c.card_id} style={{ border: '1px solid #eee', borderRadius: 10, overflow: 'hidden' }}>
-                <img src={assetUrl(c.thumbnail)} alt={c.title} style={{ width: '100%', height: 160, objectFit: 'cover' }} />
+                <ProtectedPreviewImage src={assetUrl(c.thumbnail)} alt={c.title} style={{ width: '100%', height: 160, objectFit: 'cover' }} />
                 <div style={{ padding: 14 }}>
                   <h4 style={{ margin: '0 0 10px' }}>{c.title}</h4>
                   <div style={{ display: 'flex', gap: 8 }}>

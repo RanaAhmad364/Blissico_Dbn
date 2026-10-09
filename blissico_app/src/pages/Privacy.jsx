@@ -61,7 +61,7 @@ const Privacy = () => {
         <p>
           For any questions regarding your order or these terms, please contact us at:<br />
           Blissico by Nimrah<br />
-          Email: blissicobynimrah@gmail.com
+          Email: hello@blissicobynimrah.com
         </p>
       </section>
 

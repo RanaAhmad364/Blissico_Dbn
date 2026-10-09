@@ -4,6 +4,7 @@ import { useAuth } from '../../context/AuthContext';
 import { useFavorites } from '../../context/FavoritesContext';
 import { useCart } from '../../context/CartContext';
 import { assetUrl } from '../../api/catalog';
+import ProtectedPreviewImage from '../ProtectedPreviewImage';
 import { getNotifications, getUnreadNotificationCount, markAllNotificationsRead } from '../../api/notifications';
 import { 
   FiMenu, FiSearch, FiHeart, FiShoppingCart, FiBell, 
@@ -166,7 +167,7 @@ const UserTopbar = ({ onMenuClick }) => {
                       onClick={closeAllDropdowns}
                     >
                       {item.thumbnail ? (
-                        <img
+                        <ProtectedPreviewImage
                           src={assetUrl(item.thumbnail)}
                           alt=""
                           className="user-favorite-item-thumbnail"
@@ -224,7 +225,7 @@ const UserTopbar = ({ onMenuClick }) => {
                   cartItems.slice(0, 4).map((item, index) => (
                     <div key={item.id || index} className="user-dropdown-item-card">
                       {item.thumbnail ? (
-                        <img src={assetUrl(item.thumbnail)} alt="" className="user-favorite-item-thumbnail" />
+                        <ProtectedPreviewImage src={assetUrl(item.thumbnail)} alt="" className="user-favorite-item-thumbnail" />
                       ) : (
                         <span className="user-item-icon"><FiShoppingCart size={18} /></span>
                       )}

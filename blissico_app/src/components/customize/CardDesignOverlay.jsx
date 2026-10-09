@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import ProtectedPreviewImage from '../ProtectedPreviewImage';
 
 const EDITOR_CANVAS_WIDTH = 450; // must match Customize.jsx / CardDesignEditor.jsx
 
@@ -6,21 +7,8 @@ const CardDesignOverlay = ({ imageUrl, design, alt = '' }) => {
   const boxes = design?.text_boxes?.length ? design.text_boxes : [];
   const wrapperRef = useRef(null);
 
-  // Measures the real image so this box matches the template's actual
-  // shape instead of a hardcoded guess that crops off edges.
   const [ratio, setRatio] = useState(null);
-  useEffect(() => {
-    if (!imageUrl) return undefined;
-    let cancelled = false;
-    const probe = new Image();
-    probe.onload = () => {
-      if (!cancelled && probe.naturalWidth && probe.naturalHeight) {
-        setRatio(`${probe.naturalWidth} / ${probe.naturalHeight}`);
-      }
-    };
-    probe.src = imageUrl;
-    return () => { cancelled = true; };
-  }, [imageUrl]);
+  useEffect(() => setRatio(null), [imageUrl]);
 
   // BUG FIX: font_size/letter_spacing are saved as literal px values
   // calibrated for the editor's fixed 450px-wide canvas. This component gets
@@ -47,7 +35,15 @@ const CardDesignOverlay = ({ imageUrl, design, alt = '' }) => {
 
   return (
     <div ref={wrapperRef} style={{ position: 'relative', width: '100%', aspectRatio: ratio || '3 / 4', overflow: 'hidden' }}>
-      <img src={imageUrl} alt={alt} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+      <ProtectedPreviewImage
+        src={imageUrl}
+        alt={alt}
+        onLoad={(event) => {
+          const image = event.currentTarget;
+          if (image.naturalWidth && image.naturalHeight) setRatio(`${image.naturalWidth} / ${image.naturalHeight}`);
+        }}
+        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+      />
       {boxes.map((box, i) => (
         <div
           key={i}

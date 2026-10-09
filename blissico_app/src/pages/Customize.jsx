@@ -7,12 +7,12 @@ import {
 } from 'react-icons/fa';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
-import { checkOwnership } from '../api/downloads';
 import { getCard, assetUrl } from '../api/catalog';
 import { getCustomization, saveCustomization } from '../api/customization';
 import Marquee from '../components/Marquee';
 import Navbar from '../components/Navbar';
 import ColorSwatchPicker from '../components/customize/ColorSwatchPicker';
+import ProtectedPreviewImage from '../components/ProtectedPreviewImage';
 import useScreenshotProtection from '../hooks/useScreenshotProtection';
 import { getFontsByCategory } from '../data/fontCatalog';
 import './Customize.css';
@@ -71,10 +71,10 @@ const Customize = () => {
     setLoading(true);
     setError('');
 
-    Promise.all([getCard(cardId), getCustomization(cardId), checkOwnership(cardId)])
-      .then(([cardData, custom, ownership]) => {
+    Promise.all([getCard(cardId), getCustomization(cardId)])
+      .then(([cardData, custom]) => {
         setCard(cardData);
-        setIsPurchased(ownership.is_purchased);
+        setIsPurchased(cardData.is_purchased);
         const boxes = custom?.text_boxes?.length ? custom.text_boxes : [newBox()];
         setTextBoxes(boxes);
         setSavedTextBoxes(boxes);
@@ -129,28 +129,34 @@ const Customize = () => {
     };
   }, [isDragging, updatePositionFromPointer]);
 
-  // Auto-scales the whole 450x600 card to fit whatever screen it's on,
-// so mobile shows EXACTLY the same layout as desktop — just smaller.
-useEffect(() => {
-  const el = canvasViewportRef.current;
-  if (!el) return;
+  // .canvas-card itself is CSS-responsive now (width: min(100%, 450px) —
+  // see Customize.css), so it already shrinks correctly on its own for any
+  // screen size, with no JS needed for that part. What JS still has to do
+  // is scale the TEXT to match, because font_size/letter_spacing are saved
+  // as literal px values calibrated for the editor's fixed 450px-wide
+  // canvas. Measuring the card's own actual rendered width and scaling by
+  // (actualWidth / 450) — the exact same formula CardDesignOverlay already
+  // uses for ProductDetail/CategoryPage, and the same one the backend
+  // renderer uses — keeps text visually proportional at every size,
+  // instead of relying on a separate CSS transform to shrink everything
+  // uniformly (which broke whenever anything changed the card's real
+  // layout size out from under that assumption).
+  useEffect(() => {
+    const el = cardStageRef.current;
+    if (!el) return;
 
-  const CARD_WIDTH = 450;  // must always match backend's EDITOR_CANVAS_WIDTH
-  const CARD_HEIGHT = 600;
+    const EDITOR_CANVAS_WIDTH = 450; // must always match backend's EDITOR_CANVAS_WIDTH
 
-  const updateScale = () => {
-    const availW = el.clientWidth;
-    const availH = el.clientHeight;
-    if (!availW || !availH) return;
-    const scale = Math.min(availW / CARD_WIDTH, availH / CARD_HEIGHT, 1);
-    setContainerScale(scale > 0 ? scale : 1);
-  };
+    const updateScale = () => {
+      const w = el.clientWidth;
+      if (w) setContainerScale(w / EDITOR_CANVAS_WIDTH);
+    };
 
-  updateScale();
-  const ro = new ResizeObserver(updateScale);
-  ro.observe(el);
-  return () => ro.disconnect();
-}, []);
+    updateScale();
+    const ro = new ResizeObserver(updateScale);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
 
   const handleAddBox = () => {
     setTextBoxes((prev) => [...prev, newBox()]);
@@ -357,7 +363,7 @@ useEffect(() => {
                 <label>Style</label>
                 <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
                   {templates.map((t, i) => (
-                    <img key={t.id} src={assetUrl(t.preview_image)} alt={`Style ${i + 1}`} onClick={() => setActiveTemplateIndex(i)}
+                    <ProtectedPreviewImage key={t.id} src={assetUrl(t.preview_image)} alt={`Style ${i + 1}`} onClick={() => setActiveTemplateIndex(i)}
                       style={{ width: 48, height: 48, objectFit: 'cover', borderRadius: 6, cursor: 'pointer', border: i === activeTemplateIndex ? '2px solid #333' : '2px solid transparent' }} />
                   ))}
                 </div>
@@ -369,12 +375,24 @@ useEffect(() => {
         <div className="canvas-area-wrapper">
           <div className="canvas-stage">
             <div className="canvas-viewport" ref={canvasViewportRef}>
-              <div className="canvas-card-wrapper" style={{ transform: `scale(${zoomLevel  * containerScale})`}}>
+              {/* Only zoomLevel (the user's own zoom slider) transforms this wrapper now.
+                  The responsive shrink-to-fit-screen part is handled entirely by
+                  .canvas-card's own CSS (width: min(100%, 450px) — see Customize.css)
+                  plus scaling the text below by containerScale, exactly like
+                  CardDesignOverlay does for ProductDetail/CategoryPage. */}
+              <div className="canvas-card-wrapper" style={{ transform: `scale(${zoomLevel})`}}>
                 <div
                   ref={cardStageRef}
                   className="canvas-card"
-                  style={backgroundImage ? { backgroundImage: `url(${backgroundImage})`, backgroundSize: 'cover', backgroundPosition: 'center' } : undefined}
                 >
+                  {backgroundImage && (
+                    <ProtectedPreviewImage
+                      src={backgroundImage}
+                      alt=""
+                      aria-hidden="true"
+                      style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', pointerEvents: 'none', zIndex: 0 }}
+                    />
+                  )}
                   {textBoxes.map((box, i) => (
                     <div
                       key={i}
@@ -388,10 +406,10 @@ useEffect(() => {
                       <div
                         className="editable-text"
                         style={{
-                          fontFamily: box.font_family, fontSize: `${box.font_size}px`,
+                          fontFamily: box.font_family, fontSize: `${box.font_size * containerScale}px`,
                           fontWeight: box.bold ? 'bold' : 'normal', fontStyle: box.italic ? 'italic' : 'normal',
                           textDecoration: box.underline ? 'underline' : 'none', color: box.font_color,
-                          textAlign: box.alignment, letterSpacing: `${box.letter_spacing}px`, lineHeight: box.line_height,
+                          textAlign: box.alignment, letterSpacing: `${box.letter_spacing * containerScale}px`, lineHeight: box.line_height,
                         }}
                       >
                         {box.content}
@@ -752,7 +770,7 @@ export default Customize;
 //                 <label>Style</label>
 //                 <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
 //                   {templates.map((t, i) => (
-//                     <img key={t.id} src={assetUrl(t.preview_image)} alt={`Style ${i + 1}`} onClick={() => setActiveTemplateIndex(i)}
+//                     <ProtectedPreviewImage key={t.id} src={assetUrl(t.preview_image)} alt={`Style ${i + 1}`} onClick={() => setActiveTemplateIndex(i)}
 //                       style={{ width: 48, height: 48, objectFit: 'cover', borderRadius: 6, cursor: 'pointer', border: i === activeTemplateIndex ? '2px solid #333' : '2px solid transparent' }} />
 //                   ))}
 //                 </div>
@@ -812,4 +830,3 @@ export default Customize;
 // };
 
 // export default Customize;
-

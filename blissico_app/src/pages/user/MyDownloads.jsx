@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import UserLayout from '../../components/user/UserLayout';
 import { getMyDownloads } from '../../api/downloads';
 import { assetUrl } from '../../api/catalog';
+import ProtectedPreviewImage from '../../components/ProtectedPreviewImage';
 import './MyDownloads.css';
 
 const MyDownloads = () => {
@@ -37,7 +38,7 @@ const MyDownloads = () => {
                 {downloads.map((d) => (
                   <tr key={d.id}>
                     <td className="thumb-cell">
-                      <img src={assetUrl(d.thumbnail)} alt={d.card_title} className="download-thumb" />
+                      <ProtectedPreviewImage src={assetUrl(d.thumbnail)} alt={d.card_title} className="download-thumb" />
                     </td>
                     <td className="card-title-cell">{d.card_title}</td>
                     <td className="date-cell">{new Date(d.downloaded_at).toLocaleString()}</td>

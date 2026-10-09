@@ -323,8 +323,14 @@
   width: 100%;
 }
 .canvas-card {
-  width: 450px;
-  height: 600px;
+  /* Responsive at every breakpoint — no media-query overrides needed.
+     Caps at 450px (must always match backend's EDITOR_CANVAS_WIDTH) and
+     keeps the editor's 3:4 shape down to whatever screen it's on. Text
+     size is scaled in Customize.jsx to match this element's own measured
+     width, the same approach CardDesignOverlay uses for ProductDetail. */
+  width: min(100%, 450px);
+  aspect-ratio: 3 / 4;
+  height: auto;
   background: #b3b3b3;
   border-radius: 4px;
   display: flex;
@@ -432,6 +438,12 @@
   align-items: center;
 }
 .canvas-card-wrapper {
+  /* Definite width so .canvas-card's `width: min(100%, 450px)` has a real
+     100% to resolve against at every breakpoint (without this, the two
+     auto-sized boxes fight each other and the browser has to guess). */
+  width: 100%;
+  display: flex;
+  justify-content: center;
   transform-origin: center center;
   transition: transform 0.15s ease-out;
 }
@@ -509,7 +521,10 @@
 }
 @media (max-width: 1024px) {
   .left-toolbars { width: 300px; }
-  .canvas-card { width: 350px; height: 480px; }
+  /* .canvas-card needs no override here any more — it's responsive by
+     itself at every breakpoint (width: min(100%, 450px); see base rule
+     above), and Customize.jsx scales the text to match its real measured
+     width, exactly like CardDesignOverlay does for ProductDetail. */
 }
 @media (max-width: 768px) {
   .customize-top-bar { flex-wrap: wrap; gap: 14px; padding: 16px 20px; }
@@ -521,9 +536,11 @@
   .tab-bar { flex-direction: row; width: 100%; }
   .tools-panel { width: 100%; box-sizing: border-box; padding: 16px; }
   .canvas-area-wrapper { width: 100%; min-width: 0; padding: 8px 0 20px; }
-  .canvas-stage { min-width: 0; overflow: hidden; }
-  .canvas-card-wrapper { width: 100%; max-width: 100%; display: flex; justify-content: center; }
-  .canvas-card { width: min(100%, 350px); height: auto; aspect-ratio: 3 / 4; padding: 20px; }
+  .canvas-stage { min-width: 0; overflow: hidden; width: 100%; }
+  /* Full width on mobile instead of the desktop-only 70% — .canvas-card's
+     own aspect-ratio (3:4) now drives its height, so .canvas-viewport no
+     longer needs an explicit height of its own at all. */
+  .canvas-viewport { width: 100%; height: auto; }
   .zoom-controls { max-width: 100%; padding: 8px 14px; }
   .zoom-slider-container { width: min(180px, 55vw); }
 }

@@ -9,7 +9,6 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import CardDesignOverlay from '../components/customize/CardDesignOverlay';
 import { getCards, assetUrl } from '../api/catalog';
-import { checkOwnership } from '../api/downloads';
 import useScreenshotProtection from '../hooks/useScreenshotProtection';
 import './CategoryPage.css';
 
@@ -69,24 +68,11 @@ const CategoryPage = () => {
       .then((res) => {
         setCards(res.items);
         setTotalPages(res.pages || 1);
+        setPurchasedIds(new Set(res.items.filter((card) => card.is_purchased).map((card) => card.id)));
       })
       .catch(() => setError('Could not load cards. Please try again.'))
       .finally(() => setLoading(false));
-  }, [category, slug, sortParam, currentPage, filterBy]);
-
-     useEffect(() => {
-    if (!user || cards.length === 0) {
-      setPurchasedIds(new Set());
-      return;
-    }
-    Promise.all(
-      cards.map((c) =>
-        checkOwnership(c.id)
-          .then((r) => (r.is_purchased ? c.id : null))
-          .catch(() => null)
-      )
-    ).then((results) => setPurchasedIds(new Set(results.filter((id) => id !== null))));
-  }, [cards, user]);
+  }, [category, slug, sortParam, currentPage, filterBy, user]);
 
   const toggleFavourite = async (e, productId) => {
     e.preventDefault();
